@@ -1,0 +1,38 @@
+# Contrôleur de filtre à tambour pour bassin
+
+Ce dépôt accueillera la documentation, les schémas, les décisions de conception et le logiciel d'un contrôleur de filtre à tambour pour bassin. L'objectif est de construire un système fiable, maintenable et documenté, basé autant que possible sur des cartes électroniques du commerce, avec la possibilité de concevoir une carte dédiée si le besoin devient justifié.
+
+## Organisation du dépôt
+
+| Dossier | Rôle |
+| --- | --- |
+| `docs/specification/` | Spécification fonctionnelle, exigences, contraintes et questions ouvertes. |
+| `docs/architecture/` | Architecture système, matérielle et logicielle, avec diagrammes et emplacements pour visuels. |
+| `docs/decisions/` | Journal de décisions de type ADR pour garder l'historique des choix importants. |
+| `docs/backlog/` | Backlog de cadrage, prototype, firmware, documentation et validation. |
+
+Les documents de spécification et d'architecture sont rédigés en Markdown pour pouvoir combiner texte, tableaux, diagrammes Mermaid et images stockées dans les dossiers `assets/`.
+
+## Objectifs du projet
+
+Le contrôleur doit automatiser le nettoyage d'un filtre à tambour en déclenchant une rotation du tambour et une pompe de rinçage lorsque l'encrassement est détecté. Il doit aussi protéger l'installation en détectant les défauts, permettre un fonctionnement manuel, et fournir une base logicielle claire pour évoluer vers une supervision plus complète.
+
+Les objectifs principaux sont :
+
+- automatiser les cycles de lavage du tambour ;
+- limiter la consommation d'eau et d'énergie ;
+- protéger la pompe, le moteur et le bassin en cas de défaut ;
+- permettre un mode manuel simple et sûr ;
+- garder une architecture compréhensible et réparable ;
+- préparer une évolution vers journalisation, écran local ou supervision réseau.
+
+## Documents de départ
+
+- [Spécification fonctionnelle](docs/specification/README.md)
+- [Architecture](docs/architecture/README.md)
+- [Journal de décisions](docs/decisions/README.md)
+- [Backlog](docs/backlog/backlog.md)
+
+## Prochaine étape
+
+Compléter les questions ouvertes de la spécification, puis créer les premières décisions d'architecture concernant la carte de contrôle, les capteurs et les sorties de puissance.
