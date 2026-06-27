@@ -15,6 +15,13 @@ Le projet doit aboutir à :
 - une documentation suffisante pour câblage, configuration, tests et dépannage ;
 - une stratégie de mise en sécurité des équipements auxiliaires en cas de niveau bas.
 
+## Données d'entrée connues
+
+Les données d'entrée suivantes décrivent l'installation cible à prendre en compte pour le dimensionnement et les choix de conception :
+
+- le FAT est constitué de deux entrées de 110 mm : une bonde de fond et un skimmer ;
+- le FAT est constitué de deux sorties de 110 mm afin de conserver le flux hydraulique.
+
 ## Périmètre de la première version
 
 La première version couvre :

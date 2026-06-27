@@ -10,6 +10,15 @@
 | Interface locale | Permet conduite et diagnostic | Boutons, voyants, écran simple |
 | Alimentation | Fournit basse tension stable | Alimentation DIN 12 V ou 24 V, conversion locale si besoin |
 
+## Données hydrauliques d'entrée
+
+L'installation cible à contrôler comprend un FAT avec :
+
+- deux entrées de 110 mm : une bonde de fond et un skimmer ;
+- deux sorties de 110 mm pour conserver le flux hydraulique.
+
+Ces données doivent être prises en compte pour les choix de capteurs, l'implantation du niveau de lavage et les contraintes de débit autour du filtre.
+
 ## Schéma de principe
 
 ```mermaid
