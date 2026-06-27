@@ -5,8 +5,8 @@
 | Bloc | Rôle | Options envisagées |
 | --- | --- | --- |
 | Carte de contrôle | Exécute la logique de lavage et sécurité | ESP32, automate compact, carte Arduino industrielle |
-| Entrées capteurs | Détectent niveau, défauts, rotation | Flotteurs, capteurs pression, inductifs, contacts secs |
-| Sorties puissance | Pilotent pompe et moteur | Relais, contacteurs, variateur, module relais opto-isolé |
+| Entrées capteurs | Détectent niveau de lavage, niveau bas, défauts, rotation | Flotteurs, capteurs pression, inductifs, contacts secs |
+| Sorties puissance | Pilotent pompe, moteur et prises auxiliaires | Relais, contacteurs, variateur, module relais opto-isolé |
 | Interface locale | Permet conduite et diagnostic | Boutons, voyants, écran simple |
 | Alimentation | Fournit basse tension stable | Alimentation DIN 12 V ou 24 V, conversion locale si besoin |
 
@@ -25,6 +25,7 @@ flowchart TB
         Prot[Protections électriques]
         K1[Commande pompe]
         K2[Commande moteur]
+        K3[Commande prises auxiliaires]
     end
 
     Alim --> MCU
@@ -32,8 +33,10 @@ flowchart TB
     UI <--> MCU
     MCU --> K1
     MCU --> K2
+    MCU --> K3
     Prot --> K1
     Prot --> K2
+    Prot --> K3
 ```
 
 ## Décisions matérielles à prendre
@@ -41,6 +44,8 @@ flowchart TB
 - tension de commande : 12 V ou 24 V ;
 - type de carte de contrôle ;
 - type de capteur principal de déclenchement ;
+- architecture de détection du niveau bas de sécurité ;
+- nombre de prises auxiliaires à couper et puissance par voie ;
 - choix relais/contacteurs/variateur ;
 - niveau de protection du coffret ;
 - connecteurs et borniers.

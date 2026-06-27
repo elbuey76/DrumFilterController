@@ -15,11 +15,12 @@ Les documents de spécification et d'architecture sont rédigés en Markdown pou
 
 ## Objectifs du projet
 
-Le contrôleur doit automatiser le nettoyage d'un filtre à tambour en déclenchant une rotation du tambour et une pompe de rinçage lorsque l'encrassement est détecté. Il doit aussi protéger l'installation en détectant les défauts, permettre un fonctionnement manuel, et fournir une base logicielle claire pour évoluer vers une supervision plus complète.
+Le contrôleur doit automatiser le nettoyage d'un filtre à tambour en surveillant le niveau d'eau dans le FAT, puis en déclenchant une rotation du tambour et une pompe de rinçage lorsque le seuil de lavage est atteint. Il doit aussi protéger l'installation en détectant les défauts, couper des prises auxiliaires en cas de niveau bas, permettre un fonctionnement manuel, et fournir une base logicielle claire pour évoluer vers une supervision plus complète.
 
 Les objectifs principaux sont :
 
 - automatiser les cycles de lavage du tambour ;
+- détecter un seuil de niveau haut déclenchant le lavage et un seuil de niveau bas de sécurité ;
 - limiter la consommation d'eau et d'énergie ;
 - protéger la pompe, le moteur et le bassin en cas de défaut ;
 - permettre un mode manuel simple et sûr ;

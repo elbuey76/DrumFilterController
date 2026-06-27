@@ -12,14 +12,16 @@ Le projet doit aboutir à :
 - une architecture matérielle et logicielle documentée ;
 - un prototype validable sur table puis sur installation réelle ;
 - une base de firmware maintenable ;
-- une documentation suffisante pour câblage, configuration, tests et dépannage.
+- une documentation suffisante pour câblage, configuration, tests et dépannage ;
+- une stratégie de mise en sécurité des équipements auxiliaires en cas de niveau bas.
 
 ## Périmètre de la première version
 
 La première version couvre :
 
-- détection du besoin de nettoyage ;
+- détection du besoin de nettoyage par niveau d'eau dans le FAT ;
 - séquence de lavage automatique ;
+- coupure de prises auxiliaires sur niveau bas de sécurité ;
 - mode manuel ;
 - temporisations de sécurité ;
 - signalisation des états principaux ;
