@@ -7,6 +7,7 @@ Ce dépôt accueillera la documentation, les schémas, les décisions de concept
 | Dossier | Rôle |
 | --- | --- |
 | `docs/specification/` | Spécification fonctionnelle, exigences, contraintes et questions ouvertes. |
+| `docs/calculs/` | Notes de calcul de dimensionnement hydraulique, mécanique et électrique. |
 | `docs/architecture/` | Architecture système, matérielle et logicielle, avec diagrammes et emplacements pour visuels. |
 | `docs/decisions/` | Journal de décisions de type ADR pour garder l'historique des choix importants. |
 | `docs/backlog/` | Backlog de cadrage, prototype, firmware, documentation et validation. |
@@ -30,10 +31,11 @@ Les objectifs principaux sont :
 ## Documents de départ
 
 - [Spécification fonctionnelle](docs/specification/README.md)
+- [Notes de calcul](docs/calculs/README.md)
 - [Architecture](docs/architecture/README.md)
 - [Journal de décisions](docs/decisions/README.md)
 - [Backlog](docs/backlog/backlog.md)
 
 ## Prochaine étape
 
-Compléter les questions ouvertes de la spécification, puis créer les premières décisions d'architecture concernant la carte de contrôle, les capteurs et les sorties de puissance.
+Consolider les cotes physiques du FAT, fixer les seuils hydrauliques sur le report de niveau, puis créer les premières décisions d'architecture concernant la carte de contrôle, les capteurs et les sorties de puissance.

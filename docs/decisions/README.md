@@ -19,3 +19,8 @@ ADR-0002-titre-court.md
 ## Modèle rapide
 
 Copier le fichier `_template.md` pour créer une nouvelle décision.
+
+## Decisions disponibles
+
+1. [ADR-0001 - Structurer la documentation projet en Markdown](ADR-0001-structure-documentation.md)
+2. [ADR-0002 - Dimensionner la pompe principale sur une pompe variable avec marge](ADR-0002-dimensionnement-pompe-filtration-principale.md)
