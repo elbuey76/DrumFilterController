@@ -133,6 +133,7 @@ Le point de fonctionnement nominal recherche reste 8 a 10 m3/h, mais la pompe pr
 - Les capteurs de niveau doivent etre positionnes cote eau propre sur le tube de report en 32 mm, et non directement dans la zone sale.
 - Les capteurs de niveau retenus sont des CR18-8DN en M18, sortie NPN, alimentation 12-24 VDC, cablage 3 fils.
 - Le support du FAT devra fixer la cote altimetrique du trop-plein par rapport au niveau hydraulique du bassin.
+- La pompe decoration aspirant au meme endroit que la pompe principale, elle doit suivre les memes regles de securite hydraulique.
 - Les diametres d'interconnexion existants 110 mm, 100 mm, 63 mm et 32 mm doivent etre preserves dans les choix d'implantation et de pilotage.
 
 ## Reperes de niveau a definir
@@ -159,7 +160,7 @@ Le point de fonctionnement nominal recherche reste 8 a 10 m3/h, mais la pompe pr
 | Equipement | Action attendue | Justification |
 | --- | --- | --- |
 | Pompe principale de filtration | Coupure | Eviter de vider le bassin et proteger la pompe contre la marche a sec |
-| Pompe decoration | Coupure | Eviter de vider le bassin et proteger la pompe contre la marche a sec |
+| Pompe decoration | Coupure | Meme point d'aspiration que la pompe principale : meme protection contre vidange du bassin et marche a sec |
 | UV | Coupure | Eviter un fonctionnement hors d'eau sans refroidissement correct |
 | Rotation du tambour | Inhibition | Eviter un cycle FAT en situation d'eau insuffisante |
 | Pompe de rincage | Inhibition | Eviter un lavage inutile ou degradant en situation anormale |
@@ -192,9 +193,9 @@ Le point de fonctionnement nominal recherche reste 8 a 10 m3/h, mais la pompe pr
 - Ajouter une sonde de temperature d'eau avec implantation maintenable et representative.
 - Ajouter une sonde de temperature ambiante du local avec implantation representative.
 - Definir une IHM locale permettant de remonter clairement le statut du systeme.
-- Definir un moyen de remontee a distance de l'etat et des alarmes.
-- Definir la liste des notifications immediates a emettre et leur politique anti-repetition.
-- Definir une synthese quotidienne de fonctionnement et la possibilite de la desactiver.
+- Prevoir si utile une extension de remontee a distance de l'etat et des alarmes pour une V2.
+- Prevoir pour une V2 la liste des notifications immediates a emettre et leur politique anti-repetition.
+- Prevoir pour une V2 une synthese quotidienne de fonctionnement et la possibilite de la desactiver.
 - Definir si la pompe decoration doit etre pilotee par tranches horaires et pouvoir etre desactivee en hiver.
 - Definir la liste finale des alarmes indirectes et leur formulation utilisateur.
 - Definir un test journalier automatique avec diagnostic.
@@ -221,12 +222,12 @@ Le point de fonctionnement nominal recherche reste 8 a 10 m3/h, mais la pompe pr
 - Niveau d'IHM locale a retenir et informations a afficher localement.
 - Nombre, couleur et signification des voyants si une signalisation lumineuse est retenue.
 - Liste exacte des informations visibles en permanence sur l'IHM locale et de celles accessibles en detail.
-- Canal de notification a distance a retenir.
-- Liste des evenements a notifier et comportement en cas de perte reseau.
-- Activation par defaut, horaire et contenu exact de la synthese quotidienne.
+- Canal de notification a distance a retenir pour une V2.
+- Liste des evenements a notifier et comportement en cas de perte reseau pour une V2.
+- Activation par defaut, horaire et contenu exact de la synthese quotidienne pour une V2.
 - Source exacte de l'information bassin niveau bas si elle differe du niveau bas de securite deja prevu.
 - Nombre de tranches horaires, mode de configuration et logique hivernale de la pompe decoration.
-- Priorite entre commande manuelle, programmation horaire et inhibition de la pompe decoration.
+- Priorite entre commande manuelle, programmation horaire et inhibition de la pompe decoration, tout en respectant les memes securites que la pompe principale.
 - Validation physique de l'ordre et de la logique des capteurs EP_BAS et EP_CRITIQUE.
 - Choix de rester en diagnostic indirect V1 ou d'ajouter plus tard des capteurs dedies pour rotation, courant, fuite ou niveau eau sale.
 - Regles de lancement, de verdict et de report du test journalier automatique.

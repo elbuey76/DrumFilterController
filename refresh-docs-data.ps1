@@ -1,0 +1,36 @@
+$ErrorActionPreference = "Stop"
+
+$paths = @(
+  "README.md",
+  "docs/specification/README.md",
+  "docs/specification/01-objectifs-et-perimetre.md",
+  "docs/specification/02-exigences-fonctionnelles.md",
+  "docs/specification/03-securite-et-contraintes.md",
+  "docs/specification/04-questions-ouvertes.md",
+  "docs/specification/05-donnees-installation-et-fat-existant.md",
+  "docs/architecture/README.md",
+  "docs/architecture/01-vue-ensemble.md",
+  "docs/architecture/02-architecture-materielle.md",
+  "docs/architecture/03-architecture-logicielle.md",
+  "docs/calculs/README.md",
+  "docs/calculs/NC-0001-dimensionnement-pompe-filtration.md",
+  "docs/decisions/README.md",
+  "docs/decisions/_template.md",
+  "docs/decisions/ADR-0001-structure-documentation.md",
+  "docs/decisions/ADR-0002-dimensionnement-pompe-filtration-principale.md",
+  "docs/backlog/README.md",
+  "docs/backlog/backlog.md"
+)
+
+$map = [ordered]@{}
+
+foreach ($path in $paths) {
+  $absolutePath = Join-Path (Get-Location) $path
+  $map[$path] = [System.IO.File]::ReadAllText($absolutePath, [System.Text.Encoding]::UTF8)
+}
+
+$json = $map | ConvertTo-Json -Depth 3 -Compress
+$content = "window.DOC_CONTENT = $json;`n"
+[System.IO.File]::WriteAllText((Join-Path (Get-Location) "docs-data.js"), $content, [System.Text.Encoding]::UTF8)
+
+Write-Host "docs-data.js mis a jour."

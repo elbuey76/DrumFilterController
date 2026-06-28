@@ -8,7 +8,7 @@
 | Entrees capteurs | Detectent niveau de lavage, niveau bas, defauts, rotation, temperature bassin et temperature ambiante | Flotteurs, capteurs pression, inductifs, contacts secs, sondes de temperature |
 | Sorties puissance | Pilotent pompe, moteur et prises auxiliaires | Relais, contacteurs, variateur, module relais opto-isole |
 | Interface locale | Permet conduite, signalisation et diagnostic | Boutons, voyants, ecran simple, buzzer |
-| Communication distante | Permet supervision et notifications a distance | Wi-Fi, BLE, Ethernet, modem cellulaire, passerelle externe |
+| Communication distante | Option V2 pour supervision et notifications a distance | Wi-Fi, BLE, Ethernet, modem cellulaire, passerelle externe |
 | Alimentation | Fournit basse tension stable | Alimentation DIN 12 V ou 24 V, conversion locale si besoin |
 
 ## Composants materiels deja choisis
@@ -69,7 +69,7 @@ flowchart LR
 | Sonde temperature bassin | a choisir et a implanter | Fournit une mesure exploitable pour alertes et futur mode hiver |
 | Sonde temperature ambiante local | a choisir et a implanter | Fournit une mesure exploitable pour alertes environnementales du local ou du coffret |
 | IHM locale | a definir | Doit remonter clairement le statut, les alarmes et idealement les modes principaux |
-| Liaison distante | a definir | Doit permettre de notifier sans compromettre le fonctionnement local |
+| Liaison distante | option V2 a definir | Doit permettre de notifier sans compromettre le fonctionnement local |
 | Position tambour | option a etudier | Peut aider pour l'indexation et certains diagnostics avances |
 | Compteur d'eau rincage | option a etudier | Permet une mesure directe de la consommation d'eau et des pertes associees |
 
@@ -111,8 +111,8 @@ flowchart TB
 - type de sonde de temperature ambiante local et implantation exacte ;
 - type d'IHM locale : LED, ecran, buzzer ou combinaison ;
 - nombre de voyants, couleurs et signification ;
-- type de connectivite distante : Wi-Fi, BLE, Ethernet, modem ou passerelle ;
-- architecture de notification : embarquee, serveur local, service mail ou service SMS ;
+- type de connectivite distante pour une V2 : Wi-Fi, BLE, Ethernet, modem ou passerelle ;
+- architecture de notification pour une V2 : embarquee, serveur local, service mail ou service SMS ;
 - besoin ou non d'un capteur de position tambour ;
 - strategie materielle d'indexation du tambour hors lavage ;
 - besoin ou non d'un compteur d'eau sur le rincage ou l'appoint ;

@@ -8,7 +8,7 @@
 | Temporisations | Centraliser les delais, durees et timeouts. |
 | Machine a etats | Decider des transitions, du mode courant et des verrouillages. |
 | Diagnostics | Evaluer auto-tests, coherence EP_BAS et EP_CRITIQUE, consequences hydrauliques observables, temperatures et criteres de passage en degrade ou defaut. |
-| Communication distante | Publier et notifier les etats et evenements importants vers l'exterieur. |
+| Communication distante | Option V2 : publier et notifier les etats et evenements importants vers l'exterieur. |
 | Sorties | Piloter relais, voyants, buzzer, ecran local et autres actionneurs. |
 | Configuration | Stocker les parametres modifiables et la politique de reprise. |
 | Journalisation | Enregistrer cycles, alarmes et evenements importants. |
@@ -72,6 +72,8 @@ Priorite de decision recommandee :
 - capot ouvert ou demande maintenance : entrer en MAINTENANCE ;
 - defaut degradable detecte : entrer en DEGRADE ;
 - sinon : entrer en AUTO_ATTENTE sans attente operateur supplementaire.
+
+L'arret total n'apparait pas comme un etat logiciel de la machine a etats ci-dessus. Il correspond a une consignation ou a une coupure electrique maitrisee, explicite pour l'exploitation, et geree hors du cycle logiciel nominal.
 
 ## Capteurs de reference cote eau propre
 
@@ -237,9 +239,10 @@ Le logiciel peut aussi gerer une programmation horaire simple de la pompe decora
 - verifier si la pompe decoration est globalement autorisee ;
 - verifier si l'heure courante est dans une plage active ;
 - appliquer ensuite les securites globales avant autorisation de sortie ;
+- appliquer les memes securites hydrauliques que la pompe principale, la pompe decoration aspirant au meme endroit ;
 - permettre une inhibition simple pour l'hiver ou une longue periode d'arret.
 
-## Evenements candidats a remonter a distance
+## Evenements candidats a remonter a distance en V2
 
 La supervision distante devrait au minimum pouvoir traiter :
 
@@ -256,7 +259,7 @@ La supervision distante devrait au minimum pouvoir traiter :
 - retour a un etat nominal apres incident ;
 - perte puis retour de la connectivite distante si cette information est disponible.
 
-## Notifications immediates candidates
+## Notifications immediates candidates en V2
 
 Une premiere version simple peut envoyer immediatement au minimum :
 
@@ -269,7 +272,7 @@ Une premiere version simple peut envoyer immediatement au minimum :
 - coupure courant ;
 - retour courant.
 
-## Synthese quotidienne candidate
+## Synthese quotidienne candidate en V2
 
 Si la fonction est activee, le logiciel devrait pouvoir generer une synthese quotidienne contenant au minimum :
 

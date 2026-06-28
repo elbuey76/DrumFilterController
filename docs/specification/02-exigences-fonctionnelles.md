@@ -9,7 +9,7 @@
 | F-003 | Le systeme doit commander la rotation du tambour pendant le cycle de lavage. | Must | La commande dependra du moteur retenu. |
 | F-004 | Le systeme doit arreter automatiquement le cycle apres une duree configurable. | Must | Valeur a definir lors des essais. |
 | F-005 | Le systeme doit imposer un delai minimal entre deux cycles automatiques. | Must | Protection contre un capteur instable ou un filtre sature. |
-| F-006 | Le systeme doit proposer un mode manuel de lavage. | Should | Le mode manuel doit conserver les protections essentielles. |
+| F-006 | Le systeme doit proposer un mode manuel. | Must | Le detail des commandes manuelles et des protections associees est precise par F-022 et F-023. |
 | F-007 | Le systeme doit signaler les etats marche, cycle en cours et defaut. | Should | Voyants, ecran ou interface reseau selon architecture. |
 | F-008 | Le systeme devrait journaliser les cycles et defauts. | Could | Utile pour diagnostic mais non bloquant au prototype. |
 | F-009 | Le systeme doit commander un seuil de niveau bas de securite distinct du seuil de lavage. | Must | Ce seuil protege l'installation en cas de manque d'eau. |
@@ -35,13 +35,13 @@
 | F-029 | Le systeme doit proposer un mode test distinct du mode manuel permettant de lancer un cycle complet de lavage avec validation automatique du retour a un niveau normal ou declaration d'un defaut. | Must | Ce mode est utile apres maintenance ou mise au point. |
 | F-030 | Le systeme doit mesurer la temperature de l'eau du bassin et rendre cette valeur disponible a l'automate. | Must | La localisation et la technologie du capteur restent a definir. |
 | F-031 | Le systeme doit permettre de remonter au minimum des alertes de temperature basse, temperature haute et perte de mesure du capteur. | Should | Les seuils exacts et l'usage par le mode hiver restent a definir. |
-| F-032 | Le systeme doit mesurer la temperature ambiante du local technique ou du coffret et rendre cette valeur disponible a l'automate. | Should | L'emplacement exact doit privilegier une mesure representative et maintenable. |
-| F-033 | Le systeme doit permettre de remonter au minimum des alertes de temperature ambiante basse, temperature ambiante haute et perte de mesure du capteur. | Should | Les seuils exacts et les usages de cette mesure restent a definir. |
+| F-032 | Le systeme doit mesurer la temperature ambiante du local technique ou du coffret et rendre cette valeur disponible a l'automate. | Must | L'emplacement exact doit privilegier une mesure representative et maintenable. |
+| F-033 | Le systeme doit permettre de remonter au minimum des alertes de temperature ambiante basse, temperature ambiante haute et perte de mesure du capteur. | Must | Les seuils exacts et les usages de cette mesure restent a definir. |
 | F-034 | Le systeme doit disposer d'une IHM locale permettant de remonter le statut de fonctionnement a proximite du coffret. | Must | Le choix exact entre voyants, ecran, buzzer ou combinaison reste a definir. |
 | F-035 | L'IHM locale doit permettre d'identifier au minimum les etats auto normal, manuel, maintenance, degrade, defaut, cycle en cours et alarme active. | Must | La forme d'affichage peut etre lumineuse, textuelle ou mixte. |
 | F-036 | Le systeme devrait permettre d'afficher localement au moins certaines mesures utiles comme temperatures, etat des capteurs ou cause de defaut si un ecran est retenu. | Should | Cette exigence depend du niveau d'IHM retenu. |
-| F-037 | Le systeme devrait permettre une remontee a distance de l'etat general, des alarmes et des defauts. | Should | Le canal exact reste a definir : application mobile, Wi-Fi, BLE, mail, SMS ou autre. |
-| F-038 | Le systeme devrait permettre d'emettre des notifications a distance lors d'evenements significatifs comme defaut critique, passage en degrade, niveau bas, alarme temperature ou reprise apres coupure. | Should | La liste exacte des evenements et les regles d'envoi restent a definir. |
+| F-037 | Le systeme pourrait permettre une remontee a distance de l'etat general, des alarmes et des defauts. | Could | Fonction cible pour une V2 ; le MVP doit rester pleinement exploitable sans elle. |
+| F-038 | Le systeme pourrait permettre d'emettre des notifications a distance lors d'evenements significatifs comme defaut critique, passage en degrade, niveau bas, alarme temperature ou reprise apres coupure. | Could | Fonction cible pour une V2 ; la liste exacte des evenements et les regles d'envoi restent a definir. |
 | F-039 | Le mode auto doit declencher le lavage lorsque le niveau eau propre reste en condition de demande pendant un retard configurable. | Must | La demande de lavage doit etre robuste aux fluctuations de capteur. |
 | F-040 | Une fois le lavage lance, le systeme doit maintenir rotation tambour et rincage au moins pendant une duree minimale configurable. | Must | Evite des cycles trop courts et inefficaces. |
 | F-041 | A l'issue de la duree minimale, si le niveau est redevenu normal, le systeme doit arreter le rincage, terminer eventuellement la rotation residuelle puis appliquer une temporisation anti-redemarrage. | Must | La rotation residuelle aide a evacuer le dernier film d'eau et les debris. |
@@ -62,10 +62,10 @@
 | F-056 | Les indicateurs de consommation d'eau devraient inclure au minimum les litres par lavage, les litres par jour, les litres par semaine, les litres perdus vers l'evacuation et une estimation du remplissage necessaire. | Should | Les valeurs doivent indiquer clairement si elles sont mesurees ou estimees. |
 | F-057 | Le systeme devrait suivre les temps de fonctionnement cumules des principaux actionneurs. | Should | Ces compteurs sont utiles pour la maintenance preventive et l'analyse d'usure. |
 | F-058 | Les temps de fonctionnement devraient inclure au minimum les heures moteur tambour, les heures pompe rincage, les heures pompe decoration, les heures pompe principale et les heures UV. | Should | Les compteurs doivent pouvoir etre consultes localement ou a distance selon l'IHM retenue. |
-| F-059 | Le systeme devrait permettre d'emettre immediatement une notification a distance lors des evenements critiques retenus. | Should | La liste minimale candidate comprend niveau eau propre critique, lavage inefficace critique, risque pompe a sec, capteurs incoherents, capot ouvert en situation dangereuse, coupure courant et retour courant. |
-| F-060 | Le systeme devrait pouvoir emettre une synthese quotidienne de fonctionnement lorsque cette fonction est activee. | Should | Cette synthese est utile pour suivre le filtre sans supervision permanente. |
-| F-061 | La synthese quotidienne devrait inclure au minimum un statut global du filtre, le nombre de lavages du jour, la duree moyenne, l'eau estimee ou mesuree consommee, le dernier defaut et la temperature d'eau. | Should | Le contenu exact pourra evoluer selon le canal retenu. |
-| F-062 | La synthese quotidienne doit pouvoir etre activee ou desactivee independamment des notifications immediates. | Must | L'utilisateur doit pouvoir supprimer le resume journalier sans perdre les alertes critiques. |
+| F-059 | Le systeme pourrait permettre d'emettre immediatement une notification a distance lors des evenements critiques retenus. | Could | Fonction cible pour une V2 ; la liste minimale candidate comprend niveau eau propre critique, lavage inefficace critique, risque pompe a sec, capteurs incoherents, capot ouvert en situation dangereuse, coupure courant et retour courant. |
+| F-060 | Le systeme pourrait emettre une synthese quotidienne de fonctionnement lorsque cette fonction est activee. | Could | Fonction cible pour une V2 ; cette synthese est utile pour suivre le filtre sans supervision permanente. |
+| F-061 | La synthese quotidienne pourrait inclure au minimum un statut global du filtre, le nombre de lavages du jour, la duree moyenne, l'eau estimee ou mesuree consommee, le dernier defaut et la temperature d'eau. | Could | Fonction cible pour une V2 ; le contenu exact pourra evoluer selon le canal retenu. |
+| F-062 | La synthese quotidienne doit pouvoir etre activee ou desactivee independamment des notifications immediates si cette fonction distante est retenue. | Could | Fonction cible pour une V2 ; l'utilisateur doit pouvoir supprimer le resume journalier sans perdre les alertes critiques. |
 | F-063 | Le systeme devrait permettre le pilotage automatique de la pompe decoration selon une ou plusieurs tranches horaires configurables. | Should | Permet par exemple de couper la fontaine la nuit. |
 | F-064 | Le fonctionnement programme de la pompe decoration doit pouvoir etre desactive simplement, sans supprimer la possibilite de commande manuelle si elle reste autorisee. | Must | Cette desactivation doit couvrir par exemple l'hiver ou une longue absence. |
 | F-065 | La programmation de la pompe decoration doit rester soumise aux securites generales du systeme, notamment niveau bas, defaut critique et eventuelles inhibitions saisonnieres retenues. | Must | Une tranche horaire ne doit jamais contourner une protection. |
@@ -143,6 +143,8 @@ Exemples de formulations a eviter en V1 sans capteur supplementaire :
 | Test | Verification apres intervention | Cycle complet automatise avec verdict valide ou defaut |
 | Arret total | Consignation ou maintenance lourde | Sorties arretees selon procedure maitrisee |
 
+L'arret total est une fonction d'exploitation explicite, mais il peut etre realise hors de la machine a etats logicielle par une procedure de consignation ou de coupure electrique maitrisee.
+
 ## Mesure de temperature bassin
 
 La fonction temperature doit au minimum couvrir :
@@ -191,7 +193,7 @@ Si l'IHM retenue ne permet pas d'afficher tout cela en meme temps, elle doit au 
 
 ## Remontee d'etat a distance
 
-La fonction de notification a distance doit au minimum etre etudiee pour couvrir :
+La fonction de notification a distance est hors MVP et doit etre etudiee pour une V2 afin de couvrir :
 
 - consultation ou reception de l'etat global du systeme ;
 - remontee des alarmes et defauts importants ;
@@ -199,7 +201,7 @@ La fonction de notification a distance doit au minimum etre etudiee pour couvrir
 - maitrise des notifications repetitives pour eviter le spam d'alarmes ;
 - comportement degrade acceptable en cas de perte de connectivite.
 
-### Notifications immediates a prevoir
+### Notifications immediates candidates pour une V2
 
 Une premiere liste simple et utile de notifications immediates comprend :
 
@@ -212,7 +214,7 @@ Une premiere liste simple et utile de notifications immediates comprend :
 - coupure courant ;
 - retour courant.
 
-### Synthese quotidienne
+### Synthese quotidienne candidate pour une V2
 
 La supervision distante peut aussi envoyer une synthese quotidienne lorsque cette fonction est activee.
 
@@ -237,6 +239,7 @@ La fonction devrait au minimum couvrir :
 - une ou plusieurs tranches horaires configurables ;
 - etat visible localement de la pompe decoration : active, arretee, inhibee ou hors plage ;
 - maintien des securites generales, en particulier niveau bas et defaut critique ;
+- application des memes securites hydrauliques que la pompe principale, la pompe decoration aspirant au meme endroit ;
 - compatibilite avec un futur mode hiver si cette fonction est retenue.
 
 ## Test journalier et diagnostic

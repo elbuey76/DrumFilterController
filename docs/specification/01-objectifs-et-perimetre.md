@@ -16,7 +16,7 @@ Le projet doit aboutir a :
 - une strategie de mise en securite des equipements auxiliaires en cas de niveau bas ;
 - une remontee d'alertes utile pour l'exploitation, y compris sur temperature bassin et temperature ambiante du local ;
 - une IHM locale capable de remonter clairement le statut du systeme ;
-- une capacite de notification a distance de l'etat et des alarmes.
+- une preparation explicite d'une capacite de notification a distance de l'etat et des alarmes pour une V2.
 
 ## Donnees d'entree connues
 
@@ -47,13 +47,14 @@ La premiere version couvre :
 - mesure de temperature de l'eau du bassin avec remontee d'alertes ;
 - mesure de temperature ambiante du local avec remontee d'alertes ;
 - IHM locale de statut ;
-- notifications a distance ou preparation explicite de cette fonction.
+- preparation explicite d'une extension de connectivite et de notifications a distance pour une V2.
 
 ## Hors perimetre initial
 
 Les points suivants sont envisageables, mais ne doivent pas bloquer le premier prototype :
 
 - application mobile ;
+- connectivite distante active et notifications associees ;
 - supervision cloud ;
 - carte electronique entierement dediee ;
 - historisation longue duree ;

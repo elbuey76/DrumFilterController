@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DrumFilterController - Documentation</title>
+  <link rel="stylesheet" href="viewer.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <p class="eyebrow">Documentation Viewer</p>
+        <h1>DrumFilterController</h1>
+        <p class="lede">
+          Vue d'ensemble de l'architecture projet et lecteur Markdown pour parcourir les documents du depot.
+        </p>
+      </div>
+
+      <section class="panel">
+        <div class="panel-header">
+          <h2>Navigation</h2>
+          <input id="doc-search" type="search" placeholder="Rechercher un document">
+        </div>
+        <nav id="doc-tree" class="doc-tree" aria-label="Arborescence documentaire"></nav>
+      </section>
+
+      <section class="panel quick-notes">
+        <h2>Reperes</h2>
+        <ul>
+          <li><strong>Specification</strong> : objectifs, exigences, contraintes.</li>
+          <li><strong>Architecture</strong> : vision systeme, materiel, logiciel.</li>
+          <li><strong>Calculs</strong> : hypotheses et dimensionnements.</li>
+          <li><strong>Decisions</strong> : ADR et choix structurants.</li>
+          <li><strong>Backlog</strong> : cadrage, prototype, firmware, validation.</li>
+        </ul>
+      </section>
+    </aside>
+
+    <main class="main-content">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Carte projet</p>
+          <h2>Architecture documentaire et systeme</h2>
+          <p>
+            Cette page donne une vue rapide de l'organisation des documents et permet d'ouvrir chaque fiche
+            Markdown dans un lecteur formate.
+          </p>
+        </div>
+        <div class="hero-stats" id="hero-stats"></div>
+      </section>
+
+      <section class="map-section">
+        <div class="section-title">
+          <h2>Organisation de la documentation</h2>
+          <p>Chaque bloc renvoie vers les documents cles de la section.</p>
+        </div>
+        <div id="doc-map" class="doc-map"></div>
+      </section>
+
+      <section class="architecture-section">
+        <div class="section-title">
+          <h2>Lecture rapide de l'architecture</h2>
+          <p>Representation simplifiee pour se reperer avant d'ouvrir les documents detailles.</p>
+        </div>
+        <div class="system-architecture">
+          <div class="architecture-lane">
+            <span class="lane-label">Hydraulique</span>
+            <div class="lane-track">
+              <button class="node-button" data-open="docs/specification/05-donnees-installation-et-fat-existant.md">Bassin</button>
+              <span class="connector"></span>
+              <button class="node-button" data-open="docs/architecture/01-vue-ensemble.md">FAT</button>
+              <span class="connector"></span>
+              <button class="node-button" data-open="docs/calculs/NC-0001-dimensionnement-pompe-filtration.md">Bio + Pompe</button>
+              <span class="connector"></span>
+              <button class="node-button" data-open="docs/specification/02-exigences-fonctionnelles.md">Retour / UV / Deco</button>
+            </div>
+          </div>
+          <div class="architecture-lane">
+            <span class="lane-label">Commande</span>
+            <div class="lane-track">
+              <button class="node-button" data-open="docs/specification/02-exigences-fonctionnelles.md">Capteurs</button>
+              <span class="connector"></span>
+              <button class="node-button" data-open="docs/architecture/03-architecture-logicielle.md">Machine a etats</button>
+              <span class="connector"></span>
+              <button class="node-button" data-open="docs/architecture/02-architecture-materielle.md">Sorties puissance</button>
+              <span class="connector"></span>
+              <button class="node-button" data-open="docs/backlog/backlog.md">Tests / Validation</button>
+            </div>
+          </div>
+          <div class="architecture-lane">
+            <span class="lane-label">Gouvernance</span>
+            <div class="lane-track">
+              <button class="node-button" data-open="docs/specification/01-objectifs-et-perimetre.md">Objectifs</button>
+              <span class="connector"></span>
+              <button class="node-button" data-open="docs/decisions/ADR-0001-structure-documentation.md">ADR</button>
+              <span class="connector"></span>
+              <button class="node-button" data-open="docs/backlog/backlog.md">Backlog</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="reader-section">
+        <div class="reader-toolbar">
+          <div>
+            <p class="eyebrow">Lecteur</p>
+            <h2 id="reader-title">README.md</h2>
+            <p id="reader-path" class="reader-path">README.md</p>
+          </div>
+          <div class="reader-actions">
+            <button id="open-source" class="ghost-button" type="button">Afficher le chemin</button>
+            <button id="reload-doc" class="ghost-button" type="button">Recharger</button>
+          </div>
+        </div>
+        <div id="reader-status" class="reader-status">
+          Ouverture directe prise en charge : un double-clic sur ce fichier suffit.
+        </div>
+        <article id="reader-content" class="markdown-body"></article>
+      </section>
+    </main>
+  </div>
+
+  <script src="docs-data.js"></script>
+  <script src="viewer.js"></script>
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+
+    window.mermaid = mermaid;
+    window.dispatchEvent(new Event("mermaid-ready"));
+  </script>
+</body>
+</html>
