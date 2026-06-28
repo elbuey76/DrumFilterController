@@ -82,6 +82,13 @@ Le projet porte sur un filtre a tambour (FAT) deja partiellement construit et in
 | Consommation | 10 mA | Valeur unitaire fournie |
 | Cablage | DC 3 fils | A integrer au schema de cablage |
 
+### Hypothese de nommage cote eau propre
+
+| Nom | Role | Notes |
+| --- | --- | --- |
+| EP_BAS | Demande de lavage | Niveau eau propre bas mais pas encore critique |
+| EP_CRITIQUE | Danger hydraulique et arret de securite | Niveau eau propre tres bas, coeur de la protection V1 |
+
 ## Chaine de filtration autour du FAT
 
 | Element | Valeur | Notes |
@@ -92,6 +99,8 @@ Le projet porte sur un filtre a tambour (FAT) deja partiellement construit et in
 | Pompe de filtration principale | retour bassin en 63 mm | Fonctionnement continu vise |
 | Pompe decoration | usage ponctuel | Cascade, mur d'eau, lame d'eau, etc. |
 | UV | emplacement non defini | A integrer plus tard dans la chaine |
+| Temperature bassin | mesure a ajouter | Valeur utile pour alertes et exploitation saisonniere |
+| Temperature ambiante local | mesure a ajouter | Valeur utile pour alertes environnementales et suivi du local technique |
 
 ## Hypotheses hydrauliques de dimensionnement de la filtration
 
@@ -180,6 +189,20 @@ Le point de fonctionnement nominal recherche reste 8 a 10 m3/h, mais la pompe pr
 - Fixer les capteurs de niveau sur le tube de report en 32 mm.
 - Concevoir et integrer toute la partie intelligence et pilotage du FAT.
 - Ajouter un capot de fermeture avec capteur de detection d'ouverture.
+- Ajouter une sonde de temperature d'eau avec implantation maintenable et representative.
+- Ajouter une sonde de temperature ambiante du local avec implantation representative.
+- Definir une IHM locale permettant de remonter clairement le statut du systeme.
+- Definir un moyen de remontee a distance de l'etat et des alarmes.
+- Definir la liste des notifications immediates a emettre et leur politique anti-repetition.
+- Definir une synthese quotidienne de fonctionnement et la possibilite de la desactiver.
+- Definir si la pompe decoration doit etre pilotee par tranches horaires et pouvoir etre desactivee en hiver.
+- Definir la liste finale des alarmes indirectes et leur formulation utilisateur.
+- Definir un test journalier automatique avec diagnostic.
+- Definir une strategie d'indexation du tambour pour repartir l'immersion.
+- Definir et restituer des statistiques de lavage pertinentes pour suivre l'etat du filtre.
+- Definir un indice simple d'encrassement exploitable dans le temps.
+- Definir et suivre la consommation d'eau du rincage et le besoin d'appoint associe.
+- Definir et suivre les temps de fonctionnement cumules des organes principaux.
 
 ## Questions techniques encore ouvertes
 
@@ -191,3 +214,24 @@ Le point de fonctionnement nominal recherche reste 8 a 10 m3/h, mais la pompe pr
 - Architecture de puissance pour separer clairement les sorties a couper des sorties a maintenir alimentees.
 - Implantation finale de l'UV dans la chaine de filtration.
 - Strategie de securite a appliquer si le capot est ouvert pendant un cycle.
+- Position finale du capteur de temperature bassin et technologie retenue.
+- Seuils d'alerte temperature basse et temperature haute.
+- Position finale du capteur de temperature ambiante local et technologie retenue.
+- Seuils d'alerte temperature ambiante basse et temperature ambiante haute.
+- Niveau d'IHM locale a retenir et informations a afficher localement.
+- Nombre, couleur et signification des voyants si une signalisation lumineuse est retenue.
+- Liste exacte des informations visibles en permanence sur l'IHM locale et de celles accessibles en detail.
+- Canal de notification a distance a retenir.
+- Liste des evenements a notifier et comportement en cas de perte reseau.
+- Activation par defaut, horaire et contenu exact de la synthese quotidienne.
+- Source exacte de l'information bassin niveau bas si elle differe du niveau bas de securite deja prevu.
+- Nombre de tranches horaires, mode de configuration et logique hivernale de la pompe decoration.
+- Priorite entre commande manuelle, programmation horaire et inhibition de la pompe decoration.
+- Validation physique de l'ordre et de la logique des capteurs EP_BAS et EP_CRITIQUE.
+- Choix de rester en diagnostic indirect V1 ou d'ajouter plus tard des capteurs dedies pour rotation, courant, fuite ou niveau eau sale.
+- Regles de lancement, de verdict et de report du test journalier automatique.
+- Strategie retenue pour ne pas laisser toujours la meme zone du tambour immergee.
+- Regles de calcul et de restitution des statistiques de lavage.
+- Formule retenue pour l'indice d'encrassement et usage associe.
+- Mode de mesure ou d'estimation de la consommation d'eau et des pertes vers evacuation.
+- Regles de cumul, d'affichage et de remise a zero eventuelle des temps de fonctionnement.

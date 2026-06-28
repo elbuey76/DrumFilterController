@@ -1,19 +1,51 @@
 # Questions ouvertes
 
-Ces questions doivent être complétées au fil des décisions et peuvent mener à des entrées dans le journal de décisions.
+Ces questions doivent etre completees au fil des decisions et peuvent mener a des entrees dans le journal de decisions.
 
 | ID | Question | Statut | Notes |
 | --- | --- | --- | --- |
-| Q-001 | Quelle tension et quelle puissance pour le moteur du tambour ? | Ouverte | À mesurer ou relever sur plaque signalétique. |
-| Q-002 | Quelle puissance, quel debit et quelle hauteur manometrique pour la pompe de rinçage ? | Ouverte | Conditionne relais/contacteur, protection et efficacite du lavage. |
-| Q-003 | Quelles cotes exactes retenir pour le niveau normal cote sale, le niveau normal cote propre, le seuil de lavage et le niveau bas de securite ? | En cours | Hypothese actuelle: niveau normal cote sale environ 20 cm au-dessus du bas du tambour, soit environ 27 cm depuis le fond du filtre, a confirmer avec les autres reperes. |
-| Q-004 | Combien de capteurs CR18-8DN faut-il installer et a quelles positions exactes sur le tube de report ? | Ouverte | Permet de fixer lavage, niveau bas et eventuelle redondance. |
-| Q-005 | Comment câbler et prioriser les sorties à couper sur niveau bas pompe principale, pompe décoration, UV, mise à niveau auto et les sorties à maintenir bulleurs ? | En cours | Le comportement attendu est fixé, il reste à traduire cela en architecture d'E/S et de puissance. |
-| Q-006 | Le réarmement après niveau bas doit-il être automatique, temporisé ou manuel ? | Ouverte | Impacte sécurité d'exploitation et confort d'usage. |
-| Q-007 | Faut-il une connectivité Wi-Fi ou Ethernet dès la première version ? | Ouverte | Impacte choix ESP32/automate. |
-| Q-008 | Le coffret est-il en extérieur ou local technique protégé ? | Ouverte | Impacte IP, connectique et composants. |
-| Q-009 | Quel comportement de securite doit etre applique lorsque le capot est ouvert ? | Ouverte | Arret immediat, interdiction du lavage ou simple alarme selon le risque retenu. |
+| Q-001 | Quelle tension et quelle puissance pour le moteur du tambour ? | Ouverte | A mesurer ou relever sur plaque signaletique. |
+| Q-002 | Quelle puissance, quel debit et quelle hauteur manometrique pour la pompe de rincage ? | Ouverte | Conditionne relais/contacteur, protection et efficacite du lavage. |
+| Q-003 | Quelles cotes exactes retenir pour le niveau normal cote sale, le niveau normal cote propre, le seuil de lavage et le niveau bas de securite ? | En cours | Hypothese actuelle : niveau normal cote sale environ 20 cm au-dessus du bas du tambour, soit environ 27 cm depuis le fond du filtre, a confirmer avec les autres reperes. |
+| Q-004 | Combien de capteurs CR18-8DN faut-il installer et a quelles positions exactes sur le tube de report ? | Ouverte | Permet de fixer lavage, niveau bas et redondance eventuelle. |
+| Q-005 | Comment cabler et prioriser les sorties a couper sur niveau bas pompe principale, pompe decoration, UV, mise a niveau auto et les sorties a maintenir bulleurs ? | En cours | Le comportement attendu est fixe, il reste a traduire cela en architecture d'E/S et de puissance. |
+| Q-006 | Quelle politique exacte de reprise apres coupure de courant faut-il retenir pour chaque sortie et chaque mode ? | Ouverte | Le systeme doit redevenir operationnel, mais les temporisations et exceptions doivent etre precisees. |
+| Q-007 | Faut-il une connectivite Wi-Fi ou Ethernet des la premiere version ? | Ouverte | Impacte choix ESP32/automate. |
+| Q-008 | Le coffret est-il en exterieur ou local technique protege ? | Ouverte | Impacte IP, connectique et composants. |
+| Q-009 | Quel comportement de securite exact faut-il appliquer lorsque le capot est ouvert ? | En cours | La cible actuelle est passage maintenance, UV coupe et lavage auto interdit ; le detail des transitions reste a figer. |
 | Q-010 | Ou positionner l'UV dans la chaine de filtration ? | Ouverte | En amont ou aval de la pompe principale selon l'equipement retenu. |
 | Q-011 | Quelle cote de support faut-il pour aligner le trop-plein du FAT avec le niveau hydraulique vise du bassin ? | Ouverte | Point mecanique critique pour eviter un mauvais regime gravitaire. |
 | Q-012 | Quelle geometrie d'ouvertures sous la toile inox 74 microns permet d'obtenir une surface de filtration utile d'environ 0,20 a 0,23 m2 ? | Ouverte | Depend de la forme, du nombre et de la surface totale ouverte du tambour. |
 | Q-013 | Quelle geometrie finale d'ouvertures et quel taux de passage utile retenir pour passer d'environ 0,33 m2 de toile immergee brute a environ 0,20 a 0,23 m2 de surface filtrante utile ? | Ouverte | Point dimensionnant pour le percement du tambour sous la toile inox 74 microns. |
+| Q-014 | Quels auto-diagnostics indirects sont juges indispensables des la premiere version et lesquels peuvent attendre ? | Ouverte | Par exemple : capteurs incoherents, lavage inefficace, absence anormale de lavage, lavage trop frequent, test lavage en echec. |
+| Q-015 | Faut-il prevoir un mode hiver des la premiere version, et si oui avec quelles fonctions exactes ? | Ouverte | Exemples a discuter : maintien circulation minimale, adaptation temporisations, protection antigel, priorite aeration. |
+| Q-016 | Quelle interface operateur retenir pour selectionner les modes auto, manuel, maintenance, degrade et test ? | Ouverte | Boutons physiques, selecteur a cle, IHM locale ou supervision. |
+| Q-017 | Ou implanter le capteur de temperature du bassin pour obtenir une mesure representative et maintenable ? | Ouverte | A arbitrer entre bassin, chambre technique, retour filtration ou autre point protege. |
+| Q-018 | Quels seuils d'alerte temperature basse et temperature haute faut-il retenir, et ces alertes doivent-elles seulement informer ou aussi influencer le mode hiver ? | Ouverte | A definir selon les poissons, la saison et la strategie d'exploitation. |
+| Q-019 | Ou implanter le capteur de temperature ambiante pour representer correctement le local sans etre trop influence par le coffret, le soleil ou un equipement chaud ? | Ouverte | A arbitrer entre interieur coffret, exterieur coffret, local technique ou zone protegee. |
+| Q-020 | Quels seuils d'alerte temperature ambiante basse et temperature ambiante haute faut-il retenir, et cette mesure doit-elle servir a detecter gel, surchauffe ou condensation ? | Ouverte | A definir selon le site, le coffret et la strategie d'exploitation. |
+| Q-021 | Quel niveau d'IHM locale retenir pour remonter le statut : simples LED, voyants multicolores, afficheur texte, ecran graphique ou combinaison ? | Ouverte | Impacte cout, cablage, lisibilite et maintenance. |
+| Q-022 | Combien de voyants faut-il prevoir et quel code couleur retenir pour distinguer marche, auto, manuel, maintenance, degrade, lavage, alarme et defaut ? | Ouverte | A definir pour rester lisible sans multiplier inutilement les indicateurs. |
+| Q-023 | Quel canal de remontee a distance retenir pour l'etat et les alarmes : Wi-Fi, BLE, mail, SMS, application mobile ou combinaison ? | Ouverte | Le choix depend de la couverture reseau, du cout, de la simplicite et de la fiabilite attendue. |
+| Q-024 | Quels evenements doivent declencher une notification a distance et avec quelle politique de repetition ou d'acquittement ? | Ouverte | A definir pour rester utile sans generer trop d'alertes. |
+| Q-025 | La fonction distante doit-elle seulement notifier ou aussi permettre une consultation d'etat en temps reel et un historique ? | Ouverte | Impacte fortement l'architecture logicielle et la connectivite. |
+| Q-026 | A quelle heure ou dans quelle fenetre faut-il lancer le test journalier automatique, et faut-il pouvoir le reporter si le bassin est en phase sensible ? | Ouverte | A definir selon l'usage reel du bassin et le risque de nuisance. |
+| Q-027 | Quels criteres precis doivent faire reussir ou echouer le test journalier automatique ? | Ouverte | Par exemple retour niveau, rotation detectee, courant moteur, temps de cycle ou combinaison. |
+| Q-028 | Comment definir l'indexation du tambour pour eviter une immersion toujours identique : angle fixe, pas progressif, rotation aleatoire limitee ou repositionnement complet ? | Ouverte | Depend de la mecanique et de la possibilite de connaitre la position. |
+| Q-029 | Faut-il ajouter un capteur de position tambour pour fiabiliser l'indexation et certains diagnostics ? | Ouverte | Impacte cablage, cout et precision des fonctions avancees. |
+| Q-030 | Comment calculer exactement les statistiques de lavage : inclure ou non les tests journaliers, les tentatives echouees et les lavages interrompus ? | Ouverte | Important pour garder des indicateurs comparables dans le temps. |
+| Q-031 | Sous quelle forme faut-il restituer les statistiques de lavage : ecran local, historique distant, export ou simple consultation de compteurs ? | Ouverte | Impacte l'IHM et la supervision distante. |
+| Q-032 | Faut-il figer l'indice d'encrassement sur la formule simple lavages par heure x duree moyenne lavage ou prevoir des variantes futures ? | Ouverte | Le choix impacte la comparabilite historique de l'indicateur. |
+| Q-033 | Quels seuils ou quelles derives de l'indice d'encrassement doivent declencher une alerte ou un avertissement ? | Ouverte | A definir apres observation du comportement reel du filtre. |
+| Q-034 | Faut-il ajouter un compteur d'eau pour mesurer la consommation de rincage, ou une estimation a partir du debit de la pompe suffit-elle en V1 ? | Ouverte | Impacte cout, precision et simplicite d'integration. |
+| Q-035 | Ou positionner un eventuel compteur d'eau pour distinguer au mieux eau de rincage, pertes vers evacuation et besoin de remplissage ? | Ouverte | Depend de l'hydraulique reelle du FAT et de l'appoint d'eau. |
+| Q-036 | Faut-il prevoir un simple compteur horaire cumule par organe ou aussi des remises a zero de maintenance et des seuils de rappel ? | Ouverte | Impacte l'IHM, la maintenance et la persistance des donnees. |
+| Q-037 | Quelle priorite d'affichage retenir sur l'IHM locale si toutes les informations utiles ne tiennent pas simultanement a l'ecran ? | Ouverte | A arbitrer entre vue synthese permanente et ecrans de detail. |
+| Q-038 | Quelle liste finale retenir pour les notifications immediates et faut-il differencier apparition, rappel et retour a la normale pour chaque evenement ? | Ouverte | Important pour garder des messages utiles sans surcharger l'utilisateur. |
+| Q-039 | A quelle heure faut-il envoyer la synthese quotidienne, sur quel canal et doit-elle etre activee ou desactivee par defaut ? | Ouverte | Impacte l'acceptabilite de la fonction et la qualite percue des notifications. |
+| Q-040 | Le champ bassin niveau bas repose-t-il sur le niveau bas de securite existant ou faut-il une information capteur distincte cote bassin ? | Ouverte | A clarifier pour eviter une notification mal interpretee. |
+| Q-041 | Combien de tranches horaires faut-il prevoir pour la pompe decoration et avec quelle granularite journaliere ou hebdomadaire ? | Ouverte | Impacte la simplicite d'usage et la complexite de configuration. |
+| Q-042 | La desactivation hivernale de la pompe decoration doit-elle etre un simple interrupteur, une consequence automatique du mode hiver ou une plage saisonniere datee ? | Ouverte | A definir pour rester simple tout en couvrant le besoin reel. |
+| Q-043 | Quelle priorite retenir entre commande manuelle de la pompe decoration, programmation horaire et supervision distante eventuelle ? | Ouverte | Important pour eviter des comportements contradictoires. |
+| Q-044 | La pompe decoration aspire-t-elle dans une zone qui doit la faire suivre les memes securites que la pompe filtration, notamment sur EP_CRITIQUE ? | Ouverte | Point determinent pour savoir si elle reste decorrelatione ou non du coeur securitaire FAT. |
+| Q-045 | Souhaite-t-on rester en diagnostic purement indirect en V1, ou ajouter plus tard des capteurs dedies rotation, courant, fuite ou niveau eau sale pour fiabiliser certains messages ? | Ouverte | Impacte cout, cablage, precision des defauts et simplicite d'exploitation. |
