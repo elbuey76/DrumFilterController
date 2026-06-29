@@ -7,9 +7,9 @@
 | Entrees | Lire les capteurs, la temperature bassin, la temperature ambiante et les boutons, appliquer anti-rebond et filtrage. |
 | Temporisations | Centraliser les delais, durees et timeouts. |
 | Machine a etats | Decider des transitions, du mode courant et des verrouillages. |
-| Diagnostics | Evaluer auto-tests, coherence EP_BAS et EP_CRITIQUE, consequences hydrauliques observables, temperatures et criteres de passage en degrade ou defaut. |
+| Diagnostics | Evaluer auto-tests, coherence EP_LAVAGE et EP_CRITIQUE, consequences hydrauliques observables, temperatures et criteres de passage en degrade ou defaut. |
 | Communication distante | Option V2 : publier et notifier les etats et evenements importants vers l'exterieur. |
-| Sorties | Piloter relais, voyants, buzzer, ecran local et autres actionneurs. |
+| Sorties | Piloter relais, voyants, ecran local et autres actionneurs. |
 | Configuration | Stocker les parametres modifiables et la politique de reprise. |
 | Journalisation | Enregistrer cycles, alarmes et evenements importants. |
 | Statistiques | Calculer, consolider et exposer les indicateurs de lavage a court et moyen terme. |
@@ -79,7 +79,7 @@ L'arret total n'apparait pas comme un etat logiciel de la machine a etats ci-des
 
 | Capteur | Role logique |
 | --- | --- |
-| EP_BAS | Demande de lavage par niveau eau propre bas |
+| EP_LAVAGE | Demande de lavage par niveau eau propre abaisse |
 | EP_CRITIQUE | Danger hydraulique, risque pompe a sec et arret de securite |
 
 ## Limites de diagnostic en V1
@@ -175,7 +175,7 @@ Le logiciel devrait aussi consolider au minimum :
 - litres perdus vers evacuation ;
 - estimation du remplissage necessaire.
 
-Ces indicateurs doivent pouvoir etre etiquetes comme mesures ou estimes selon l'instrumentation disponible.
+Ces indicateurs sont estimes empiriquement a partir des essais, du debit de rincage de reference et du temps cumule de fonctionnement.
 
 ## Temps de fonctionnement a consolider
 
@@ -216,12 +216,12 @@ Le moteur tambour et la pompe de rincage sont commandes ensemble au debut de cha
 
 La logique d'etat observable recommandee est la suivante :
 
-1. EP_BAS = 0 et EP_CRITIQUE = 0 : fonctionnement normal ;
-2. EP_BAS = 1 et EP_CRITIQUE = 0 : demande de lavage ;
-3. apres lavage, EP_BAS retourne a 0 : lavage reussi ;
-4. apres lavage, EP_BAS reste a 1 : lavage douteux puis relance selon tentatives restantes ;
+1. EP_LAVAGE = 0 et EP_CRITIQUE = 0 : fonctionnement normal ;
+2. EP_LAVAGE = 1 et EP_CRITIQUE = 0 : demande de lavage ;
+3. apres lavage, EP_LAVAGE retourne a 0 : lavage reussi ;
+4. apres lavage, EP_LAVAGE reste a 1 : lavage douteux puis relance selon tentatives restantes ;
 5. EP_CRITIQUE = 1 : defaut critique, arret filtration et UV ;
-6. EP_CRITIQUE = 1 alors que EP_BAS = 0 : capteurs incoherents, mise en securite.
+6. EP_CRITIQUE = 1 alors que EP_LAVAGE = 0 : capteurs incoherents, mise en securite.
 
 ## Fonctions periodiques recommandees
 
@@ -305,8 +305,8 @@ Cette synthese doit rester optionnelle et configurable independamment des notifi
 - duree maximale de commande continue par sortie ;
 - regles de calcul des statistiques ;
 - regle de calcul de l'indice d'encrassement ;
-- regle de calcul de la consommation d'eau ;
-- debit de rincage de reference si estimation ;
+- regle empirique de calcul de la consommation d'eau ;
+- debit de rincage de reference ;
 - regles de cumul des temps de fonctionnement ;
 - profondeur historique 7 jours et 30 jours ;
 - heure ou fenetre du test journalier ;
@@ -348,9 +348,9 @@ Cette synthese doit rester optionnelle et configurable independamment des notifi
 - Definir une priorite claire entre commande manuelle, programmation horaire de la pompe decoration et securites globales.
 - Conditionner le comportement de la pompe decoration a son point reel d'aspiration si elle peut contribuer a vider une zone sensible.
 - Memoriser le compteur de tentatives et le compteur de lavages par heure et par jour pour les diagnostics.
-- Memoriser le temps de retour EP_BAS a l'etat normal, le nombre d'activations de EP_CRITIQUE, les ouvertures capot et leur duree.
+- Memoriser le temps de retour EP_LAVAGE a l'etat normal, le nombre d'activations de EP_CRITIQUE, les ouvertures capot et leur duree.
 - Garder une definition stable des statistiques pour pouvoir comparer les tendances dans le temps.
 - Garder une definition stable de l'indice d'encrassement pour que sa derive reste interpretable.
-- Indiquer explicitement si la consommation d'eau est mesuree ou seulement estimee.
+- Indiquer explicitement que la consommation d'eau de rincage est estimee empiriquement.
 - Garantir que les compteurs de temps de fonctionnement restent coherents apres redemarrage ou coupure.
 - Empiler proprement les planifications periodiques pour que test journalier et indexation ne perturbent pas la logique de lavage nominale.

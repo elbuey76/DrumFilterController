@@ -18,8 +18,8 @@
 | F-012 | Le systeme doit couper l'UV lorsque le seuil bas est atteint. | Must | Evite un fonctionnement hors d'eau et sans refroidissement correct. |
 | F-013 | Le systeme doit interdire toute rotation du tambour et toute activation de la pompe de rincage tant que le niveau bas persiste. | Must | La fonction de lavage du FAT doit etre completement inhibee en niveau bas. |
 | F-014 | Le systeme doit couper la mise a niveau automatique du bassin lorsque le seuil bas est atteint. | Must | Evite de remplir indefiniment le bassin en cas de fuite. |
-| F-015 | Le systeme doit maintenir alimente le bulleur de la cuve bio meme lorsque le seuil bas est atteint. | Must | Permet de preserver les bacteries de filtration biologique. |
-| F-016 | Le systeme doit maintenir alimente le bulleur du bassin meme lorsque le seuil bas est atteint. | Must | Permet de maintenir l'oxygenation des poissons et de limiter la glace en hiver. |
+| F-015 | L'architecture doit laisser le bulleur de la cuve bio hors des sorties coupees par le controleur. | Must | Le bulleur sera branche directement sur le 220 V afin de preserver les bacteries de filtration biologique. |
+| F-016 | L'architecture doit laisser le bulleur du bassin hors des sorties coupees par le controleur. | Must | Le bulleur sera branche directement sur le 220 V afin de maintenir l'oxygenation des poissons et de limiter la glace en hiver. |
 | F-017 | Le systeme doit maintenir les sorties coupees ou inhibees tant que la condition de niveau bas persiste. | Must | Le redemarrage doit etre maitrise pour eviter les oscillations. |
 | F-018 | Le systeme devrait permettre de configurer un delai ou une logique de rearmement apres retour a un niveau normal. | Should | Permet d'eviter une remise en service trop brusque apres incident. |
 | F-019 | Le systeme doit proposer un mode auto normal comme mode principal d'exploitation. | Must | C'est le mode nominal apres mise en service et en exploitation courante. |
@@ -37,7 +37,7 @@
 | F-031 | Le systeme doit permettre de remonter au minimum des alertes de temperature basse, temperature haute et perte de mesure du capteur. | Should | Les seuils exacts et l'usage par le mode hiver restent a definir. |
 | F-032 | Le systeme doit mesurer la temperature ambiante du local technique ou du coffret et rendre cette valeur disponible a l'automate. | Must | L'emplacement exact doit privilegier une mesure representative et maintenable. |
 | F-033 | Le systeme doit permettre de remonter au minimum des alertes de temperature ambiante basse, temperature ambiante haute et perte de mesure du capteur. | Must | Les seuils exacts et les usages de cette mesure restent a definir. |
-| F-034 | Le systeme doit disposer d'une IHM locale permettant de remonter le statut de fonctionnement a proximite du coffret. | Must | Le choix exact entre voyants, ecran, buzzer ou combinaison reste a definir. |
+| F-034 | Le systeme doit disposer d'une IHM locale permettant de remonter le statut de fonctionnement a proximite du coffret. | Must | Le choix exact entre voyants, ecran ou combinaison reste a definir. |
 | F-035 | L'IHM locale doit permettre d'identifier au minimum les etats auto normal, manuel, maintenance, degrade, defaut, cycle en cours et alarme active. | Must | La forme d'affichage peut etre lumineuse, textuelle ou mixte. |
 | F-036 | Le systeme devrait permettre d'afficher localement au moins certaines mesures utiles comme temperatures, etat des capteurs ou cause de defaut si un ecran est retenu. | Should | Cette exigence depend du niveau d'IHM retenu. |
 | F-037 | Le systeme pourrait permettre une remontee a distance de l'etat general, des alarmes et des defauts. | Could | Fonction cible pour une V2 ; le MVP doit rester pleinement exploitable sans elle. |
@@ -58,8 +58,8 @@
 | F-052 | Le systeme devrait permettre de suivre l'evolution de ces statistiques sur au moins 7 jours et 30 jours. | Should | L'objectif est d'observer les derives lentes du comportement du filtre. |
 | F-053 | Le systeme devrait calculer un indice simple d'encrassement du filtre a partir des statistiques de lavage. | Should | Cet indice aide a suivre l'evolution globale de la charge et de l'efficacite du nettoyage. |
 | F-054 | L'indice d'encrassement devrait etre calcule au minimum comme : nombre de lavages par heure x duree moyenne de lavage. | Should | La formule pourra etre enrichie plus tard si des mesures supplementaires sont disponibles. |
-| F-055 | Le systeme devrait permettre d'estimer ou de mesurer la consommation d'eau liee au rincage du filtre. | Should | Cette fonction peut reposer sur un compteur d'eau ou sur une estimation a partir du debit de rincage. |
-| F-056 | Les indicateurs de consommation d'eau devraient inclure au minimum les litres par lavage, les litres par jour, les litres par semaine, les litres perdus vers l'evacuation et une estimation du remplissage necessaire. | Should | Les valeurs doivent indiquer clairement si elles sont mesurees ou estimees. |
+| F-055 | Le systeme devrait permettre d'estimer empiriquement la consommation d'eau liee au rincage du filtre. | Should | L'estimation reposera sur les essais, le debit de rincage de reference et les temps de fonctionnement. |
+| F-056 | Les indicateurs de consommation d'eau devraient inclure au minimum les litres estimes par lavage, les litres estimes par jour, les litres estimes par semaine, les litres perdus vers l'evacuation et une estimation du remplissage necessaire. | Should | Les valeurs doivent indiquer clairement qu'elles sont estimees empiriquement. |
 | F-057 | Le systeme devrait suivre les temps de fonctionnement cumules des principaux actionneurs. | Should | Ces compteurs sont utiles pour la maintenance preventive et l'analyse d'usure. |
 | F-058 | Les temps de fonctionnement devraient inclure au minimum les heures moteur tambour, les heures pompe rincage, les heures pompe decoration, les heures pompe principale et les heures UV. | Should | Les compteurs doivent pouvoir etre consultes localement ou a distance selon l'IHM retenue. |
 | F-059 | Le systeme pourrait permettre d'emettre immediatement une notification a distance lors des evenements critiques retenus. | Could | Fonction cible pour une V2 ; la liste minimale candidate comprend niveau eau propre critique, lavage inefficace critique, risque pompe a sec, capteurs incoherents, capot ouvert en situation dangereuse, coupure courant et retour courant. |
@@ -70,14 +70,14 @@
 | F-064 | Le fonctionnement programme de la pompe decoration doit pouvoir etre desactive simplement, sans supprimer la possibilite de commande manuelle si elle reste autorisee. | Must | Cette desactivation doit couvrir par exemple l'hiver ou une longue absence. |
 | F-065 | La programmation de la pompe decoration doit rester soumise aux securites generales du systeme, notamment niveau bas, defaut critique et eventuelles inhibitions saisonnieres retenues. | Must | Une tranche horaire ne doit jamais contourner une protection. |
 | F-066 | Le systeme doit formuler ses alarmes et defauts a partir des consequences observables et des incoherences mesurables, sans affirmer une panne d'organe non instrumentee directement. | Must | Par exemple, preferer lavage inefficace a tambour bloque ou pompe HS si aucun retour d'etat direct n'existe. |
-| F-067 | La nomenclature de reference cote eau propre doit distinguer au minimum un capteur EP_BAS pour la demande de lavage et un capteur EP_CRITIQUE pour le danger pompe et l'arret de securite. | Must | Ces deux entrees constituent le coeur de la logique hydraulique observable en V1. |
-| F-068 | Le systeme doit detecter comme defaut critique toute combinaison incoherente des capteurs eau propre, notamment EP_CRITIQUE actif alors que EP_BAS n'est pas actif si l'ordre physique des capteurs l'interdit. | Must | Cette verification protege contre un capteur bloque ou un cablage incoherent. |
-| F-069 | Au redemarrage, si EP_BAS ou EP_CRITIQUE sont actifs, le systeme ne doit pas relancer directement la filtration et l'UV sans verification de la situation hydraulique et sans appliquer la strategie de reprise retenue. | Must | Un lavage peut etre tente si les conditions le permettent, sinon le systeme doit rester en securite. |
+| F-067 | La nomenclature de reference cote eau propre doit distinguer au minimum un capteur EP_LAVAGE pour la demande de lavage et un capteur EP_CRITIQUE pour le danger pompe et l'arret de securite. | Must | Ces deux entrees constituent le coeur de la logique hydraulique observable en V1. |
+| F-068 | Le systeme doit detecter comme defaut critique toute combinaison incoherente des capteurs eau propre, notamment EP_CRITIQUE actif alors que EP_LAVAGE n'est pas actif si l'ordre physique des capteurs l'interdit. | Must | Cette verification protege contre un capteur bloque ou un cablage incoherent. |
+| F-069 | Au redemarrage, si EP_LAVAGE ou EP_CRITIQUE sont actifs, le systeme ne doit pas relancer directement la filtration et l'UV sans verification de la situation hydraulique et sans appliquer la strategie de reprise retenue. | Must | Un lavage peut etre tente si les conditions le permettent, sinon le systeme doit rester en securite. |
 | F-070 | Le systeme devrait detecter une absence anormale de lavage lorsque la filtration est commandee mais qu'aucun lavage n'est observe pendant une duree inhabituelle au regard de la saison ou de l'historique. | Should | Ce diagnostic reste indirect et doit etre formule comme une verification de debit, pompe ou capteur. |
 | F-071 | Le systeme doit couper l'UV et lever une alarme de commande incoherente si l'UV est commande alors que la filtration n'est pas autorisee ou qu'un niveau critique eau propre est present. | Must | En V1, l'UV est asservi a la commande de filtration autorisee et non a une mesure directe de debit. |
 | F-072 | Le systeme devrait surveiller un temps anormal de commande continue des sorties principales et alerter l'utilisateur en cas d'incoherence durable. | Should | Cette surveillance vise surtout a detecter une derive d'automatisme ou un oubli d'exploitation. |
 | F-073 | Le systeme devrait surveiller la frequence des redemarrages de l'automate et signaler des coupures secteur anormalement repetitives. | Should | Utile pour detecter une alimentation instable ou des reboots parasites. |
-| F-074 | Les statistiques internes devraient inclure au minimum le temps de retour de EP_BAS a l'etat normal, le nombre de tentatives par lavage, le nombre d'activations de EP_CRITIQUE, les temperatures min/max/moyenne, le nombre d'ouvertures capot et la duree capot ouvert. | Should | Ces donnees compensent le faible nombre de capteurs directs par une meilleure lecture des derives. |
+| F-074 | Les statistiques internes devraient inclure au minimum le temps de retour de EP_LAVAGE a l'etat normal, le nombre de tentatives par lavage, le nombre d'activations de EP_CRITIQUE, les temperatures min/max/moyenne, le nombre d'ouvertures capot et la duree capot ouvert. | Should | Ces donnees compensent le faible nombre de capteurs directs par une meilleure lecture des derives. |
 
 ## Reperes de niveau a definir
 
@@ -98,7 +98,7 @@ Dans l'hypothese actuelle, les deux capteurs cote eau propre sont nommes comme s
 
 | Capteur | Role |
 | --- | --- |
-| EP_BAS | Niveau eau propre bas, demande de lavage |
+| EP_LAVAGE | Niveau eau propre abaisse, demande de lavage |
 | EP_CRITIQUE | Niveau eau propre tres bas, danger pompe et arret de securite |
 
 Ces deux entrees constituent le coeur de la logique observable du FAT en V1.
@@ -259,17 +259,17 @@ Le test journalier automatique doit au minimum couvrir :
 | Code | Alarme | Detection observable | Action cible |
 | --- | --- | --- | --- |
 | C01 | Niveau eau propre critique | EP_CRITIQUE actif au-dela de la temporisation de confirmation | Arret filtration, arret UV, alarme critique |
-| C02 | Lavage inefficace critique | EP_BAS reste actif apres le nombre maximum de tentatives, ou EP_CRITIQUE finit par s'activer | Arret filtration, arret UV, alarme critique |
-| C03 | Capteurs niveau incoherents | Combinaison physiquement impossible entre EP_BAS et EP_CRITIQUE | Arret filtration par prudence, arret UV, alarme |
-| C04 | Demarrage impossible niveau eau propre bas | EP_BAS ou EP_CRITIQUE actifs au demarrage sans retour a un etat sur | Interdire redemarrage direct, alarme |
+| C02 | Lavage inefficace critique | EP_LAVAGE reste actif apres le nombre maximum de tentatives, ou EP_CRITIQUE finit par s'activer | Arret filtration, arret UV, alarme critique |
+| C03 | Capteurs niveau incoherents | Combinaison physiquement impossible entre EP_LAVAGE et EP_CRITIQUE | Arret filtration par prudence, arret UV, alarme |
+| C04 | Demarrage impossible niveau eau propre bas | EP_LAVAGE ou EP_CRITIQUE actifs au demarrage sans retour a un etat sur | Interdire redemarrage direct, alarme |
 | C05 | Capot ouvert avec cycle dangereux | Capot ouvert pendant lavage, ou capot ouvert alors qu'un cycle automatique voudrait demarrer | Stop UV, interdire lavage auto, alarme |
 
 ### Alarmes majeures
 
 | Code | Alarme | Detection observable | Action cible |
 | --- | --- | --- | --- |
-| M01 | Niveau eau propre bas persistant | EP_BAS actif trop longtemps sans atteindre EP_CRITIQUE | Lavage renforce ou relances, alarme majeure |
-| M02 | Lavages trop frequents | Trop de passages de EP_BAS ou trop de cycles sur une periode | Alerte encrassement, maintien fonctionnement si securite OK |
+| M01 | Niveau eau propre bas persistant | EP_LAVAGE actif trop longtemps sans atteindre EP_CRITIQUE | Lavage renforce ou relances, alarme majeure |
+| M02 | Lavages trop frequents | Trop de passages de EP_LAVAGE ou trop de cycles sur une periode | Alerte encrassement, maintien fonctionnement si securite OK |
 | M03 | Lavage trop long | Retour a niveau normal trop lent par rapport au nominal | Alerte nettoyage inefficace |
 | M04 | Absence anormale de lavage | Filtration commandee mais aucun lavage observe pendant une duree inhabituelle | Demande de verification debit, pompe ou capteur |
 | M05 | Commande UV incoherente | UV commande alors que filtration non autorisee ou niveau critique actif | Couper UV, alarme |
@@ -306,7 +306,7 @@ Les statistiques de lavage considerees comme les plus utiles sont :
 - nombre de lavages par jour ;
 - duree moyenne d'un lavage ;
 - duree totale de lavage par jour ;
-- temps necessaire pour que EP_BAS repasse a l'etat normal ;
+- temps necessaire pour que EP_LAVAGE repasse a l'etat normal ;
 - nombre de tentatives par lavage ;
 - intervalle moyen entre lavages ;
 - intervalle minimum entre lavages ;
@@ -331,16 +331,13 @@ Si cet indice monte, cela peut indiquer par exemple :
 
 Les indicateurs de consommation d'eau les plus utiles sont :
 
-- litres par lavage ;
-- litres par jour ;
-- litres par semaine ;
-- litres perdus vers evacuation ;
+- litres estimes par lavage ;
+- litres estimes par jour ;
+- litres estimes par semaine ;
+- litres estimes perdus vers evacuation ;
 - estimation du remplissage necessaire.
 
-La fonction peut etre realisee de deux facons :
-
-- par mesure directe avec compteur d'eau sur le circuit de rincage ou d'appoint ;
-- par estimation a partir du debit de rincage et du temps cumule de fonctionnement.
+La fonction est realisee par estimation empirique a partir des essais, du debit de rincage de reference et du temps cumule de fonctionnement.
 
 Les donnees de consommation doivent aider a comprendre :
 
@@ -410,20 +407,20 @@ Les interverrouillages minimaux attendus sont les suivants :
 - Pompe de rincage.
 - Mise a niveau automatique du bassin.
 
-### Sorties a maintenir alimentees
+### Equipements hors sorties controlees
 
-- Bulleur de la cuve bio.
-- Bulleur du bassin.
+- Bulleur de la cuve bio, branche directement sur le 220 V.
+- Bulleur du bassin, branche directement sur le 220 V.
 
 ## Logique cible de lavage automatique
 
 La logique de reference retenue est la suivante :
 
-1. Si EP_BAS reste actif pendant le retard capteur configure, lancer un lavage.
+1. Si EP_LAVAGE reste actif pendant le retard capteur configure, lancer un lavage.
 2. Pendant le lavage, activer simultanement le moteur tambour et le rincage.
 3. Maintenir cet etat au moins pendant la duree lavage mini.
 4. A la fin de la duree mini :
-5. Si EP_BAS est redevenu inactif, arreter le rincage, conserver la rotation pendant un temps residuel eventuel, puis arreter le tambour et lancer la temporisation anti-redemarrage.
+5. Si EP_LAVAGE est redevenu inactif, arreter le rincage, conserver la rotation pendant un temps residuel eventuel, puis arreter le tambour et lancer la temporisation anti-redemarrage.
 6. Sinon, poursuivre le lavage jusqu'a la duree lavage maxi.
 7. Si la duree maxi est atteinte et que le niveau reste en demande, attendre une courte pause puis relancer une tentative.
 8. Si le nombre maximum de tentatives est atteint, declarer un defaut lavage, arreter la pompe principale et lever une alarme critique.

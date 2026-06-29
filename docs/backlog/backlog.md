@@ -26,17 +26,17 @@
 | B-019 | Definir le nombre de voyants, leurs couleurs et les informations a afficher localement. | Must | A faire |
 | B-020 | Definir pour une V2 le besoin de remontee a distance : type de notification, canaux retenus et evenements a signaler. | Should | V2 |
 | B-021 | Choisir pour une V2 l'architecture de connectivite distante compatible avec le site et le niveau de fiabilite attendu. | Should | V2 |
-| B-023 | Definir le test journalier automatique : fenetre de lancement, criteres de succes, conditions d'inhibition et diagnostic attendu. | Must | A faire |
-| B-024 | Definir la strategie d'indexation du tambour pour eviter une immersion permanente de la meme zone. | Must | A faire |
+| B-023 | Definir le test journalier automatique : fenetre de lancement, criteres de succes, conditions d'inhibition et diagnostic attendu. | Should | A faire |
+| B-024 | Definir la strategie d'indexation du tambour pour eviter une immersion permanente de la meme zone. | Should | A faire |
 | B-025 | Definir precisement les statistiques de lavage a calculer et les regles de calcul associees. | Must | A faire |
 | B-026 | Definir la formule de l'indice d'encrassement et les regles de son interpretation. | Should | A faire |
-| B-027 | Definir les indicateurs de consommation d'eau et leur mode de calcul mesure ou estimation. | Should | A faire |
+| B-027 | Definir les indicateurs de consommation d'eau et leur mode d'estimation empirique. | Should | A faire |
 | B-028 | Definir les compteurs de temps de fonctionnement a suivre et leur mode de restitution. | Should | A faire |
 | B-029 | Definir la vue synthese de l'IHM locale et la priorite des informations affichees. | Must | A faire |
 | B-030 | Definir pour une V2 la liste finale des notifications immediates, leur politique anti-repetition et la gestion du retour a la normale. | Should | V2 |
 | B-031 | Definir pour une V2 le contenu, l'horaire, le canal et l'activation par defaut de la synthese quotidienne. | Should | V2 |
 | B-032 | Definir le pilotage horaire de la pompe decoration : nombre de plages, activation, inhibition hivernale et priorites de commande. | Should | A faire |
-| B-033 | Figer le nommage et l'ordre physique des capteurs EP_BAS et EP_CRITIQUE ainsi que les regles d'incoherence associees. | Must | A faire |
+| B-033 | Figer le nommage et l'ordre physique des capteurs EP_LAVAGE et EP_CRITIQUE ainsi que les regles d'incoherence associees. | Must | A faire |
 | B-034 | Definir la taxonomie finale des alarmes indirectes, leurs codes et leurs formulations utilisateur non ambigues. | Must | A faire |
 | B-035 | Decider explicitement quelles pannes restent hors diagnostic direct en V1 faute de capteurs retour ou mesure electrique. | Must | A faire |
 | B-036 | Documenter que la pompe decoration suit les memes securites que la filtration car elle aspire au meme endroit. | Must | Tranchee |
@@ -60,19 +60,18 @@
 | ID | Element | Priorite | Statut |
 | --- | --- | --- | --- |
 | B-101 | Choisir une carte de controle candidate. | Must | A faire |
-| B-102 | Definir les entrees/sorties necessaires au prototype, compatibles avec les capteurs CR18-8DN NPN 12-24 VDC. | Must | A faire |
+| B-102 | Definir les entrees/sorties necessaires au prototype, compatibles avec les capteurs CR18-8DN NPN 12-24 VDC. | Must | En cours |
 | B-103 | Realiser un schema de cablage de principe. | Must | A faire |
 | B-104 | Monter un prototype basse tension avec boutons et voyants. | Should | A faire |
-| B-105 | Reserver des sorties distinctes pour les equipements a couper sur niveau bas et pour les bulleurs a maintenir alimentes. | Must | A faire |
-| B-106 | Definir l'architecture de contacteurs ou relais permettant la coupure de securite sans couper les bulleurs. | Must | A faire |
+| B-105 | Reserver des sorties distinctes pour les equipements a couper sur niveau bas, sans integrer les bulleurs branches directement sur le 220 V. | Must | A faire |
+| B-106 | Definir l'architecture de contacteurs ou relais permettant la coupure de securite des equipements controles. | Must | A faire |
 | B-107 | Definir l'interface electrique des entrees pour lecture fiable des capteurs CR18-8DN 3 fils. | Must | A faire |
 | B-108 | Prevoir les organes de commande operateur pour selection des modes et commandes manuelles securisees. | Must | A faire |
 | B-109 | Prevoir l'entree materielle necessaire pour la sonde de temperature bassin et son cablage. | Must | A faire |
 | B-110 | Prevoir l'entree materielle necessaire pour la sonde de temperature ambiante local et son cablage. | Must | A faire |
-| B-111 | Prevoir les sorties et composants necessaires pour l'IHM locale retenue voyants, ecran, buzzer et cablage associe. | Must | A faire |
+| B-111 | Prevoir les sorties et composants necessaires pour l'IHM locale retenue voyants, ecran et cablage associe. | Must | A faire |
 | B-112 | Prevoir pour une V2 les composants et interfaces necessaires a la remontee distante retenue module radio, reseau ou passerelle. | Should | V2 |
 | B-113 | Etudier si un capteur de position tambour est necessaire pour l'indexation et les diagnostics. | Should | A faire |
-| B-114 | Etudier si un compteur d'eau est necessaire pour suivre la consommation de rincage et l'appoint. | Should | A faire |
 
 ## Firmware
 
@@ -86,7 +85,7 @@
 | B-206 | Integrer la logique des capteurs de niveau, du capteur d'ouverture de capot et des securites associees. | Must | A faire |
 | B-207 | Implementer le comportement des pompes et sorties auxiliaires sur niveau bas et capot ouvert. | Must | A faire |
 | B-208 | Implementer l'inhibition de la rotation tambour et de la pompe de rincage sur niveau bas. | Must | A faire |
-| B-209 | Implementer le maintien des bulleurs cuve bio et bassin pendant l'etat niveau bas. | Must | A faire |
+| B-209 | Verifier que les bulleurs cuve bio et bassin sont hors controleur et non impactes par l'etat niveau bas. | Must | A faire |
 | B-210 | Implementer la politique de reprise apres coupure d'alimentation sans attente indefinie. | Must | A faire |
 | B-211 | Implementer le mode manuel avec commandes independantes et interverrouillages critiques. | Must | A faire |
 | B-212 | Implementer le mode maintenance avec inhibition partielle des alarmes et temporisation de reprise. | Must | A faire |
@@ -102,16 +101,16 @@
 | B-222 | Implementer l'indexation periodique du tambour en respectant les verrouillages de securite. | Should | A faire |
 | B-223 | Implementer les statistiques de lavage : duree moyenne, duree totale journaliere, intervalles moyens et minimums, tendances 7 jours et 30 jours. | Should | A faire |
 | B-224 | Implementer le calcul et le suivi de l'indice d'encrassement. | Should | A faire |
-| B-225 | Implementer le suivi de consommation d'eau : litres par lavage, par jour, par semaine, pertes estimees et appoint necessaire. | Should | A faire |
+| B-225 | Implementer le suivi empirique de consommation d'eau : litres estimes par lavage, par jour, par semaine, pertes estimees et appoint necessaire. | Should | A faire |
 | B-226 | Implementer les compteurs de temps de fonctionnement des organes principaux. | Should | A faire |
 | B-227 | Implementer l'affichage local des etats, temperatures, dernier lavage et compteurs utiles retenus. | Should | A faire |
 | B-228 | Implementer pour une V2 l'emission des notifications immediates retenues, avec anti-repetition et gestion du retour a la normale. | Should | V2 |
 | B-229 | Implementer pour une V2 la synthese quotidienne de fonctionnement avec parametre d'activation ou desactivation. | Should | V2 |
 | B-230 | Implementer la programmation horaire de la pompe decoration avec activation globale et inhibition saisonniere si retenue. | Should | A faire |
-| B-231 | Implementer la logique d'alarmes indirectes basees sur EP_BAS, EP_CRITIQUE et le resultat observable des cycles de lavage. | Must | A faire |
+| B-231 | Implementer la logique d'alarmes indirectes basees sur EP_LAVAGE, EP_CRITIQUE et le resultat observable des cycles de lavage. | Must | A faire |
 | B-232 | Implementer la detection capteurs incoherents, le comportement au demarrage avec niveau bas et la mise en securite associee. | Must | A faire |
 | B-233 | Implementer les alertes de commande incoherente UV, absence anormale de lavage, redemarrages frequents, capot ouvert trop longtemps et sorties commandees trop longtemps. | Should | A faire |
-| B-234 | Etendre les statistiques avec temps de retour EP_BAS, tentatives par lavage, activations EP_CRITIQUE, temperatures min/max/moyenne et historiques capot. | Should | A faire |
+| B-234 | Etendre les statistiques avec temps de retour EP_LAVAGE, tentatives par lavage, activations EP_CRITIQUE, temperatures min/max/moyenne et historiques capot. | Should | A faire |
 
 ## Documentation et validation
 
@@ -120,7 +119,7 @@
 | B-301 | Decrire une procedure de test sur table. | Must | A faire |
 | B-302 | Decrire les scenarios de defaut a tester. | Must | A faire |
 | B-303 | Documenter le cablage final. | Should | A faire |
-| B-304 | Valider par test que le niveau bas coupe bien les pompes, l'UV, la mise a niveau auto et n'interrompt pas les deux bulleurs. | Must | A faire |
+| B-304 | Valider par test que le niveau bas coupe bien les pompes controlees, l'UV et la mise a niveau auto, sans impact sur les deux bulleurs branches hors controleur. | Must | A faire |
 | B-305 | Valider par test le comportement de reprise apres coupure de courant. | Must | A faire |
 | B-306 | Valider par test l'entree en maintenance a l'ouverture du capot, avec coupure UV et interdiction lavage auto. | Must | A faire |
 | B-307 | Valider par test les scenarios de mode degrade retenus. | Must | A faire |
@@ -134,13 +133,13 @@
 | B-315 | Valider par test que l'indexation du tambour change bien la zone immergee sans perturber l'exploitation ni la securite. | Should | A faire |
 | B-316 | Valider par test la coherence des statistiques de lavage et leur consolidation sur 7 jours et 30 jours. | Should | A faire |
 | B-317 | Valider par test la coherence et la stabilite de l'indice d'encrassement dans le temps. | Should | A faire |
-| B-318 | Valider par test la coherence des indicateurs de consommation d'eau et l'etiquetage mesure ou estimation. | Should | A faire |
+| B-318 | Valider par test la coherence des indicateurs de consommation d'eau et leur etiquetage comme estimations empiriques. | Should | A faire |
 | B-319 | Valider par test la coherence des compteurs de temps de fonctionnement et leur persistance. | Should | A faire |
 | B-320 | Valider par test la lisibilite et la coherence des informations affichees sur l'IHM locale. | Should | A faire |
 | B-321 | Valider pour une V2 par test que les notifications immediates partent sur les bons evenements, sans spam et avec retour a la normale coherent. | Should | V2 |
 | B-322 | Valider pour une V2 par test le contenu, l'horaire et la desactivation de la synthese quotidienne sans impact sur les alertes critiques. | Should | V2 |
 | B-323 | Valider par test la programmation horaire de la pompe decoration, sa desactivation et sa bonne inhibition par les securites. | Should | A faire |
-| B-324 | Valider par test la detection des incoherences EP_BAS et EP_CRITIQUE et la mise en securite associee. | Must | A faire |
-| B-325 | Valider par test qu'un demarrage avec EP_BAS ou EP_CRITIQUE actifs ne relance pas aveuglement filtration et UV. | Must | A faire |
+| B-324 | Valider par test la detection des incoherences EP_LAVAGE et EP_CRITIQUE et la mise en securite associee. | Must | A faire |
+| B-325 | Valider par test qu'un demarrage avec EP_LAVAGE ou EP_CRITIQUE actifs ne relance pas aveuglement filtration et UV. | Must | A faire |
 | B-326 | Valider par test que les messages d'alarme restent indirects et n'affirment pas une panne d'organe non instrumentee. | Must | A faire |
 | B-327 | Valider par test les alertes d'absence anormale de lavage, de redemarrages frequents et de sortie commandee trop longtemps. | Should | A faire |

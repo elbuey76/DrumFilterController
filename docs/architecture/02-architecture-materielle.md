@@ -5,9 +5,9 @@
 | Bloc | Role | Options envisagees |
 | --- | --- | --- |
 | Carte de controle | Execute la logique de lavage et securite | ESP32, automate compact, carte Arduino industrielle |
-| Entrees capteurs | Detectent niveau de lavage, niveau bas, defauts, rotation, temperature bassin et temperature ambiante | Flotteurs, capteurs pression, inductifs, contacts secs, sondes de temperature |
+| Entrees capteurs | Detectent niveau de lavage, niveau critique, capot, temperature bassin et temperature ambiante | Flotteurs, capteurs pression, inductifs, contacts secs, sondes de temperature |
 | Sorties puissance | Pilotent pompe, moteur et prises auxiliaires | Relais, contacteurs, variateur, module relais opto-isole |
-| Interface locale | Permet conduite, signalisation et diagnostic | Boutons, voyants, ecran simple, buzzer |
+| Interface locale | Permet conduite, signalisation et diagnostic | Boutons, voyants, ecran simple |
 | Communication distante | Option V2 pour supervision et notifications a distance | Wi-Fi, BLE, Ethernet, modem cellulaire, passerelle externe |
 | Alimentation | Fournit basse tension stable | Alimentation DIN 12 V ou 24 V, conversion locale si besoin |
 
@@ -33,6 +33,8 @@ L'installation cible a controler comprend un FAT avec :
 
 Ces donnees doivent etre prises en compte pour les choix de capteurs, l'implantation du niveau de lavage, l'ajout d'une mesure de temperature bassin, l'ajout d'une mesure de temperature ambiante local et les contraintes de debit autour du filtre.
 
+La liste de signaux a prevoir pour le prototype est detaillee dans [04-table-entrees-sorties.md](04-table-entrees-sorties.md).
+
 ## Chaine hydraulique de reference
 
 ```mermaid
@@ -46,7 +48,7 @@ flowchart LR
     Retour["Retour bassin 63 mm"]
     PD["Pompe decoration"]
     Deco["Cascade / mur d'eau / lame d'eau"]
-    UV["UV (emplacement a definir)"]
+    UV["UV hors tambour (probablement apres pompe)"]
     Waste["Goutiere + evacuation 100 mm"]
 
     Bassin --> BF --> FAT
@@ -71,7 +73,8 @@ flowchart LR
 | IHM locale | a definir | Doit remonter clairement le statut, les alarmes et idealement les modes principaux |
 | Liaison distante | option V2 a definir | Doit permettre de notifier sans compromettre le fonctionnement local |
 | Position tambour | option a etudier | Peut aider pour l'indexation et certains diagnostics avances |
-| Compteur d'eau rincage | option a etudier | Permet une mesure directe de la consommation d'eau et des pertes associees |
+
+L'UV est represente hors tambour dans la chaine de filtration, probablement apres la pompe principale. Son implantation finale reste a confirmer selon l'equipement retenu et les contraintes de montage.
 
 ## Schema de principe
 
@@ -109,14 +112,13 @@ flowchart TB
 - nombre de capteurs CR18-8DN et implantation exacte sur le tube de report ;
 - type de sonde de temperature bassin et implantation exacte ;
 - type de sonde de temperature ambiante local et implantation exacte ;
-- type d'IHM locale : LED, ecran, buzzer ou combinaison ;
+- type d'IHM locale : LED, ecran ou combinaison ;
 - nombre de voyants, couleurs et signification ;
 - type de connectivite distante pour une V2 : Wi-Fi, BLE, Ethernet, modem ou passerelle ;
 - architecture de notification pour une V2 : embarquee, serveur local, service mail ou service SMS ;
 - besoin ou non d'un capteur de position tambour ;
 - strategie materielle d'indexation du tambour hors lavage ;
-- besoin ou non d'un compteur d'eau sur le rincage ou l'appoint ;
-- architecture de mesure de consommation eau : directe, estimee ou mixte ;
+- methode empirique d'estimation de la consommation d'eau de rincage ;
 - compatibilite native ou conditionnement des entrees pour capteurs NPN 12-24 VDC ;
 - interface d'entree necessaire pour la sonde de temperature ;
 - interface d'entree necessaire pour la sonde de temperature ambiante ;

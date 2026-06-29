@@ -86,7 +86,7 @@ Le projet porte sur un filtre a tambour (FAT) deja partiellement construit et in
 
 | Nom | Role | Notes |
 | --- | --- | --- |
-| EP_BAS | Demande de lavage | Niveau eau propre bas mais pas encore critique |
+| EP_LAVAGE | Demande de lavage | Niveau eau propre abaisse mais pas encore critique |
 | EP_CRITIQUE | Danger hydraulique et arret de securite | Niveau eau propre tres bas, coeur de la protection V1 |
 
 ## Chaine de filtration autour du FAT
@@ -98,7 +98,7 @@ Le projet porte sur un filtre a tambour (FAT) deja partiellement construit et in
 | Filtration biologique | cuve IBC 1000 L avec tapis japonais | En sortie du FAT |
 | Pompe de filtration principale | retour bassin en 63 mm | Fonctionnement continu vise |
 | Pompe decoration | usage ponctuel | Cascade, mur d'eau, lame d'eau, etc. |
-| UV | emplacement non defini | A integrer plus tard dans la chaine |
+| UV | hors tambour, dans la filtration, probablement apres la pompe principale | Implantation finale a confirmer selon l'equipement retenu |
 | Temperature bassin | mesure a ajouter | Valeur utile pour alertes et exploitation saisonniere |
 | Temperature ambiante local | mesure a ajouter | Valeur utile pour alertes environnementales et suivi du local technique |
 
@@ -166,12 +166,12 @@ Le point de fonctionnement nominal recherche reste 8 a 10 m3/h, mais la pompe pr
 | Pompe de rincage | Inhibition | Eviter un lavage inutile ou degradant en situation anormale |
 | Mise a niveau automatique du bassin | Coupure | Eviter de remplir indefiniment un bassin en cas de fuite |
 
-### Equipements a maintenir alimentes
+### Equipements hors sorties controlees
 
 | Equipement | Action attendue | Justification |
 | --- | --- | --- |
-| Bulleur cuve bio | Maintien alimente | Preserver les bacteries de filtration biologique |
-| Bulleur bassin | Maintien alimente | Maintenir l'oxygenation des poissons et limiter la glace en hiver |
+| Bulleur cuve bio | Branchement direct 220 V, hors controleur | Preserver les bacteries de filtration biologique |
+| Bulleur bassin | Branchement direct 220 V, hors controleur | Maintenir l'oxygenation des poissons et limiter la glace en hiver |
 
 ## Travaux restants sur le FAT existant
 
@@ -202,7 +202,7 @@ Le point de fonctionnement nominal recherche reste 8 a 10 m3/h, mais la pompe pr
 - Definir une strategie d'indexation du tambour pour repartir l'immersion.
 - Definir et restituer des statistiques de lavage pertinentes pour suivre l'etat du filtre.
 - Definir un indice simple d'encrassement exploitable dans le temps.
-- Definir et suivre la consommation d'eau du rincage et le besoin d'appoint associe.
+- Definir une estimation empirique de la consommation d'eau du rincage et du besoin d'appoint associe.
 - Definir et suivre les temps de fonctionnement cumules des organes principaux.
 
 ## Questions techniques encore ouvertes
@@ -212,7 +212,7 @@ Le point de fonctionnement nominal recherche reste 8 a 10 m3/h, mais la pompe pr
 - Caracteristiques electriques du moteur de tambour.
 - Caracteristiques electriques et debit de la pompe de rincage.
 - Forme, nombre et surface totale des ouvertures du tambour pour atteindre la surface de filtration utile visee.
-- Architecture de puissance pour separer clairement les sorties a couper des sorties a maintenir alimentees.
+- Architecture de puissance pour separer clairement les sorties a couper des equipements hors controleur.
 - Implantation finale de l'UV dans la chaine de filtration.
 - Strategie de securite a appliquer si le capot est ouvert pendant un cycle.
 - Position finale du capteur de temperature bassin et technologie retenue.
@@ -228,11 +228,11 @@ Le point de fonctionnement nominal recherche reste 8 a 10 m3/h, mais la pompe pr
 - Source exacte de l'information bassin niveau bas si elle differe du niveau bas de securite deja prevu.
 - Nombre de tranches horaires, mode de configuration et logique hivernale de la pompe decoration.
 - Priorite entre commande manuelle, programmation horaire et inhibition de la pompe decoration, tout en respectant les memes securites que la pompe principale.
-- Validation physique de l'ordre et de la logique des capteurs EP_BAS et EP_CRITIQUE.
+- Validation physique de l'ordre et de la logique des capteurs EP_LAVAGE et EP_CRITIQUE.
 - Choix de rester en diagnostic indirect V1 ou d'ajouter plus tard des capteurs dedies pour rotation, courant, fuite ou niveau eau sale.
 - Regles de lancement, de verdict et de report du test journalier automatique.
 - Strategie retenue pour ne pas laisser toujours la meme zone du tambour immergee.
 - Regles de calcul et de restitution des statistiques de lavage.
 - Formule retenue pour l'indice d'encrassement et usage associe.
-- Mode de mesure ou d'estimation de la consommation d'eau et des pertes vers evacuation.
+- Methode empirique d'estimation de la consommation d'eau et des pertes vers evacuation.
 - Regles de cumul, d'affichage et de remise a zero eventuelle des temps de fonctionnement.

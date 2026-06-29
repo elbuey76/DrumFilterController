@@ -5,7 +5,7 @@
 ```mermaid
 flowchart LR
     Bassin[Bassin / filtre à tambour]
-    Capteurs[Capteurs niveau, défauts, rotation]
+    Capteurs[Capteurs niveau, capot, températures]
     Controleur[Contrôleur basse tension]
     Puissance[Relais, contacteurs ou variateur]
     Pompe[Pompe de rinçage]

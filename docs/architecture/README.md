@@ -7,6 +7,7 @@ Ce dossier documente l'architecture matérielle, électronique et logicielle. Le
 1. [Vue d'ensemble](01-vue-ensemble.md)
 2. [Architecture matérielle](02-architecture-materielle.md)
 3. [Architecture logicielle](03-architecture-logicielle.md)
+4. [Table des entrées / sorties](04-table-entrees-sorties.md)
 
 ## Visuels
 

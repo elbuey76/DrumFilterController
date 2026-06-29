@@ -12,6 +12,7 @@ $paths = @(
   "docs/architecture/01-vue-ensemble.md",
   "docs/architecture/02-architecture-materielle.md",
   "docs/architecture/03-architecture-logicielle.md",
+  "docs/architecture/04-table-entrees-sorties.md",
   "docs/calculs/README.md",
   "docs/calculs/NC-0001-dimensionnement-pompe-filtration.md",
   "docs/decisions/README.md",

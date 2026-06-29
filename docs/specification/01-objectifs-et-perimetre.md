@@ -27,7 +27,7 @@ Les donnees d'entree suivantes decrivent l'installation cible a prendre en compt
 - l'arrivee en eau sale se fait par deux entrees de 110 mm et la sortie en eau propre par deux sorties de 110 mm ;
 - la goutiere d'evacuation collecte le debordement et evacue les dechets rinces vers un tuyau de 100 mm ;
 - un tube de report de niveau en 32 mm existe deja cote eau propre pour recevoir les capteurs ;
-- la ligne de filtration comprend ensuite une cuve IBC de 1000 L pour la biofiltration, une pompe de filtration avec retour en 63 mm, une pompe decoration et un UV encore a positionner ;
+- la ligne de filtration comprend ensuite une cuve IBC de 1000 L pour la biofiltration, une pompe de filtration avec retour en 63 mm, une pompe decoration et un UV hors tambour, dans la filtration, probablement apres la pompe principale ;
 - une mesure de temperature bassin doit etre ajoutee pour informer l'automate et remonter des alertes ;
 - une mesure de temperature ambiante du local doit etre ajoutee pour informer l'automate et remonter des alertes.
 

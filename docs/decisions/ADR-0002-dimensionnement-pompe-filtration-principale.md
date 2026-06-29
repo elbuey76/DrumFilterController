@@ -2,7 +2,7 @@
 
 ## Statut
 
-Proposee
+Acceptée
 
 ## Contexte
 

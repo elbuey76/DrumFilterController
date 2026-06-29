@@ -31,7 +31,8 @@ const DOC_SECTIONS = [
       { path: "docs/architecture/README.md", label: "README", blurb: "Sommaire de l'architecture." },
       { path: "docs/architecture/01-vue-ensemble.md", label: "Vue d'ensemble", blurb: "Contexte systeme et principes." },
       { path: "docs/architecture/02-architecture-materielle.md", label: "Architecture materielle", blurb: "Blocs physiques, capteurs et puissance." },
-      { path: "docs/architecture/03-architecture-logicielle.md", label: "Architecture logicielle", blurb: "Machine a etats, modules et logique." }
+      { path: "docs/architecture/03-architecture-logicielle.md", label: "Architecture logicielle", blurb: "Machine a etats, modules et logique." },
+      { path: "docs/architecture/04-table-entrees-sorties.md", label: "Table E/S", blurb: "Signaux d'entree, sorties et groupes de securite." }
     ]
   },
   {
