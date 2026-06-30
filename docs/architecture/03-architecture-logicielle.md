@@ -77,6 +77,8 @@ L'arret total n'apparait pas comme un etat logiciel de la machine a etats ci-des
 
 ## Capteurs de reference cote eau propre
 
+La logique V1 repose sur une cote simple cote eau propre, sans comparaison automatisee avec un niveau cote eau sale.
+
 | Capteur | Role logique |
 | --- | --- |
 | EP_LAVAGE | Demande de lavage par niveau eau propre abaisse |
@@ -88,6 +90,7 @@ Sans capteur supplementaire, la V1 ne prouve pas directement :
 
 - un tambour bloque ;
 - une pompe de rincage HS ;
+- une pression ou un debit reel de rincage absent ;
 - une pompe filtration reellement branchee ou debiteuse ;
 - une pompe decoration reellement branchee ou debiteuse ;
 - un UV reellement allume ;
@@ -307,6 +310,7 @@ Cette synthese doit rester optionnelle et configurable independamment des notifi
 - regle de calcul de l'indice d'encrassement ;
 - regle empirique de calcul de la consommation d'eau ;
 - debit de rincage de reference ;
+- eventuel retour pressostat, debitmetre ou courant pompe rincage si ajoute ;
 - regles de cumul des temps de fonctionnement ;
 - profondeur historique 7 jours et 30 jours ;
 - heure ou fenetre du test journalier ;

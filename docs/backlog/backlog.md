@@ -4,13 +4,13 @@
 
 | ID | Element | Priorite | Statut |
 | --- | --- | --- | --- |
-| B-001 | Relever tension et puissance du moteur de tambour. | Must | A faire |
-| B-002 | Fournir les caracteristiques de la pompe de rincage deja achetee puissance, debit, hauteur manometrique, tension, intensite, modele. | Must | En attente utilisateur |
+| B-001 | Consolider les caracteristiques du moteur de tambour candidat SWF 403.835 : 12 V DC, puissance estimee 40 W, courant, vitesse, couple et brochage. | Must | En cours |
+| B-002 | Consolider les caracteristiques de la pompe de rincage VEVOR / Leo EKJ-802S et mesurer son point de fonctionnement reel aux buses. | Must | En cours |
 | B-003 | Definir le nombre et l'implantation des capteurs CR18-8DN pour le seuil de lavage, le niveau bas et la redondance eventuelle. | Must | A faire |
-| B-004 | Definir l'environnement du coffret et l'indice de protection attendu. | Must | A faire |
+| B-004 | Definir l'environnement du coffret et l'indice de protection attendu. | Must | En cours |
 | B-005 | Definir les cotes exactes du niveau normal cote sale, du niveau normal cote propre, du seuil de lavage et du niveau bas sur le tube de report en 32 mm. | Must | A faire |
 | B-006 | Definir la hauteur finale du support du FAT par rapport au niveau hydraulique du bassin. | Must | A faire |
-| B-007 | Determiner si la logique de lavage repose sur une cote simple cote propre, sur une comparaison sale/propre, ou sur une combinaison des deux. | Must | A faire |
+| B-007 | Determiner si la logique de lavage repose sur une cote simple cote propre, sur une comparaison sale/propre, ou sur une combinaison des deux. | Must | Tranchee |
 | B-008 | Ajouter des reperes visuels de niveau pour identifier d'un coup d'oeil l'etat hydraulique du FAT, par exemple avec de petites cales plastiques collees aux niveaux de reference. | Should | A faire |
 | B-009 | Etudier un bypass passif ou mecanique entre eau sale et eau propre comme seconde securite si le capteur de niveau bas ne fonctionne pas, afin d'eviter la marche a sec de la pompe tout en acceptant un fonctionnement sans filtration mecanique du FAT. | Must | A faire |
 | B-010 | Valider l'hypothese de niveau normal cote sale autour de 20 cm au-dessus du bas du tambour soit environ 27 cm depuis le fond, avec ses reperes associes environ 64,5 % du diametre en hauteur, environ 59 % de circonference immergee et environ 58 cm de longueur developpee immergee. | Must | A faire |
@@ -40,6 +40,10 @@
 | B-034 | Definir la taxonomie finale des alarmes indirectes, leurs codes et leurs formulations utilisateur non ambigues. | Must | A faire |
 | B-035 | Decider explicitement quelles pannes restent hors diagnostic direct en V1 faute de capteurs retour ou mesure electrique. | Must | A faire |
 | B-036 | Documenter que la pompe decoration suit les memes securites que la filtration car elle aspire au meme endroit. | Must | Tranchee |
+| B-037 | Decider si la protection surintensite du moteur tambour remonte une information automate ou reste une protection materielle autonome. | Must | A faire |
+| B-038 | Decider si les fonctions de parking du moteur d'essuie-glace sont utilisees, ignorees ou isolees. | Should | A faire |
+| B-039 | Definir le debit de rincage de reference a utiliser pour l'estimation de consommation d'eau. | Must | A faire |
+| B-040 | Decider si un pressostat, debitmetre ou retour courant est ajoute pour diagnostiquer le rincage. | Should | A faire |
 
 ## FAT existant a finaliser
 
@@ -72,6 +76,9 @@
 | B-111 | Prevoir les sorties et composants necessaires pour l'IHM locale retenue voyants, ecran et cablage associe. | Must | A faire |
 | B-112 | Prevoir pour une V2 les composants et interfaces necessaires a la remontee distante retenue module radio, reseau ou passerelle. | Should | V2 |
 | B-113 | Etudier si un capteur de position tambour est necessaire pour l'indexation et les diagnostics. | Should | A faire |
+| B-114 | Dimensionner la commande 12 V DC du moteur tambour avec fusible, relais/contacteur DC et alimentation adaptes aux appels de courant. | Must | A faire |
+| B-115 | Identifier au multimetre le brochage exact du moteur tambour 5 broches avant tout cablage definitif. | Must | A faire |
+| B-116 | Dimensionner la commande secteur de la pompe de rincage EKJ-802S avec organe de coupure adapte aux charges moteur, terre et protection. | Must | A faire |
 
 ## Firmware
 
@@ -143,3 +150,9 @@
 | B-325 | Valider par test qu'un demarrage avec EP_LAVAGE ou EP_CRITIQUE actifs ne relance pas aveuglement filtration et UV. | Must | A faire |
 | B-326 | Valider par test que les messages d'alarme restent indirects et n'affirment pas une panne d'organe non instrumentee. | Must | A faire |
 | B-327 | Valider par test les alertes d'absence anormale de lavage, de redemarrages frequents et de sortie commandee trop longtemps. | Should | A faire |
+| B-328 | Mesurer le courant moteur tambour a vide, avec tambour a sec, avec tambour en eau et au demarrage. | Must | A faire |
+| B-329 | Mesurer la vitesse reelle du moteur tambour et la vitesse tambour obtenue avec la reduction 3:1. | Must | A faire |
+| B-330 | Realiser un test de blocage controle du tambour pour definir ou confirmer le seuil de protection surintensite. | Must | A faire |
+| B-331 | Mesurer le debit reel de la pompe de rincage aux buses pendant un cycle type. | Must | A faire |
+| B-332 | Verifier la qualite du jet de rincage, l'amorcage, le reamorcage et l'absence d'echauffement anormal sur cycles repetes. | Must | A faire |
+| B-333 | Ajuster l'estimation de consommation d'eau de rincage a partir du debit reel et des durees de cycle. | Should | A faire |

@@ -4,7 +4,7 @@
 
 | ID | Exigence | Priorite | Commentaire |
 | --- | --- | --- | --- |
-| F-001 | Le systeme doit detecter un besoin de lavage a partir du niveau d'eau dans le filtre a tambour. | Must | Les capteurs de niveau retenus sont des CR18-8DN ; leur nombre exact, leur position et la logique finale restent a figer. |
+| F-001 | Le systeme doit detecter un besoin de lavage a partir du niveau d'eau cote propre du filtre a tambour. | Must | La logique de pilotage V1 repose sur deux niveaux cote eau propre : EP_LAVAGE et EP_CRITIQUE, mesures sur le report de niveau. |
 | F-002 | Le systeme doit demarrer une pompe de rincage pendant le cycle de lavage. | Must | La sortie devra probablement piloter un relais ou contacteur. |
 | F-003 | Le systeme doit commander la rotation du tambour pendant le cycle de lavage. | Must | La commande dependra du moteur retenu. |
 | F-004 | Le systeme doit arreter automatiquement le cycle apres une duree configurable. | Must | Valeur a definir lors des essais. |
@@ -87,8 +87,10 @@ Les quatre reperes suivants doivent etre definis explicitement pour finaliser la
 | --- | --- | --- |
 | Niveau normal cote sale | Compartiment eau sale | Reference hydraulique nominale en fonctionnement normal |
 | Niveau normal cote propre | Compartiment eau propre ou report de niveau | Reference hydraulique nominale en fonctionnement normal |
-| Niveau de declenchement du lavage | Cote propre ou logique derivee du differentiel sale/propre | Seuil de lancement d'un cycle de lavage |
+| Niveau de declenchement du lavage | Cote propre sur le report de niveau | Seuil de lancement d'un cycle de lavage |
 | Niveau bas de securite | Cote propre ou report de niveau | Seuil de mise en securite de l'installation |
+
+La logique de lavage V1 ne repose pas sur une comparaison eau sale / eau propre. Elle utilise une cote simple cote eau propre avec deux niveaux fonctionnels : EP_LAVAGE pour lancer ou verifier un lavage, et EP_CRITIQUE pour la mise en securite hydraulique.
 
 Ces reperes doivent ensuite etre traduits en cotes physiques, en nombre de capteurs et en logique logicielle.
 
@@ -444,7 +446,7 @@ En parallele, si EP_CRITIQUE devient actif pendant cette logique, le systeme doi
 | Tempo redemarrage pompe | 30 a 120 s | Maitriser la reprise apres defaut ou incident |
 | Taille historique statistiques | 7 jours et 30 jours minimum | Permettre le suivi de tendance |
 | Regle de calcul indice encrassement | formule configurable ou figee en V1 | Garder un indicateur stable et interpretable |
-| Debit de rincage de reference | a definir ou mesurer | Base de calcul si la consommation n'est pas mesuree directement |
+| Debit de rincage de reference | a mesurer ; maximum pompe 60 L/min seulement a faible hauteur | Base de calcul si la consommation n'est pas mesuree directement |
 | Regle de calcul consommation eau | mesuree ou estimee | Garder des chiffres comparables et correctement etiquetes |
 | Granularite compteurs horaires | a definir | Fixer la precision des temps cumules |
 | Heure ou fenetre test journalier | a definir | Choisir un moment compatible avec l'exploitation |

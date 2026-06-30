@@ -15,6 +15,8 @@ $paths = @(
   "docs/architecture/04-table-entrees-sorties.md",
   "docs/calculs/README.md",
   "docs/calculs/NC-0001-dimensionnement-pompe-filtration.md",
+  "docs/calculs/NC-0002-dimensionnement-motorisation-tambour.md",
+  "docs/calculs/NC-0003-dimensionnement-pompe-rincage.md",
   "docs/decisions/README.md",
   "docs/decisions/_template.md",
   "docs/decisions/ADR-0001-structure-documentation.md",

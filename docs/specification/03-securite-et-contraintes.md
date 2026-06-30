@@ -40,6 +40,12 @@ Le controleur doit separer la basse tension de commande de la puissance moteur/p
 | S-030 | Les notifications immediates devraient distinguer une apparition d'evenement, un retour a la normale et un etat deja signale afin de rester exploitables. | Should | Evite les ambiguities et les messages repetitifs peu utiles. |
 | S-031 | Toute programmation horaire de la pompe decoration doit etre inhibee par le niveau bas, un defaut critique ou toute autre securite superieure applicable. | Must | La pompe decoration aspirant au meme endroit que la filtration, une plage horaire ne doit jamais forcer une marche non sure. |
 | S-032 | Le systeme doit eviter les libelles de defaut affirmant une panne d'organe non prouvee par capteur dedie, mesure electrique ou retour de marche reel. | Must | En V1, on privilegie les effets observes comme lavage inefficace, niveau eau propre anormal ou commande incoherente. |
+| S-033 | Le moteur tambour doit disposer d'une protection adaptee contre surintensite ou blocage mecanique. | Must | Le moteur d'essuie-glace 12 V peut tirer 10 a 20 A au demarrage ou en blocage ; la protection peut etre materielle autonome ou remontee a l'automate. |
+| S-034 | Le systeme ne doit pas supposer une protection thermique interne du moteur tambour sans preuve. | Must | La protection externe doit rester dimensionnante tant que la reference moteur n'est pas documentee completement. |
+| S-035 | Le moteur tambour doit rester hors immersion et protege des projections directes. | Must | Le moteur automobile est acceptable en ambiance humide protegee, mais pas en immersion. |
+| S-036 | La pompe de rincage 230 VAC doit etre commandee par un organe adapte aux charges moteur et protegee cote secteur. | Must | Pompe VEVOR / Leo EKJ-802S, classe I, 0,6 a 0,8 kW ; tenir compte du courant d'appel au demarrage. |
+| S-037 | La pompe de rincage doit etre raccordee a la terre et rester hors immersion. | Must | Protection classe I et IPX4 : compatible projections, pas immersion ni exposition forte non protegee. |
+| S-038 | Le systeme ne doit pas assimiler commande de pompe de rincage a debit ou pression reel sans mesure dediee. | Must | Sans pressostat, debitmetre ou retour electrique exploite, le diagnostic doit rester indirect. |
 
 ## Politique de repli en niveau bas
 
@@ -71,8 +77,15 @@ Le mode degrade doit etre concu pour maintenir le bassin en vie tout en signalan
 
 ## Contraintes environnementales
 
-- humidite importante ;
-- projections d'eau possibles ;
+- local de filtration maconne, isole en XPS 5 cm ;
+- FAT non expose a la pluie directe ;
+- capot relevable au-dessus du petit batiment, matiere et isolation encore a definir ;
+- humidite importante et condensation possibles ;
+- projections d'eau possibles dans le local ;
+- moteur tambour a maintenir hors eau et a proteger des projections directes ;
+- pompe de rincage IPX4 a maintenir hors immersion, raccordee a la terre et protegee du gel ;
 - parasites electriques lies aux moteurs ;
 - acces maintenance potentiellement limite ;
 - besoin de composants remplacables facilement.
+
+Le capteur de temperature ambiante doit mesurer l'air du local de filtration. Il ne doit donc pas etre considere comme une simple mesure interne du coffret, sauf si l'implantation retenue permet de representer correctement l'ambiance du local.

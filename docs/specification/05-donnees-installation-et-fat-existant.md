@@ -4,6 +4,14 @@
 
 Le projet porte sur un filtre a tambour (FAT) deja partiellement construit et integre dans une ligne de filtration de bassin. Les dimensions et interfaces ci-dessous sont considerees comme des caracteristiques d'entree stables pour la conception mecanique, hydraulique et de pilotage.
 
+## Environnement d'installation
+
+Le FAT sera installe dans un local de filtration maconne, isole avec 5 cm de XPS. Un capot relevable sera present au-dessus du petit batiment. Sa matiere et son niveau d'isolation restent a definir.
+
+Le FAT ne sera donc pas expose a la pluie directe. L'environnement reste toutefois un local de filtration humide, avec risque de condensation, projections ponctuelles et contraintes de maintenance.
+
+Le capteur de temperature ambiante local doit mesurer l'air du local de filtration. Son implantation exacte doit eviter une mesure trop influencee par le coffret electrique, un equipement chaud, le soleil ou le volume sous capot si celui-ci cree une stratification thermique.
+
 ## Geometrie immuable du FAT
 
 ### Enveloppe generale
@@ -82,6 +90,50 @@ Le projet porte sur un filtre a tambour (FAT) deja partiellement construit et in
 | Consommation | 10 mA | Valeur unitaire fournie |
 | Cablage | DC 3 fils | A integrer au schema de cablage |
 
+### Motorisation tambour
+
+| Element | Valeur | Notes |
+| --- | --- | --- |
+| Moteur candidat | Moteur d'essuie-glace avant Peugeot 106 phase 2 | Moteur avec reducteur integre et tringlerie |
+| Fabricant / reference | SWF 403.835 / 403835 | Reference longue observee : 7905562055 |
+| Reference PSA probable | 640583 / 6405.83 | Equivalence probable, a ne pas considerer comme preuve directe |
+| Connecteur | 5 broches | Brochage exact a identifier avant cablage |
+| Tension moteur | 12 V DC | Hypothese de conception |
+| Vitesse retenue | Petite vitesse uniquement | Limite vitesse tambour, bruit, a-coups et consommation |
+| Puissance estimee | environ 40 W | Hypothese de dimensionnement, non confirmee par fiche constructeur |
+| Courant de fonctionnement a prevoir | 4 a 8 A | A mesurer sur montage reel |
+| Courant de demarrage ou blocage | 10 a 20 A possible | Dimensionnant pour alimentation, fusible et protection |
+| Alimentation recommandee | 12 V DC / 15 A | Minimum prudent : 12 V DC / 10 A |
+| Fusible initial | 10 a 15 A | A ajuster apres essais |
+| Vitesse sortie moteur estimee | 40 a 60 tr/min a vide | Valeur typique a valider experimentalement |
+| Couple moteur | Inconnu | Donnee critique a valider par essais |
+| Usage retenu | Intermittent pendant les cycles de lavage | Usage continu 24/24 non recommande |
+
+La transmission envisagee utilise un pignon moteur de 10 cm vers un engrenage tambour de 30 cm, soit une reduction 3:1. La vitesse tambour attendue serait donc d'environ 13 a 20 tr/min si la vitesse moteur reelle est bien comprise entre 40 et 60 tr/min.
+
+Le moteur doit rester hors eau et protege des projections. Le brochage exact, la vitesse, le courant en charge et le comportement en blocage doivent etre valides avant integration definitive. Le detail du dimensionnement est trace dans [../calculs/NC-0002-dimensionnement-motorisation-tambour.md](../calculs/NC-0002-dimensionnement-motorisation-tambour.md).
+
+### Pompe de rincage
+
+| Element | Valeur | Notes |
+| --- | --- | --- |
+| Pompe retenue | VEVOR / Leo EKJ-802S | Garden Jet Pump de surface auto-amorcante |
+| Fabricant OEM | Leo Group Pump (Zhejiang) Co., Ltd. | Information fournisseur |
+| Numero de serie | 221228693910166 | Donnee plaque |
+| Alimentation | 220-240 VAC, 50 Hz | Pompe secteur monophase |
+| Puissance | 800 W indique projet ; 0,6 kW / 0,8 HP sur fiche Leo | Divergence a garder visible pour dimensionnement prudent |
+| Courant nominal fiche | 3,5 A | Le courant d'appel moteur reste a prendre en compte |
+| Debit maximal | 3,6 a 3,7 m3/h, soit environ 60 L/min | Valeur de bout de courbe, pas disponible en meme temps que la hauteur maximale |
+| Hauteur maximale | 40 a 43 m | Selon source ; la courbe Leo indique 43 m a debit nul |
+| Raccords aspiration / refoulement | 1 pouce / 1 pouce | A adapter vers la prise d'eau et la rampe 32 mm |
+| Temperature liquide maximale | 35 degC projet ; 40 degC fiche | Retenir 35 degC par prudence tant que la source exacte n'est pas arbitree |
+| Temperature ambiante maximale | 40 degC | Donnee fiche technique |
+| Protection | IPX4, classe I, isolation F | Pompe a mettre a la terre, non immergeable |
+| Corps de pompe | AISI 304 | Donnee fiche technique |
+| Dimensions / poids | environ 38 x 24 x 30 cm, 9 kg | Fiche detaillee : L 369,5 mm, W 243,5 mm, H 284 mm |
+
+La courbe disponible donne environ 20 L/min a 34 m, 30 L/min a 28 m, 40 L/min a 21 m, 50 L/min a 12,5 m et 60 L/min a 3 m. Le debit de rincage de reference devra donc etre mesure ou estime a partir du point de fonctionnement reel des buses. Le detail du dimensionnement est trace dans [../calculs/NC-0003-dimensionnement-pompe-rincage.md](../calculs/NC-0003-dimensionnement-pompe-rincage.md).
+
 ### Hypothese de nommage cote eau propre
 
 | Nom | Role | Notes |
@@ -130,8 +182,14 @@ Le point de fonctionnement nominal recherche reste 8 a 10 m3/h, mais la pompe pr
 ## Hypotheses de conception a retenir
 
 - Le seuil physique de debordement du filtre est impose par la goutiere a 30,5 cm au-dessus du fond du filtre.
+- La logique de pilotage V1 repose sur une cote simple cote eau propre, avec deux niveaux fonctionnels : EP_LAVAGE et EP_CRITIQUE.
 - Les capteurs de niveau doivent etre positionnes cote eau propre sur le tube de report en 32 mm, et non directement dans la zone sale.
 - Les capteurs de niveau retenus sont des CR18-8DN en M18, sortie NPN, alimentation 12-24 VDC, cablage 3 fils.
+- Le moteur tambour candidat est un moteur d'essuie-glace avant SWF 403.835 en 12 V DC, a utiliser en petite vitesse et en fonctionnement intermittent.
+- L'alimentation moteur doit etre dimensionnee sur les appels de courant de demarrage et de blocage, pas seulement sur la puissance estimee de 40 W.
+- Une protection contre blocage ou surintensite du moteur tambour doit etre prevue ou fortement justifiee si elle est absente.
+- La pompe de rincage retenue est une pompe de surface VEVOR / Leo EKJ-802S en 220-240 VAC ; elle doit etre commandee comme une charge moteur secteur.
+- Le debit de rincage de reference ne doit pas etre confondu avec le debit maximal de 60 L/min, car le point de fonctionnement dependra des buses et des pertes de charge.
 - Le support du FAT devra fixer la cote altimetrique du trop-plein par rapport au niveau hydraulique du bassin.
 - La pompe decoration aspirant au meme endroit que la pompe principale, elle doit suivre les memes regles de securite hydraulique.
 - Les diametres d'interconnexion existants 110 mm, 100 mm, 63 mm et 32 mm doivent etre preserves dans les choix d'implantation et de pilotage.
@@ -142,15 +200,17 @@ Le point de fonctionnement nominal recherche reste 8 a 10 m3/h, mais la pompe pr
 | --- | --- | --- |
 | Niveau normal cote sale | Niveau nominal observe dans la chambre eau sale en fonctionnement etabli | Hypothese de travail: environ 20 cm au-dessus du bas du tambour, soit environ 27 cm depuis le fond du filtre |
 | Niveau normal cote propre | Niveau nominal observe dans la chambre eau propre et sur le report de niveau | A definir |
-| Niveau de declenchement du lavage | Niveau a partir duquel le FAT doit lancer un cycle de lavage | A definir |
-| Niveau bas de securite | Niveau a partir duquel l'installation passe en etat de securite | A definir |
+| Niveau de declenchement du lavage | Niveau cote eau propre a partir duquel le FAT doit lancer un cycle de lavage | A definir |
+| Niveau bas de securite | Niveau cote eau propre a partir duquel l'installation passe en etat de securite | A definir |
 
 ### Contraintes sur ces reperes
 
 - Le niveau bas de securite doit rester au-dessus du niveau minimal acceptable pour proteger pompes, UV et hydraulique.
+- Le niveau de declenchement du lavage et le niveau bas de securite sont mesures cote eau propre sur le report de niveau.
 - Le niveau de declenchement du lavage doit rester suffisamment sous le trop-plein physique a 30,5 cm pour laisser une marge de reaction.
 - Les niveaux normaux cote sale et cote propre serviront de reference pour comprendre le comportement hydraulique du filtre propre.
-- Ces quatre reperes devront etre convertis en cotes physiques mesurables depuis le fond du filtre et, si utile, en ecarts entre cote sale et cote propre.
+- Les ecarts eau sale / eau propre peuvent rester utiles pour les observations de mise au point, mais ils ne constituent pas la logique de pilotage V1.
+- Ces reperes devront etre convertis en cotes physiques mesurables depuis le fond du filtre.
 - La surface de filtration utile finale dependra de la geometrie des ouvertures du tambour sous la toile inox 74 microns.
 
 ## Politique de securite en cas de niveau bas
@@ -181,6 +241,7 @@ Le point de fonctionnement nominal recherche reste 8 a 10 m3/h, mais la pompe pr
 - Poser la maille inox autour du tambour.
 - Raccorder la rampe d'aspersion a la pompe de rincage.
 - Percer une paroi du filtre pour la prise d'eau de la pompe de rincage.
+- Mesurer le debit reel de rincage et verifier la pression ou qualite de jet aux buses.
 - Percer le trou de vidange du filtre.
 - Installer le joint a levre autour du tambour pour separer eau propre et eau sale.
 - Fabriquer le support du FAT afin de positionner correctement le trop-plein par rapport au bassin.
@@ -188,6 +249,8 @@ Le point de fonctionnement nominal recherche reste 8 a 10 m3/h, mais la pompe pr
 ### Instrumentation et automatisme
 
 - Fixer les capteurs de niveau sur le tube de report en 32 mm.
+- Identifier le brochage exact du moteur d'essuie-glace et valider son sens de rotation.
+- Installer une alimentation 12 V DC et une protection adaptees au courant de demarrage du moteur tambour.
 - Concevoir et integrer toute la partie intelligence et pilotage du FAT.
 - Ajouter un capot de fermeture avec capteur de detection d'ouverture.
 - Ajouter une sonde de temperature d'eau avec implantation maintenable et representative.
@@ -209,15 +272,16 @@ Le point de fonctionnement nominal recherche reste 8 a 10 m3/h, mais la pompe pr
 
 - Cotes exactes du niveau normal cote sale, du niveau normal cote propre, du seuil de lavage et du niveau bas de securite.
 - Nombre exact de capteurs CR18-8DN a installer et implantation precise de chacun.
-- Caracteristiques electriques du moteur de tambour.
-- Caracteristiques electriques et debit de la pompe de rincage.
+- Couple reel, vitesse reelle, courant en charge et seuil de protection du moteur de tambour.
+- Brochage exact du moteur de tambour, y compris fonctions de parking si elles sont utilisees ou isolees.
+- Debit reel, pression utile aux buses, amorcage et courant reel de la pompe de rincage.
 - Forme, nombre et surface totale des ouvertures du tambour pour atteindre la surface de filtration utile visee.
 - Architecture de puissance pour separer clairement les sorties a couper des equipements hors controleur.
 - Implantation finale de l'UV dans la chaine de filtration.
 - Strategie de securite a appliquer si le capot est ouvert pendant un cycle.
 - Position finale du capteur de temperature bassin et technologie retenue.
 - Seuils d'alerte temperature basse et temperature haute.
-- Position finale du capteur de temperature ambiante local et technologie retenue.
+- Position finale du capteur de temperature ambiante local et technologie retenue, avec mesure representative de l'air du local de filtration.
 - Seuils d'alerte temperature ambiante basse et temperature ambiante haute.
 - Niveau d'IHM locale a retenir et informations a afficher localement.
 - Nombre, couleur et signification des voyants si une signalisation lumineuse est retenue.
