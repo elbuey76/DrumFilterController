@@ -242,7 +242,7 @@ input[type="search"] {
 .doc-map {
   padding: 20px 24px 24px;
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
   gap: 16px;
 }
 

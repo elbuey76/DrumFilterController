@@ -4,12 +4,13 @@
 
 | Bloc | Role | Options envisagees |
 | --- | --- | --- |
-| Carte de controle | Execute la logique de lavage et securite | ESP32, automate compact, carte Arduino industrielle |
+| Carte de controle | Execute la logique de lavage et securite | Choix a brainstormer : automate compact / module industriel DIN ou carte microcontroleur type ESP32 / Arduino industriel, selon cout, effort de developpement, robustesse, maintenabilite, capacite d'heure fiable V2 et compatibilite Wi-Fi V2 sans remplacement de plateforme |
 | Entrees capteurs | Detectent niveau de lavage, niveau critique, capot, temperature bassin et temperature ambiante | Flotteurs, capteurs pression, inductifs, contacts secs, sondes de temperature |
 | Sorties puissance | Pilotent pompe, moteur et prises auxiliaires | Relais, contacteurs, variateur, module relais opto-isole |
 | Interface locale | Permet conduite, signalisation et diagnostic | Boutons, voyants, ecran simple |
-| Communication distante | Option V2 pour supervision et notifications a distance | Wi-Fi, BLE, Ethernet, modem cellulaire, passerelle externe |
-| Alimentation | Fournit basse tension stable | Alimentation DIN 12 V ou 24 V, conversion locale si besoin |
+| Communication distante | Option V2 pour supervision et notifications a distance | Wi-Fi cible ; BLE seul insuffisant, Ethernet non disponible sur site, SMS non retenu par defaut |
+| Temps fiable | Support futur d'horodatage V2 | RTC, temps local conserve, module temps, synchronisation reseau ou capacite equivalente selon plateforme ; ne pas dependre exclusivement d'Internet |
+| Alimentation | Fournit basse tension stable | Tension de commande ouverte a ce stade : 12 V ou 24 V, avec 12 V separe pour le moteur tambour si besoin |
 
 ## Composants materiels deja choisis
 
@@ -37,7 +38,7 @@ La rotation du tambour est envisagee avec un moteur d'essuie-glace avant SWF 403
 
 Le rincage est envisage avec une pompe de surface VEVOR / Leo EKJ-802S en 220-240 VAC. La courbe disponible indique environ 3,6 m3/h a tres faible hauteur utile et environ 2,4 m3/h a 21 m ; le debit effectif aux buses devra etre mesure sur la rampe reelle.
 
-Le FAT sera installe dans un local de filtration maconne, isole en XPS 5 cm, sans pluie directe sur le FAT. Un capot relevable est prevu au-dessus du petit batiment ; sa matiere et son niveau d'isolation restent a definir.
+Le FAT sera installe dans un local de filtration maconne, isole en XPS 5 cm, sans pluie directe sur le FAT. Un capot transparent relevable est prevu au-dessus du petit batiment pour permettre de voir le tambour tourner sans ouvrir le FAT ; ce capot et le couvercle transparent designent la meme piece physique. Sa matiere et son niveau d'isolation restent a definir.
 
 Ces donnees doivent etre prises en compte pour les choix de capteurs, l'implantation du niveau de lavage cote eau propre, l'ajout d'une mesure de temperature bassin, l'ajout d'une mesure de temperature ambiante local et les contraintes de debit autour du filtre.
 
@@ -56,7 +57,7 @@ flowchart LR
     Retour["Retour bassin 63 mm"]
     PD["Pompe decoration"]
     Deco["Cascade / mur d'eau / lame d'eau"]
-    UV["UV hors tambour (probablement apres pompe)"]
+    UV["UV hors tambour (apres pompe)"]
     Waste["Goutiere + evacuation 100 mm"]
 
     Bassin --> BF --> FAT
@@ -78,16 +79,17 @@ flowchart LR
 | Joint a levre tambour | a poser | Indispensable pour separer correctement eau sale et eau propre |
 | Moteur tambour | SWF 403.835, 12 V DC, connecteur 5 broches | Brochage, vitesse, courant et sens de rotation a valider avant schema definitif |
 | Transmission tambour | Pignon 10 cm vers engrenage 30 cm | Reduction 3:1, vitesse tambour estimee 13 a 20 tr/min avant mesure |
-| Protection moteur tambour | Fusible initial 10 a 15 A et detection/limitation surintensite a definir | Necessaire pour gerer demarrage, encrassement et blocage mecanique |
+| Protection moteur tambour | Fusible initial 10 a 15 A et protection materielle surintensite/blocage obligatoire | Le retour defaut vers l'automate est optionnel en V1 si le module choisi le fournit simplement |
 | Pompe de rincage | VEVOR / Leo EKJ-802S, raccords 1 pouce, IPX4, classe I | Pompe 230 VAC de surface, a proteger electriquement et a maintenir hors immersion |
 | Rampe de rincage | Tuyau 32 mm + buses | Le choix des buses fixera le point debit/pression reel de la pompe |
-| Sonde temperature bassin | a choisir et a implanter | Fournit une mesure exploitable pour alertes et futur mode hiver |
-| Sonde temperature ambiante local | a choisir et a implanter | Fournit une mesure exploitable de l'air du local de filtration pour alertes environnementales |
-| IHM locale | a definir | Doit remonter clairement le statut, les alarmes et idealement les modes principaux |
-| Liaison distante | option V2 a definir | Doit permettre de notifier sans compromettre le fonctionnement local |
-| Position tambour | option a etudier | Peut aider pour l'indexation et certains diagnostics avances |
+| Sonde temperature bassin | sonde numerique etanche type DS18B20 candidate | A implanter dans le bassin ou une zone tres representative de l'eau du bassin ; alerte informative en V1 avec seuils initiaux < 4 deg C et > 28 deg C |
+| Sonde temperature ambiante local | sonde numerique simple candidate | Fournit une mesure representative de l'air du local de filtration ; alerte informative en V1 avec seuils initiaux < 2 deg C et > 40 deg C |
+| IHM locale | ecran texte ou petit afficheur, commandes physiques, voyants MARCHE et ALARME | L'ecran porte le detail ; voyant MARCHE vert et voyant ALARME rouge sont retenus en V1, voyant LAVAGE jaune ou ambre optionnel |
+| Liaison distante | option V2 Wi-Fi | Le materiel MVP doit etre pret pour une V2 Wi-Fi sans remplacement de plateforme principale ; la notification ne doit pas compromettre le fonctionnement local |
+| Horloge fiable | capacite plateforme V2 obligatoire, implementation MVP optionnelle | La plateforme V1 doit permettre une heure fiable en V2 sans remplacement materiel principal, par RTC, temps local conserve, module temps, synchronisation reseau ou equivalent, sans dependance exclusive a Internet |
+| Position tambour | option V1.1 a etudier | Peut aider pour l'indexation et certains diagnostics avances |
 
-L'UV est represente hors tambour dans la chaine de filtration, probablement apres la pompe principale. Son implantation finale reste a confirmer selon l'equipement retenu et les contraintes de montage.
+L'UV est retenu hors tambour dans la chaine de filtration, apres la pompe principale. Il reste asservi a la filtration autorisee et a l'absence de EP_CRITIQUE ; il n'est pas coupe sur un defaut FAT non critique si la filtration reste autorisee.
 
 ## Schema de principe
 
@@ -97,7 +99,7 @@ flowchart TB
         Alim[Alimentation isolee]
         MCU[Carte de controle]
         Inputs[Entrees capteurs]
-        UI[Commandes, voyants et ecran eventuel]
+        UI[Commandes, ecran local et voyants complementaires]
     end
 
     subgraph P[Puissance]
@@ -120,22 +122,24 @@ flowchart TB
 
 ## Decisions materielles a prendre
 
-- tension de commande : 12 V ou 24 V ;
-- type de carte de controle ;
+- tension de commande : 12 V ou 24 V, decision ouverte ;
+- type de carte de controle, a comparer selon cout, effort de developpement, robustesse et maintenabilite ;
 - nombre de capteurs CR18-8DN et implantation exacte sur le tube de report ;
-- brochage exact du moteur tambour SWF 403.835 et choix d'utilisation des fonctions parking ;
-- alimentation 12 V moteur, calibre fusible et protection surintensite/blocage ;
+- brochage exact du moteur tambour SWF 403.835 et isolation propre des fonctions parking en V1, sauf contrainte de brochage simple ;
+- alimentation 12 V moteur, calibre fusible et protection materielle surintensite/blocage ;
 - commande secteur de la pompe de rincage, protection moteur et raccordement a la terre ;
 - debit ou pression de rincage de reference apres essais sur la rampe et les buses ;
+- mesure terrain de la cote support FAT avant fabrication, afin d'aligner trop-plein physique et niveau hydraulique cible du bassin ;
+- calcul final de la geometrie des ouvertures du tambour avant decoupe ou percage, avec objectif 0,20 a 0,23 m2 de surface filtrante utile ;
 - type de sonde de temperature bassin et implantation exacte ;
 - type de sonde de temperature ambiante local et implantation exacte ;
 - type d'IHM locale : LED, ecran ou combinaison ;
 - nombre de voyants, couleurs et signification ;
-- type de connectivite distante pour une V2 : Wi-Fi, BLE, Ethernet, modem ou passerelle ;
-- architecture de notification pour une V2 : embarquee, serveur local, service mail ou service SMS ;
+- architecture Wi-Fi V2 : Wi-Fi natif ou module Wi-Fi ajoutable proprement sans remplacement de plateforme principale ;
+- architecture de notification pour une V2 : embarquee, serveur local, service mail ou service push simple ;
 - besoin ou non d'un capteur de position tambour ;
-- strategie materielle d'indexation du tambour hors lavage ;
-- methode empirique d'estimation de la consommation d'eau de rincage ;
+- strategie materielle d'indexation du tambour hors lavage pour V1.1 ;
+- methode empirique d'estimation de la consommation d'eau de rincage pour V1.1 ou V2 ;
 - compatibilite native ou conditionnement des entrees pour capteurs NPN 12-24 VDC ;
 - interface d'entree necessaire pour la sonde de temperature ;
 - interface d'entree necessaire pour la sonde de temperature ambiante ;

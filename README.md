@@ -11,6 +11,7 @@ Ce depot accueillera la documentation, les schemas, les decisions de conception 
 | `docs/architecture/` | Architecture systeme, materielle et logicielle, avec diagrammes et emplacements pour visuels. |
 | `docs/decisions/` | Journal de decisions de type ADR pour garder l'historique des choix importants. |
 | `docs/backlog/` | Backlog de cadrage, prototype, firmware, documentation et validation. |
+| `docs/validation/` | Plan de tests, tracabilite exigences/preuves et resultats de validation. |
 
 Les documents de specification et d'architecture sont rediges en Markdown pour pouvoir combiner texte, tableaux, diagrammes Mermaid et images stockees dans les dossiers `assets/`.
 
@@ -35,6 +36,7 @@ Les objectifs principaux sont :
 - [Architecture](docs/architecture/README.md)
 - [Journal de decisions](docs/decisions/README.md)
 - [Backlog](docs/backlog/backlog.md)
+- [Validation](docs/validation/README.md)
 
 ## Prochaine etape
 

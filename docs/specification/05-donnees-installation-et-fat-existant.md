@@ -6,7 +6,7 @@ Le projet porte sur un filtre a tambour (FAT) deja partiellement construit et in
 
 ## Environnement d'installation
 
-Le FAT sera installe dans un local de filtration maconne, isole avec 5 cm de XPS. Un capot relevable sera present au-dessus du petit batiment. Sa matiere et son niveau d'isolation restent a definir.
+Le FAT sera installe dans un local de filtration maconne, isole avec 5 cm de XPS. Un capot transparent relevable sera present au-dessus du petit batiment afin de voir le tambour tourner sans ouvrir le FAT. Le capot et le couvercle transparent designent la meme piece physique. Sa matiere et son niveau d'isolation restent a definir.
 
 Le FAT ne sera donc pas expose a la pluie directe. L'environnement reste toutefois un local de filtration humide, avec risque de condensation, projections ponctuelles et contraintes de maintenance.
 
@@ -132,7 +132,7 @@ Le moteur doit rester hors eau et protege des projections. Le brochage exact, la
 | Corps de pompe | AISI 304 | Donnee fiche technique |
 | Dimensions / poids | environ 38 x 24 x 30 cm, 9 kg | Fiche detaillee : L 369,5 mm, W 243,5 mm, H 284 mm |
 
-La courbe disponible donne environ 20 L/min a 34 m, 30 L/min a 28 m, 40 L/min a 21 m, 50 L/min a 12,5 m et 60 L/min a 3 m. Le debit de rincage de reference devra donc etre mesure ou estime a partir du point de fonctionnement reel des buses. Le detail du dimensionnement est trace dans [../calculs/NC-0003-dimensionnement-pompe-rincage.md](../calculs/NC-0003-dimensionnement-pompe-rincage.md).
+La courbe disponible donne environ 20 L/min a 34 m, 30 L/min a 28 m, 40 L/min a 21 m, 50 L/min a 12,5 m et 60 L/min a 3 m. La courbe sert seulement d'estimation provisoire. Le debit de rincage de reference V1 devra etre mesure aux buses apres montage reel de la pompe, de la rampe et des pertes de charge. Le detail du dimensionnement est trace dans [../calculs/NC-0003-dimensionnement-pompe-rincage.md](../calculs/NC-0003-dimensionnement-pompe-rincage.md).
 
 ### Hypothese de nommage cote eau propre
 
@@ -150,7 +150,7 @@ La courbe disponible donne environ 20 L/min a 34 m, 30 L/min a 28 m, 40 L/min a 
 | Filtration biologique | cuve IBC 1000 L avec tapis japonais | En sortie du FAT |
 | Pompe de filtration principale | retour bassin en 63 mm | Fonctionnement continu vise |
 | Pompe decoration | usage ponctuel | Cascade, mur d'eau, lame d'eau, etc. |
-| UV | hors tambour, dans la filtration, probablement apres la pompe principale | Implantation finale a confirmer selon l'equipement retenu |
+| UV | hors tambour, dans la filtration, apres la pompe principale | Asservi a filtration autorisee plus absence EP_CRITIQUE ; ne pas couper sur defaut FAT non critique si la filtration reste autorisee |
 | Temperature bassin | mesure a ajouter | Valeur utile pour alertes et exploitation saisonniere |
 | Temperature ambiante local | mesure a ajouter | Valeur utile pour alertes environnementales et suivi du local technique |
 
@@ -190,7 +190,7 @@ Le point de fonctionnement nominal recherche reste 8 a 10 m3/h, mais la pompe pr
 - Une protection contre blocage ou surintensite du moteur tambour doit etre prevue ou fortement justifiee si elle est absente.
 - La pompe de rincage retenue est une pompe de surface VEVOR / Leo EKJ-802S en 220-240 VAC ; elle doit etre commandee comme une charge moteur secteur.
 - Le debit de rincage de reference ne doit pas etre confondu avec le debit maximal de 60 L/min, car le point de fonctionnement dependra des buses et des pertes de charge.
-- Le support du FAT devra fixer la cote altimetrique du trop-plein par rapport au niveau hydraulique du bassin.
+- Le support du FAT devra fixer la cote altimetrique du trop-plein par rapport au niveau hydraulique du bassin. Cette cote doit etre mesuree sur site avant fabrication du support ; elle ne doit pas etre inventee en specification.
 - La pompe decoration aspirant au meme endroit que la pompe principale, elle doit suivre les memes regles de securite hydraulique.
 - Les diametres d'interconnexion existants 110 mm, 100 mm, 63 mm et 32 mm doivent etre preserves dans les choix d'implantation et de pilotage.
 
@@ -211,7 +211,7 @@ Le point de fonctionnement nominal recherche reste 8 a 10 m3/h, mais la pompe pr
 - Les niveaux normaux cote sale et cote propre serviront de reference pour comprendre le comportement hydraulique du filtre propre.
 - Les ecarts eau sale / eau propre peuvent rester utiles pour les observations de mise au point, mais ils ne constituent pas la logique de pilotage V1.
 - Ces reperes devront etre convertis en cotes physiques mesurables depuis le fond du filtre.
-- La surface de filtration utile finale dependra de la geometrie des ouvertures du tambour sous la toile inox 74 microns.
+- La surface de filtration utile finale dependra de la geometrie des ouvertures du tambour sous la toile inox 74 microns. L'objectif V1 est d'obtenir environ 0,20 a 0,23 m2 de surface filtrante utile ; le calcul doit etre valide avant decoupe ou percage.
 
 ## Politique de securite en cas de niveau bas
 
@@ -252,51 +252,50 @@ Le point de fonctionnement nominal recherche reste 8 a 10 m3/h, mais la pompe pr
 - Identifier le brochage exact du moteur d'essuie-glace et valider son sens de rotation.
 - Installer une alimentation 12 V DC et une protection adaptees au courant de demarrage du moteur tambour.
 - Concevoir et integrer toute la partie intelligence et pilotage du FAT.
-- Ajouter un capot de fermeture avec capteur de detection d'ouverture.
+- Ajouter un capot transparent de fermeture avec capteur de detection d'ouverture.
 - Ajouter une sonde de temperature d'eau avec implantation maintenable et representative.
 - Ajouter une sonde de temperature ambiante du local avec implantation representative.
 - Definir une IHM locale permettant de remonter clairement le statut du systeme.
-- Prevoir si utile une extension de remontee a distance de l'etat et des alarmes pour une V2.
-- Prevoir pour une V2 la liste des notifications immediates a emettre et leur politique anti-repetition.
+- Prevoir une extension Wi-Fi V2 de remontee a distance de l'etat et des alarmes sans remplacement de la plateforme principale.
+- Prevoir pour une V2 les notifications immediates actionnables et leur politique anti-repetition : apparition, rappel rare et retour a la normale.
 - Prevoir pour une V2 une synthese quotidienne de fonctionnement et la possibilite de la desactiver.
-- Definir si la pompe decoration doit etre pilotee par tranches horaires et pouvoir etre desactivee en hiver.
+- La pompe decoration pourra etre pilotee en V1.1/V2 par deux plages horaires maximum par jour, identiques tous les jours, avec interrupteur logiciel actif/inactif pour les longues periodes d'arret dont l'hiver.
 - Definir la liste finale des alarmes indirectes et leur formulation utilisateur.
-- Definir un test journalier automatique avec diagnostic.
-- Definir une strategie d'indexation du tambour pour repartir l'immersion.
-- Definir et restituer des statistiques de lavage pertinentes pour suivre l'etat du filtre.
-- Definir un indice simple d'encrassement exploitable dans le temps.
-- Definir une estimation empirique de la consommation d'eau du rincage et du besoin d'appoint associe.
-- Definir et suivre les temps de fonctionnement cumules des organes principaux.
+- Definir pour une V1.1 un test journalier automatique avec diagnostic.
+- Definir pour une V1.1 une strategie d'indexation du tambour pour repartir l'immersion.
+- Definir pour une V1.1 les statistiques de lavage pertinentes pour suivre l'etat du filtre.
+- Definir pour une V1.1 ou V2 un indice simple d'encrassement exploitable dans le temps.
+- Definir pour une V1.1 ou V2 une estimation empirique de la consommation d'eau du rincage et du besoin d'appoint associe.
+- Definir pour une V1.1 les temps de fonctionnement cumules des organes principaux.
 
 ## Questions techniques encore ouvertes
 
 - Cotes exactes du niveau normal cote sale, du niveau normal cote propre, du seuil de lavage et du niveau bas de securite.
 - Nombre exact de capteurs CR18-8DN a installer et implantation precise de chacun.
 - Couple reel, vitesse reelle, courant en charge et seuil de protection du moteur de tambour.
-- Brochage exact du moteur de tambour, y compris fonctions de parking si elles sont utilisees ou isolees.
+- Brochage exact du moteur de tambour, y compris fonctions de parking a isoler ou ignorer proprement en V1.
 - Debit reel, pression utile aux buses, amorcage et courant reel de la pompe de rincage.
-- Forme, nombre et surface totale des ouvertures du tambour pour atteindre la surface de filtration utile visee.
+- Forme, nombre et surface totale des ouvertures du tambour a calculer avant decoupe pour atteindre environ 0,20 a 0,23 m2 de surface filtrante utile.
 - Architecture de puissance pour separer clairement les sorties a couper des equipements hors controleur.
-- Implantation finale de l'UV dans la chaine de filtration.
 - Strategie de securite a appliquer si le capot est ouvert pendant un cycle.
 - Position finale du capteur de temperature bassin et technologie retenue.
-- Seuils d'alerte temperature basse et temperature haute.
+- Seuils d'alerte temperature eau V1 : basse < 4 deg C, haute > 28 deg C, configurables.
 - Position finale du capteur de temperature ambiante local et technologie retenue, avec mesure representative de l'air du local de filtration.
-- Seuils d'alerte temperature ambiante basse et temperature ambiante haute.
+- Seuils d'alerte temperature ambiante local V1 : basse < 2 deg C, haute > 40 deg C, configurables.
 - Niveau d'IHM locale a retenir et informations a afficher localement.
 - Nombre, couleur et signification des voyants si une signalisation lumineuse est retenue.
 - Liste exacte des informations visibles en permanence sur l'IHM locale et de celles accessibles en detail.
-- Canal de notification a distance a retenir pour une V2.
-- Liste des evenements a notifier et comportement en cas de perte reseau pour une V2.
+- Canal de notification a distance V2 retenu : Wi-Fi, avec materiel MVP compatible.
+- Liste des evenements a notifier et comportement en cas de perte reseau pour une V2, sur la base des evenements actionnables deja retenus.
 - Activation par defaut, horaire et contenu exact de la synthese quotidienne pour une V2.
-- Source exacte de l'information bassin niveau bas si elle differe du niveau bas de securite deja prevu.
-- Nombre de tranches horaires, mode de configuration et logique hivernale de la pompe decoration.
-- Priorite entre commande manuelle, programmation horaire et inhibition de la pompe decoration, tout en respectant les memes securites que la pompe principale.
+- Ne pas creer d'information distante "bassin niveau bas" sans capteur bassin distinct ; avec l'instrumentation retenue, EP_CRITIQUE doit etre presente comme `NIVEAU FAT CRITIQUE`.
+- Programmation pompe decoration retenue pour V1.1/V2 : deux plages maximum par jour, identiques tous les jours, et interrupteur logiciel actif/inactif sans automatisme hiver au depart.
+- Priorite pompe decoration retenue : securites hydrauliques et defauts bloquants, commande manuelle locale, commande distante, puis programmation horaire.
 - Validation physique de l'ordre et de la logique des capteurs EP_LAVAGE et EP_CRITIQUE.
-- Choix de rester en diagnostic indirect V1 ou d'ajouter plus tard des capteurs dedies pour rotation, courant, fuite ou niveau eau sale.
-- Regles de lancement, de verdict et de report du test journalier automatique.
-- Strategie retenue pour ne pas laisser toujours la meme zone du tambour immergee.
-- Regles de calcul et de restitution des statistiques de lavage.
-- Formule retenue pour l'indice d'encrassement et usage associe.
-- Methode empirique d'estimation de la consommation d'eau et des pertes vers evacuation.
-- Regles de cumul, d'affichage et de remise a zero eventuelle des temps de fonctionnement.
+- Choix de rester en diagnostic indirect V1 confirme ; pressostat, debitmetre, retour courant rincage, rotation, fuite ou niveau eau sale sont reportes V1.1/V2 si les essais montrent un besoin.
+- Regles de lancement, de verdict et de report du test journalier automatique en V1.1.
+- Strategie retenue en V1.1 pour ne pas laisser toujours la meme zone du tambour immergee.
+- Regles de calcul et de restitution des statistiques de lavage en V1.1.
+- Formule retenue pour l'indice d'encrassement et usage associe en V1.1 ou V2.
+- Methode empirique d'estimation de la consommation d'eau et des pertes vers evacuation en V1.1 ou V2.
+- Regles de cumul et d'affichage des temps de fonctionnement en V1.1 ; remises a zero maintenance et seuils de rappel reportes V2.

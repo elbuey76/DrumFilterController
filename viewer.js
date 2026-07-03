@@ -42,7 +42,9 @@ const DOC_SECTIONS = [
     accent: "Dimensionnement",
     files: [
       { path: "docs/calculs/README.md", label: "README", blurb: "Convention des notes de calcul." },
-      { path: "docs/calculs/NC-0001-dimensionnement-pompe-filtration.md", label: "NC-0001 Pompe filtration", blurb: "Debit cible et justification hydraulique." }
+      { path: "docs/calculs/NC-0001-dimensionnement-pompe-filtration.md", label: "NC-0001 Pompe filtration", blurb: "Debit cible et justification hydraulique." },
+      { path: "docs/calculs/NC-0002-dimensionnement-motorisation-tambour.md", label: "NC-0002 Motorisation tambour", blurb: "Moteur, alimentation et validations mecaniques." },
+      { path: "docs/calculs/NC-0003-dimensionnement-pompe-rincage.md", label: "NC-0003 Pompe rincage", blurb: "Pompe de rincage, courbe hydraulique et essais." }
     ]
   },
   {
@@ -53,7 +55,8 @@ const DOC_SECTIONS = [
     files: [
       { path: "docs/decisions/README.md", label: "README", blurb: "Convention du journal de decisions." },
       { path: "docs/decisions/ADR-0001-structure-documentation.md", label: "ADR-0001 Documentation", blurb: "Choix du format Markdown." },
-      { path: "docs/decisions/ADR-0002-dimensionnement-pompe-filtration-principale.md", label: "ADR-0002 Pompe principale", blurb: "Direction prise pour le dimensionnement." }
+      { path: "docs/decisions/ADR-0002-dimensionnement-pompe-filtration-principale.md", label: "ADR-0002 Pompe principale", blurb: "Direction prise pour le dimensionnement." },
+      { path: "docs/decisions/ADR-0003-choix-plateforme-controle-v1.md", label: "ADR-0003 Plateforme V1", blurb: "Comparaison attendue de la plateforme de controle." }
     ]
   },
   {
@@ -64,6 +67,16 @@ const DOC_SECTIONS = [
     files: [
       { path: "docs/backlog/README.md", label: "README", blurb: "Convention des priorites." },
       { path: "docs/backlog/backlog.md", label: "Backlog projet", blurb: "Actions MVP, V2 et validations." }
+    ]
+  },
+  {
+    id: "validation",
+    title: "Validation",
+    description: "Plan de tests, tracabilite des exigences et preuves de validation.",
+    accent: "Tests",
+    files: [
+      { path: "docs/validation/README.md", label: "README", blurb: "Principe de validation tracee." },
+      { path: "docs/validation/plan-tests-exigences.md", label: "Plan de tests", blurb: "Matrice exigences, modes de preuve et statuts." }
     ]
   }
 ];
