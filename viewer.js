@@ -2,80 +2,80 @@ const DOC_SECTIONS = [
   {
     id: "racine",
     title: "Racine",
-    description: "Point d'entree du depot et vision projet.",
-    accent: "Vue generale",
+    description: "Point d'entrée du dépôt et vision projet.",
+    accent: "Vue générale",
     files: [
-      { path: "README.md", label: "README", blurb: "Contexte global et organisation du depot." }
+      { path: "README.md", label: "README", blurb: "Contexte global et organisation du dépôt." }
     ]
   },
   {
     id: "specification",
-    title: "Specification",
-    description: "Ce que le systeme doit faire, ses contraintes et ses questions ouvertes.",
+    title: "Spécification",
+    description: "Ce que le système doit faire, ses contraintes et ses questions ouvertes.",
     accent: "Exigences",
     files: [
-      { path: "docs/specification/README.md", label: "README", blurb: "Structure de la specification." },
-      { path: "docs/specification/01-objectifs-et-perimetre.md", label: "Objectifs et perimetre", blurb: "Cible du projet et limites du MVP." },
+      { path: "docs/specification/README.md", label: "README", blurb: "Structure de la spécification." },
+      { path: "docs/specification/01-objectifs-et-perimetre.md", label: "Objectifs et périmètre", blurb: "Cible du projet et limites du MVP." },
       { path: "docs/specification/02-exigences-fonctionnelles.md", label: "Exigences fonctionnelles", blurb: "Fonctions attendues, modes et alarmes." },
-      { path: "docs/specification/03-securite-et-contraintes.md", label: "Securite et contraintes", blurb: "Protections, repli et environnement." },
-      { path: "docs/specification/04-questions-ouvertes.md", label: "Questions ouvertes", blurb: "Points a arbitrer ou a confirmer." },
-      { path: "docs/specification/05-donnees-installation-et-fat-existant.md", label: "Donnees installation", blurb: "Geometrie, hydraulique et composants." }
+      { path: "docs/specification/03-securite-et-contraintes.md", label: "Sécurité et contraintes", blurb: "Protections, repli et environnement." },
+      { path: "docs/specification/04-questions-ouvertes.md", label: "Questions ouvertes", blurb: "Points à arbitrer ou à confirmer." },
+      { path: "docs/specification/05-donnees-installation-et-fat-existant.md", label: "Données installation", blurb: "Géométrie, hydraulique et composants." }
     ]
   },
   {
     id: "architecture",
     title: "Architecture",
-    description: "Comment le systeme est structure materiellement et logiciellement.",
+    description: "Comment le système est structuré matériellement et logiciellement.",
     accent: "Structure",
     files: [
       { path: "docs/architecture/README.md", label: "README", blurb: "Sommaire de l'architecture." },
-      { path: "docs/architecture/01-vue-ensemble.md", label: "Vue d'ensemble", blurb: "Contexte systeme et principes." },
-      { path: "docs/architecture/02-architecture-materielle.md", label: "Architecture materielle", blurb: "Blocs physiques, capteurs et puissance." },
-      { path: "docs/architecture/03-architecture-logicielle.md", label: "Architecture logicielle", blurb: "Machine a etats, modules et logique." },
-      { path: "docs/architecture/04-table-entrees-sorties.md", label: "Table E/S", blurb: "Signaux d'entree, sorties et groupes de securite." }
+      { path: "docs/architecture/01-vue-ensemble.md", label: "Vue d'ensemble", blurb: "Contexte système et principes." },
+      { path: "docs/architecture/02-architecture-materielle.md", label: "Architecture matérielle", blurb: "Blocs physiques, capteurs et puissance." },
+      { path: "docs/architecture/03-architecture-logicielle.md", label: "Architecture logicielle", blurb: "Machine à états, modules et logique." },
+      { path: "docs/architecture/04-table-entrees-sorties.md", label: "Table E/S", blurb: "Signaux d'entrée, sorties et groupes de sécurité." }
     ]
   },
   {
     id: "calculs",
     title: "Calculs",
-    description: "Hypotheses de dimensionnement et raisonnement technique.",
+    description: "Hypothèses de dimensionnement et raisonnement technique.",
     accent: "Dimensionnement",
     files: [
       { path: "docs/calculs/README.md", label: "README", blurb: "Convention des notes de calcul." },
-      { path: "docs/calculs/NC-0001-dimensionnement-pompe-filtration.md", label: "NC-0001 Pompe filtration", blurb: "Debit cible et justification hydraulique." },
-      { path: "docs/calculs/NC-0002-dimensionnement-motorisation-tambour.md", label: "NC-0002 Motorisation tambour", blurb: "Moteur, alimentation et validations mecaniques." },
-      { path: "docs/calculs/NC-0003-dimensionnement-pompe-rincage.md", label: "NC-0003 Pompe rincage", blurb: "Pompe de rincage, courbe hydraulique et essais." }
+      { path: "docs/calculs/NC-0001-dimensionnement-pompe-filtration.md", label: "NC-0001 Pompe filtration", blurb: "Débit cible et justification hydraulique." },
+      { path: "docs/calculs/NC-0002-dimensionnement-motorisation-tambour.md", label: "NC-0002 Motorisation tambour", blurb: "Moteur, alimentation et validations mécaniques." },
+      { path: "docs/calculs/NC-0003-dimensionnement-pompe-rincage.md", label: "NC-0003 Pompe rinçage", blurb: "Pompe de rinçage, courbe hydraulique et essais." }
     ]
   },
   {
     id: "decisions",
-    title: "Decisions",
+    title: "Décisions",
     description: "Historique des arbitrages importants et rationale.",
     accent: "ADR",
     files: [
-      { path: "docs/decisions/README.md", label: "README", blurb: "Convention du journal de decisions." },
+      { path: "docs/decisions/README.md", label: "README", blurb: "Convention du journal de décisions." },
       { path: "docs/decisions/ADR-0001-structure-documentation.md", label: "ADR-0001 Documentation", blurb: "Choix du format Markdown." },
       { path: "docs/decisions/ADR-0002-dimensionnement-pompe-filtration-principale.md", label: "ADR-0002 Pompe principale", blurb: "Direction prise pour le dimensionnement." },
-      { path: "docs/decisions/ADR-0003-choix-plateforme-controle-v1.md", label: "ADR-0003 Plateforme V1", blurb: "Comparaison attendue de la plateforme de controle." }
+      { path: "docs/decisions/ADR-0003-choix-plateforme-controle-v1.md", label: "ADR-0003 Plateforme V1", blurb: "Comparaison attendue de la plateforme de contrôle." }
     ]
   },
   {
     id: "backlog",
     title: "Backlog",
-    description: "Travaux a cadrer, prototype, firmware, validation et V2.",
+    description: "Travaux à cadrer, prototype, firmware, validation et V2.",
     accent: "Plan d'action",
     files: [
-      { path: "docs/backlog/README.md", label: "README", blurb: "Convention des priorites." },
+      { path: "docs/backlog/README.md", label: "README", blurb: "Convention des priorités." },
       { path: "docs/backlog/backlog.md", label: "Backlog projet", blurb: "Actions MVP, V2 et validations." }
     ]
   },
   {
     id: "validation",
     title: "Validation",
-    description: "Plan de tests, tracabilite des exigences et preuves de validation.",
+    description: "Plan de tests, traçabilité des exigences et preuves de validation.",
     accent: "Tests",
     files: [
-      { path: "docs/validation/README.md", label: "README", blurb: "Principe de validation tracee." },
+      { path: "docs/validation/README.md", label: "README", blurb: "Principe de validation tracée." },
       { path: "docs/validation/plan-tests-exigences.md", label: "Plan de tests", blurb: "Matrice exigences, modes de preuve et statuts." }
     ]
   }
@@ -214,7 +214,7 @@ async function openDocument(path) {
     readerContent.innerHTML = renderMarkdown(raw, path);
     readerTitle.textContent = extractTitle(raw) || docLabelForPath(path);
     renderMermaidDiagrams();
-    setStatus(`Document charge : ${path}`);
+    setStatus(`Document chargé : ${path}`);
   } catch (error) {
     readerContent.innerHTML = `
       <h2>Chargement impossible</h2>
@@ -493,7 +493,7 @@ reloadButton.addEventListener("click", () => {
 openSourceButton.addEventListener("click", async () => {
   try {
     await navigator.clipboard.writeText(activePath);
-    setStatus(`Chemin copie : ${activePath}`);
+    setStatus(`Chemin copié : ${activePath}`);
   } catch {
     setStatus(`Chemin courant : ${activePath}`);
   }

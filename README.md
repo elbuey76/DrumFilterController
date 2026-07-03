@@ -1,43 +1,43 @@
-# Controleur de filtre a tambour pour bassin
+﻿# Contrôleur de filtre à tambour pour bassin
 
-Ce depot accueillera la documentation, les schemas, les decisions de conception et le logiciel d'un controleur de filtre a tambour pour bassin. L'objectif est de construire un systeme fiable, maintenable et documente, base autant que possible sur des cartes electroniques du commerce, avec la possibilite de concevoir une carte dediee si le besoin devient justifie.
+Ce dépôt accueillera la documentation, les schémas, les décisions de conception et le logiciel d'un contrôleur de filtre à tambour pour bassin. L'objectif est de construire un système fiable, maintenable et documenté, basé autant que possible sur des cartes électroniques du commerce, avec la possibilité de concevoir une carte dédiée si le besoin devient justifié.
 
-## Organisation du depot
+## Organisation du dépôt
 
-| Dossier | Role |
+| Dossier | Rôle |
 | --- | --- |
-| `docs/specification/` | Specification fonctionnelle, exigences, contraintes et questions ouvertes. |
-| `docs/calculs/` | Notes de calcul de dimensionnement hydraulique, mecanique et electrique. |
-| `docs/architecture/` | Architecture systeme, materielle et logicielle, avec diagrammes et emplacements pour visuels. |
-| `docs/decisions/` | Journal de decisions de type ADR pour garder l'historique des choix importants. |
+| `docs/specification/` | Spécification fonctionnelle, exigences, contraintes et questions ouvertes. |
+| `docs/calculs/` | Notes de calcul de dimensionnement hydraulique, mécanique et électrique. |
+| `docs/architecture/` | Architecture système, matérielle et logicielle, avec diagrammes et emplacements pour visuels. |
+| `docs/decisions/` | Journal de décisions de type ADR pour garder l'historique des choix importants. |
 | `docs/backlog/` | Backlog de cadrage, prototype, firmware, documentation et validation. |
-| `docs/validation/` | Plan de tests, tracabilite exigences/preuves et resultats de validation. |
+| `docs/validation/` | Plan de tests, traçabilité exigences/preuves et résultats de validation. |
 
-Les documents de specification et d'architecture sont rediges en Markdown pour pouvoir combiner texte, tableaux, diagrammes Mermaid et images stockees dans les dossiers `assets/`.
+Les documents de spécification et d'architecture sont rédigés en Markdown pour pouvoir combiner texte, tableaux, diagrammes Mermaid et images stockées dans les dossiers `assets/`.
 
 ## Objectifs du projet
 
-Le controleur doit automatiser le nettoyage d'un filtre a tambour en surveillant le niveau d'eau dans le FAT, puis en declenchant une rotation du tambour et une pompe de rincage lorsque le seuil de lavage est atteint. Il doit aussi proteger l'installation en detectant les defauts, couper des prises auxiliaires en cas de niveau bas, permettre un fonctionnement manuel, gerer des modes maintenance, degrade et test, et redemarrer proprement apres une coupure de courant.
+Le contrôleur doit automatiser le nettoyage d'un filtre à tambour en surveillant le niveau d'eau dans le FAT, puis en déclenchant une rotation du tambour et une pompe de rinçage lorsque le seuil de lavage est atteint. Il doit aussi protéger l'installation en détectant les défauts, couper des prises auxiliaires en cas de niveau bas, permettre un fonctionnement manuel, gérer des modes maintenance, dégradé et test, et redémarrer proprement après une coupure de courant.
 
 Les objectifs principaux sont :
 
 - automatiser les cycles de lavage du tambour ;
-- detecter un seuil de niveau haut declenchant le lavage et un seuil de niveau bas de securite ;
-- limiter la consommation d'eau et d'energie ;
-- proteger la pompe, le moteur et le bassin en cas de defaut ;
-- permettre des modes auto, manuel, maintenance, degrade et test avec comportements explicites ;
-- garder une architecture comprehensible et reparable ;
-- preparer une evolution vers journalisation, ecran local, supervision reseau et notifications a distance.
+- détecter un seuil de niveau haut déclenchant le lavage et un seuil de niveau bas de sécurité ;
+- limiter la consommation d'eau et d'énergie ;
+- protéger la pompe, le moteur et le bassin en cas de défaut ;
+- permettre des modes auto, manuel, maintenance, dégradé et test avec comportements explicites ;
+- garder une architecture compréhensible et réparable ;
+- préparer une évolution vers journalisation, écran local, supervision réseau et notifications à distance.
 
-## Documents de depart
+## Documents de départ
 
-- [Specification fonctionnelle](docs/specification/README.md)
+- [Spécification fonctionnelle](docs/specification/README.md)
 - [Notes de calcul](docs/calculs/README.md)
 - [Architecture](docs/architecture/README.md)
-- [Journal de decisions](docs/decisions/README.md)
+- [Journal de décisions](docs/decisions/README.md)
 - [Backlog](docs/backlog/backlog.md)
 - [Validation](docs/validation/README.md)
 
-## Prochaine etape
+## Prochaine étape
 
-Consolider les cotes physiques du FAT, fixer les seuils hydrauliques sur le report de niveau, figer les modes de fonctionnement et la reprise apres coupure, puis creer les premieres decisions d'architecture concernant la carte de controle, les capteurs et les sorties de puissance.
+Consolider les cotes physiques du FAT, fixer les seuils hydrauliques sur le report de niveau, figer les modes de fonctionnement et la reprise après coupure, puis créer les premières décisions d'architecture concernant la carte de contrôle, les capteurs et les sorties de puissance.

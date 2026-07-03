@@ -1,4 +1,4 @@
-$ErrorActionPreference = "Stop"
+﻿$ErrorActionPreference = "Stop"
 
 $paths = @(
   "README.md",
@@ -39,4 +39,4 @@ $json = $map | ConvertTo-Json -Depth 3 -Compress
 $content = "window.DOC_CONTENT = $json;`n"
 [System.IO.File]::WriteAllText((Join-Path (Get-Location) "docs-data.js"), $content, [System.Text.Encoding]::UTF8)
 
-Write-Host "docs-data.js mis a jour."
+Write-Host "docs-data.js mis à jour."

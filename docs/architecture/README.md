@@ -1,6 +1,6 @@
-# Architecture
+﻿# Architecture
 
-Ce dossier documente l'architecture matérielle, électronique et logicielle. Le format principal est Markdown avec schémas Mermaid intégrés et possibilité d'ajouter des images dans `assets/` ou des sources de diagrammes dans `diagrams/`.
+Ce dossier documenté l'architecture matérielle, électronique et logicielle. Le format principal est Markdown avec schémas Mermaid intégrés et possibilité d'ajouter des images dans `assets/` ou des sources de diagrammes dans `diagrams/`.
 
 ## Documents
 
