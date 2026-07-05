@@ -41,10 +41,10 @@ Le contrôleur doit separer la basse tension de commande de la puissance moteur/
 | S-030 | Les notifications immédiates devraient distinguer une apparition d'événement, un retour à la normale et un état deja signale afin de rester exploitables. | Should | Évite les ambiguities et les messages répétitifs peu utiles. |
 | S-031 | Toute programmation horaire de la pompe décoration doit être inhibée par le niveau bas, un défaut critique ou toute autre sécurité supérieure applicable. | Must | La pompe décoration aspirant au même endroit que la filtration, une plage horaire ne doit jamais forcer une marche non sûre. |
 | S-032 | Le système doit éviter les libellés de défaut affirmant une panne d'organe non prouvee par capteur dédié, mesure électrique ou retour de marche réel. | Must | En V1, on privilegie les effets observés comme lavage inefficace, niveau eau propre anormal ou commande incohérente. |
-| S-033 | Le moteur tambour doit disposer d'une protection adaptée contre surintensité ou blocage mécanique. | Must | Le moteur d'essuie-glace 12 V peut tirer 10 à 20 A au démarrage ou en blocage ; la protection peut être matérielle autonome ou remontée à l'automate. |
+| S-033 | Le moteur tambour doit disposer d'une protection adaptée contre surintensité ou blocage mécanique. | Must | Moteur Fyearfly 12 VDC 10 rpm, fusible ATO 7,5 A retenu en première approche ; confirmer par mesures a vide, en charge, au démarrage et au blocage. |
 | S-034 | Le système ne doit pas supposer une protection thermique interne du moteur tambour sans preuve. | Must | La protection externe doit rester dimensionnante tant que la référence moteur n'est pas documentée complètement. |
 | S-035 | Le moteur tambour doit rester hors immersion et protège des projections directes. | Must | Le moteur automobile est acceptable en ambiance humide protégée, mais pas en immersion. |
-| S-036 | La pompe de rinçage 230 VAC doit être commandée par un organe adapté aux charges moteur et protégée cote secteur. | Must | Pompe VEVOR / Leo EKJ-802S, classe I, 0,6 à 0,8 kW ; tenir compte du courant d'appel au démarrage. |
+| S-036 | La pompe de rinçage 230 VAC doit être commandée par un organe adapté aux charges moteur et protégée cote secteur. | Must | Pompe VEVOR / Leo EKJ-802S, classe I, 0,6 à 0,8 kW ; depart disjoncteur 10 A courbe C et contacteur Schneider TeSys LC1D12P7 bobine 230 VAC retenus, a valider au schema final. |
 | S-037 | La pompe de rinçage doit être raccordee à la terre et rester hors immersion. | Must | Protection classe I et IPX4 : compatible projections, pas immersion ni exposition forte non protégée. |
 | S-038 | Le système ne doit pas assimiler commande de pompe de rinçage a débit ou pression réel sans mesure dédiée. | Must | Sans pressostat, débitmètre ou retour électrique exploité, le diagnostic doit rester indirect. |
 | S-039 | Les alarmes bloquantes V1 doivent rester actives jusqu'à disparition de la cause et acquittement valide. | Must | Concerne au minimum EP_CRITIQUE, capteurs niveau incohérents, capot ouvert pendant action dangereuse et défaut lavage maintenu après tentatives max. |
@@ -106,6 +106,16 @@ Le mode dégradé doit être conçu pour maintenir le bassin en vie tout en sign
 - parasites électriques liés aux moteurs ;
 - accès maintenance potentiellement limité ;
 - besoin de composants remplacables facilement.
+
+## Contraintes de tableau electrique V1
+
+- un interrupteur differentiel 30 mA est retenu en tete de tableau, avec type et calibre a choisir avant schema final ;
+- l'alimentation 12 VDC est protegee par un disjoncteur 4 A courbe C ;
+- la pompe de rincage est protegee par un disjoncteur 10 A courbe C ;
+- les prises classiques du local sont protegees par un disjoncteur 16 A courbe C ;
+- la pompe de filtration est protegee par un depart dedie 6 A courbe C ;
+- l'UV, la pompe decoration et la mise a niveau sont sur un depart 6 A courbe C separe de la filtration ;
+- les departs 12 VDC sont proteges par fusibles ATO : moteur tambour 7,5 A, automate 3 A, capteurs/boutons 1 A, ecran/voyants/accessoires 1 A.
 
 Le capteur de température ambiante doit mesurer l'air du local de filtration. Il ne doit donc pas être considere comme une simple mesure interne du coffret, sauf si l'implantation retenue permet de représenter correctement l'ambiance du local.
 

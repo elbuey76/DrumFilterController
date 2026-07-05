@@ -4,13 +4,13 @@
 
 | Bloc | Rôle | Options envisagées |
 | --- | --- | --- |
-| Carte de contrôle | Exécute la logique de lavage et sécurité | Choix à brainstormer : automate compact / module industriel DIN ou carte microcontrôleur type ESP32 / Arduino industriel, selon coût, effort de développement, robustesse, maintenabilité, capacité d'heure fiable V2 et compatibilité Wi-Fi V2 sans remplacement de plateforme |
+| Carte de contrôle | Exécute la logique de lavage et sécurité | KC868-A32 retenu pour la V1 |
 | Entrées capteurs | Detectent niveau de lavage, niveau critique, capot, température bassin et température ambiante | Flotteurs, capteurs pression, inductifs, contacts secs, sondes de température |
-| Sorties puissance | Pilotent pompe, moteur et prises auxiliaires | Relais, contacteurs, variateur, module relais opto-isole |
+| Sorties puissance | Pilotent pompe, moteur et prises auxiliaires | Relais automate vers relais HELLA 12 VDC, contacteur Schneider 230 VAC et contacteurs TOMZN 12 VDC selon organe |
 | Interface locale | Permet conduite, signalisation et diagnostic | Boutons, voyants, écran simple |
 | Communication distante | Option V2 pour supervision et notifications à distance | Wi-Fi cible ; BLE seul insuffisant, Ethernet non disponible sur site, SMS non retenu par défaut |
 | Temps fiable | Support futur d'horodatage V2 | RTC, temps local conserve, module temps, synchronisation réseau ou capacité equivalente selon plateforme ; ne pas dependre exclusivement d'Internet |
-| Alimentation | Fournit basse tension stable | Tension de commande ouverte a ce stade : 12 V ou 24 V, avec 12 V séparé pour le moteur tambour si besoin |
+| Alimentation | Fournit basse tension stable | 12 VDC retenu via Mean Well NDR-120-12, 120 W, 10 A |
 
 ## Composants materiels deja choisis
 
@@ -18,8 +18,13 @@
 | --- | --- | --- |
 | Toile de filtration tambour | Inox 74 microns | Fixe la finesse de filtration mécanique de référence |
 | Capteurs de niveau | CR18-8DN | Imposent une interface d'entrée compatible NPN, 12-24 VDC, 3 fils |
-| Moteur tambour candidat | Moteur d'essuie-glace avant SWF 403.835, 12 V DC | Impose une alimentation 12 V suffisamment dimensionnée, une commande petite vitesse et une protection surintensité/blocage |
+| Plateforme de contrôle | KC868-A32 | Fixe la base des entrées/sorties V1 et la logique de cablage |
+| Alimentation 12 VDC | Mean Well NDR-120-12, 120 W, 10 A, rail DIN | Alimente automate, capteurs, IHM, accessoires et moteur tambour via départs fusibles |
+| Moteur tambour | Motorreducteur Fyearfly 12 VDC 10 rpm | Simplifie la vitesse de tambour par rapport au moteur d'essuie-glace candidat |
+| Relais moteur tambour | HELLA 4RD 933 332-551, 12 V, charge inductive 15 A | Commande le moteur tambour ; support rail DIN a imprimer en 3D |
 | Pompe de rinçage | VEVOR / Leo EKJ-802S, 220-240 VAC, 800 W indique projet | Impose une commande secteur adaptée à une charge moteur et une mesure du débit réel aux buses |
+| Contacteur pompe de rinçage | Schneider Electric TeSys LC1D12P7, 3P, AC-3 12 A, bobine 230 VAC | Piloté par un relais du KC868-A32 pour commander la pompe de rinçage |
+| Contacteurs filtration, UV, décoration, mise à niveau | TOMZN TOCT1-25Z, 25 A, bobine 12 VDC | Pilotés en 12 VDC par les relais de l'automate selon les sécurités |
 
 ## Données hydrauliques d'entrée
 
@@ -34,7 +39,7 @@ L'installation cible a contrôler comprend un FAT avec :
 - un report de niveau côté eau propre via un tube de 32 mm ;
 - une rampe d'aspersion en 32 mm avec buses.
 
-La rotation du tambour est envisagée avec un moteur d'essuie-glace avant SWF 403.835 de Peugeot 106 phase 2, utilisé en petite vitesse, en 12 V DC et en fonctionnement intermittent. La transmission prévue est un pignon moteur de 10 cm vers un engrenage tambour de 30 cm, soit une réduction 3:1.
+La rotation du tambour est retenue avec un motorreducteur Fyearfly 12 VDC 10 rpm, en fonctionnement intermittent pendant les cycles de lavage, tests ou commandes manuelles autorisées. Ce choix remplace le candidat initial de moteur d'essuie-glace SWF 403.835 et évite de dépendre d'une réduction mécanique importante pour atteindre une vitesse exploitable.
 
 Le rinçage est envisagé avec une pompe de surface VEVOR / Leo EKJ-802S en 220-240 VAC. La courbe disponible indique environ 3,6 m3/h a très faible hauteur utile et environ 2,4 m3/h à 21 m ; le débit effectif aux buses devra être mesure sur la rampe réelle.
 
@@ -77,9 +82,9 @@ flowchart LR
 | Support du FAT | a fabriquer | Conditionne tout le régime gravitaire par rapport au bassin |
 | Capot | à créer avec capteur d'ouverture | Ajoute une entrée de sécurité supplémentaire |
 | Joint a levre tambour | a poser | Indispensable pour separer correctement eau sale et eau propre |
-| Moteur tambour | SWF 403.835, 12 V DC, connecteur 5 broches | Brochage, vitesse, courant et sens de rotation à valider avant schéma définitif |
-| Transmission tambour | Pignon 10 cm vers engrenage 30 cm | Reduction 3:1, vitesse tambour estimée 13 à 20 tr/min avant mesure |
-| Protection moteur tambour | Fusible initial 10 à 15 A et protection matérielle surintensité/blocage obligatoire | Le retour défaut vers l'automate est optionnel en V1 si le module choisi le fournit simplement |
+| Moteur tambour | Fyearfly 12 VDC 10 rpm | Courant réel, couple disponible, sens de rotation et fixation mécanique à valider avant schéma définitif |
+| Transmission tambour | A définir autour du motorreducteur 10 rpm | La vitesse finale tambour doit être validée en essai réel ; la réduction 3:1 du candidat SWF n'est plus l'hypothèse de base |
+| Protection moteur tambour | Fusible ATO 7,5 A sur le départ moteur et relais HELLA 12 V 15 A inductif | Le courant réel et le comportement au blocage restent à mesurer |
 | Pompe de rinçage | VEVOR / Leo EKJ-802S, raccords 1 pouce, IPX4, classe I | Pompe 230 VAC de surface, a protéger electriquement et a maintenir hors immersion |
 | Rampe de rinçage | Tuyau 32 mm + buses | Le choix des buses fixera le point débit/pression réel de la pompe |
 | Sonde température bassin | sonde numérique étanche type DS18B20 candidate | A implanter dans le bassin ou une zone très représentative de l'eau du bassin ; alerte informative en V1 avec seuils initiaux < 4 deg C et > 28 deg C |
@@ -91,43 +96,85 @@ flowchart LR
 
 L'UV est retenu hors tambour dans la chaine de filtration, après la pompe principale. Il reste asservi à la filtration autorisée et à l'absence de EP_CRITIQUE ; il n'est pas coupé sur un défaut FAT non critique si la filtration reste autorisée.
 
+## Architecture electrique retenue V1
+
+La decision de reference est [ADR-0004 - Architecture electrique V1](../decisions/ADR-0004-architecture-electrique-v1.md).
+
+### Tableau 230 VAC
+
+| Depart | Protection retenue | Equipements | Commentaire |
+| --- | --- | --- | --- |
+| Tete de tableau | Interrupteur differentiel 30 mA | Tableau local complet | Type et calibre definitifs a arbitrer en backlog. |
+| Alimentation 12 VDC | Disjoncteur 4 A courbe C | Mean Well NDR-120-12 | Depart dedie au controle basse tension. |
+| Pompe de rincage | Disjoncteur 10 A courbe C | Pompe VEVOR / Leo EKJ-802S | Commande par contacteur Schneider LC1D12P7, bobine 230 VAC. |
+| Prises local | Disjoncteur 16 A courbe C | 1 prise bulleur bassin, 1 prise bulleur filtre bio, 2 prises maintenance | Les bulleurs restent hors controleur ; les prises maintenance sont reservees aux usages ponctuels. |
+| Pompe filtration | Disjoncteur 6 A courbe C | Pompe principale de filtration | Depart separe et prioritaire car organe essentiel. |
+| UV, pompe decoration, mise a niveau | Disjoncteur 6 A courbe C | UV, pompe decoration, mise a niveau automatique | Separé de la filtration afin qu'un defaut sur un organe non essentiel ne coupe pas la pompe de filtration. |
+
+### Distribution 12 VDC
+
+| Depart 12 VDC | Fusible | Usage |
+| --- | --- | --- |
+| Moteur tambour | 7,5 A | Motorreducteur Fyearfly 12 VDC 10 rpm via relais HELLA |
+| Automate | 3 A | KC868-A32 |
+| Capteurs et boutons | 1 A | Capteurs de niveau, capot et commandes locales |
+| Ecran, voyants, accessoires | 1 A | IHM locale, signalisation et accessoires |
+
+### Commandes de puissance
+
+| Organe | Commande automate | Organe de puissance retenu | Remarque |
+| --- | --- | --- | --- |
+| Moteur tambour | Relais KC868-A32 vers commande 12 VDC | Relais HELLA 4RD 933 332-551, 12 V, 15 A inductif | Support rail DIN a imprimer en 3D. |
+| Pompe de rincage | Relais KC868-A32 vers bobine 230 VAC | Contacteur moteur Schneider TeSys LC1D12P7, AC-3 12 A | Charge moteur secteur a raccorder a la terre. |
+| Pompe filtration | Relais KC868-A32 vers bobine 12 VDC | Contacteur modulaire TOMZN TOCT1-25Z 25 A | Depart separe des organes non essentiels. |
+| UV | Relais KC868-A32 vers bobine 12 VDC | Contacteur modulaire TOMZN TOCT1-25Z 25 A | Asservi a la filtration autorisee et a EP_CRITIQUE absent. |
+| Pompe decoration | Relais KC868-A32 vers bobine 12 VDC | Contacteur modulaire TOMZN TOCT1-25Z 25 A | Suit les memes securites hydrauliques que la filtration. |
+| Mise a niveau | Relais KC868-A32 vers bobine 12 VDC | Contacteur modulaire TOMZN TOCT1-25Z 25 A ou sortie equivalente | Coupee sur EP_CRITIQUE. |
+
 ## Schéma de principe
 
 ```mermaid
 flowchart TB
     subgraph BT[Basse tension]
-        Alim[Alimentation isolee]
-        MCU[Carte de controle]
+        Alim[Mean Well NDR-120-12]
+        Fusibles[Porte-fusibles ATO 4 departs]
+        MCU[KC868-A32]
         Inputs[Entrees capteurs]
         UI[Commandes, ecran local et voyants complémentaires]
     end
 
     subgraph P[Puissance]
-        Prot[Protections electriques]
-        K1[Commande pompe]
-        K2[Commande moteur]
-        K3[Commande prises auxiliaires]
+        Diff[Differentiel 30 mA]
+        DJ[Disjoncteurs 4A, 6A, 10A, 16A]
+        KFiltration[Contacteur TOMZN filtration]
+        KRincage[Contacteur Schneider rincage]
+        KTOMZN[Contacteurs TOMZN UV/deco/mise a niveau]
+        KTambour[Relais HELLA tambour]
     end
 
-    Alim --> MCU
+    Diff --> DJ
+    DJ --> Alim
+    Alim --> Fusibles
+    Fusibles --> MCU
+    Fusibles --> KTambour
     Inputs --> MCU
     UI <--> MCU
-    MCU --> K1
-    MCU --> K2
-    MCU --> K3
-    Prot --> K1
-    Prot --> K2
-    Prot --> K3
+    MCU --> KFiltration
+    MCU --> KRincage
+    MCU --> KTOMZN
+    MCU --> KTambour
+    DJ --> KFiltration
+    DJ --> KRincage
+    DJ --> KTOMZN
 ```
 
 ## Decisions matérielles a prendre
 
-- tension de commande : 12 V ou 24 V, decision ouverte ;
-- type de carte de contrôle, à comparer selon coût, effort de développement, robustesse et maintenabilité ;
+- type et calibre de l'interrupteur differentiel 30 mA en tete de tableau ;
 - nombre de capteurs CR18-8DN et implantation exacte sur le tube de report ;
-- brochage exact du moteur tambour SWF 403.835 et isolation propre des fonctions parking en V1, sauf contrainte de brochage simple ;
-- alimentation 12 V moteur, calibre fusible et protection matérielle surintensité/blocage ;
-- commande secteur de la pompe de rinçage, protection moteur et raccordement à la terre ;
+- courant réel, fixation et sens de rotation du motorreducteur Fyearfly 12 VDC 10 rpm ;
+- validation du fusible 7,5 A moteur tambour après mesure du courant en charge et au blocage ;
+- commande secteur de la pompe de rinçage, raccordement à la terre et validation du contacteur Schneider LC1D12P7 dans le schema final ;
 - débit ou pression de rinçage de référence après essais sur la rampe et les buses ;
 - mesure terrain de la cote support FAT avant fabrication, afin d'aligner trop-plein physique et niveau hydraulique cible du bassin ;
 - calcul final de la geometrie des ouvertures du tambour avant découpe ou perçage, avec objectif 0,20 à 0,23 m2 de surface filtrante utile ;
@@ -135,7 +182,7 @@ flowchart TB
 - type de sonde de température ambiante local et implantation exacte ;
 - type d'IHM locale : LED, écran ou combinaison ;
 - nombre de voyants, couleurs et signification ;
-- architecture Wi-Fi V2 : Wi-Fi natif ou module Wi-Fi ajoutable proprement sans remplacement de plateforme principale ;
+- architecture Wi-Fi V2 autour du KC868-A32, sans remplacement de plateforme principale ;
 - architecture de notification pour une V2 : embarquée, serveur local, service mail ou service push simple ;
 - besoin ou non d'un capteur de position tambour ;
 - stratégie matérielle d'indexation du tambour hors lavage pour V1.1 ;
@@ -143,7 +190,6 @@ flowchart TB
 - compatibilité native ou conditionnement des entrées pour capteurs NPN 12-24 VDC ;
 - interface d'entrée nécessaire pour la sonde de température ;
 - interface d'entrée nécessaire pour la sonde de température ambiante ;
-- nombre de prises auxiliaires à couper et puissance par voie ;
-- choix relais/contacteurs/variateur ;
+- sections de cables, borniers, repérage et implantation physique des protections ;
 - niveau de protection du coffret dans un local humide non expose à la pluie directe ;
 - connecteurs et borniers.

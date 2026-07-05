@@ -4,7 +4,7 @@
 
 | ID | Element | Priorité | Statut |
 | --- | --- | --- | --- |
-| B-001 | Consolider les caractéristiques du moteur de tambour candidat SWF 403.835 : 12 V DC, puissance estimée 40 W, courant, vitesse, couple et brochage. | Must | En cours |
+| B-001 | Consolider par essais les caractéristiques du moteur de tambour retenu Fyearfly 12 VDC 10 rpm : courant a vide, courant en charge, courant au démarrage, blocage, couple utile et vitesse finale tambour. | Must | En cours |
 | B-002 | Consolider les caractéristiques de la pompe de rinçage VEVOR / Leo EKJ-802S et mesurer son point de fonctionnement réel aux buses. | Must | En cours |
 | B-003 | Définir l'implantation des deux capteurs CR18-8DN V1, EP_LAVAGE et EP_CRITIQUE, en prévoyant une réserve mécanique pour un éventuel troisieme capteur futur si les essais le justifiént. | Must | En cours |
 | B-004 | Définir l'environnement du coffret et l'indice de protection attendu. | Must | En cours |
@@ -41,11 +41,14 @@
 | B-035 | Documenter que rotation tambour, courant mesuré, fuite local et niveau eau sale restent hors diagnostic direct V1 faute de capteurs dedies ; les diagnostics logiciels restent basés sur effets observés. | Must | Tranchée |
 | B-036 | Documenter que la pompe décoration suit les mêmes sécurités que la filtration car elle aspire au même endroit. | Must | Tranchée |
 | B-037 | Prévoir une protection matérielle obligatoire contre la surintensité ou le blocage du moteur tambour ; remonter l'information à l'automate seulement si le module choisi le permet simplement. | Must | Tranchée |
-| B-038 | Isoler ou ignorer proprement les fonctions de parking du moteur d'essuie-glace en V1, sauf contrainte de brochage simple ; reetudier leur usage en V1.1 pour indexation tambour. | Should | Tranchée |
+| B-038 | Ne pas dépendre d'une fonction de parking ou de position moteur en V1 ; garder l'indexation au temps en V1.1 sauf ajout futur d'un capteur de position. | Should | Tranchée |
 | B-039 | Mesurer le débit de rinçage de référence aux buses après montage réel de la pompe, de la rampe et des pertes de charge ; utiliser la courbe pompe seulement comme estimation provisoire. | Must | Tranchée |
 | B-040 | Ne pas ajouter de pressostat, débitmètre ou retour courant pour diagnostiquer le rinçage en V1 ; reporter ces capteurs V1.1/V2 si les essais montrent trop d'ambiguite. | Should | Tranchée |
 | B-041 | Integrer au choix de plateforme V1 la capacité d'heure fiable V2 sans remplacement matériel principal, par RTC, temps local conserve, module temps, synchronisation réseau ou equivalent, sans dépendance exclusive à Internet. | Must | Tranchée |
 | B-042 | Retenir l'UV hors tambour, après la pompe principale, asservi a filtration autorisée plus absence EP_CRITIQUE, sans coupure sur défaut FAT non critique. | Must | Tranchée |
+| B-043 | Choisir le type et le calibre de l'interrupteur differentiel 30 mA en tete de tableau, avec coordination des departs aval et contraintes du local humide. | Must | À faire |
+| B-044 | Retenir une distribution 230 VAC avec departs : 4 A courbe C alimentation 12 V, 10 A courbe C pompe rincage, 16 A courbe C prises local, 6 A courbe C pompe filtration, 6 A courbe C UV/pompe decoration/mise a niveau. | Must | Tranchée |
+| B-045 | Retenir une distribution 12 VDC Mean Well NDR-120-12 + porte-fusibles ATO 4 departs : moteur 7,5 A, automate 3 A, capteurs/boutons 1 A, ecran/voyants/accessoires 1 A. | Must | Tranchée |
 
 ## FAT existant a finaliser
 
@@ -65,13 +68,13 @@
 
 | ID | Element | Priorité | Statut |
 | --- | --- | --- | --- |
-| B-101 | Comparer les architectures de contrôle V1, notamment automate compact / module industriel DIN et carte microcontrôleur type ESP32 ou Arduino industriel, selon coût, effort de développement, robustesse et maintenabilité. | Must | À faire |
+| B-101 | Documenter le choix de plateforme V1 KC868-A32 et vérifier ses interfaces exactes avec capteurs, boutons, relais, contacteurs, écran et voyants. | Must | Tranchée |
 | B-102 | Définir les entrées/sorties nécessaires au prototype, compatibles avec les capteurs CR18-8DN NPN 12-24 VDC. | Must | Tranchée |
 | B-100 | Geler le nombre minimal d'entrées/sorties V1 avant de rechercher et comparer des références matérielles candidates. | Must | Tranchée |
-| B-103 | Réaliser un schéma de câblage de principe. | Must | À faire |
+| B-103 | Réaliser un schéma de câblage de principe intégrant differentiel 30 mA, disjoncteurs, Mean Well NDR-120-12, KC868-A32, fusibles ATO, relais HELLA, contacteur Schneider et contacteurs TOMZN. | Must | À faire |
 | B-104 | Monter un prototype basse tension avec boutons, voyant MARCHE vert, voyant ALARME rouge et voyant LAVAGE optionnel jaune ou ambre. | Should | À faire |
 | B-105 | Réserver des sorties distinctes pour les équipements à couper sur niveau bas, sans integrer les bulleurs branchés directement sur le 220 V. | Must | À faire |
-| B-106 | Définir l'architecture de contacteurs ou relais permettant la coupure de sécurité des équipements controles. | Must | À faire |
+| B-106 | Définir l'architecture de contacteurs ou relais permettant la coupure de sécurité des équipements controles : HELLA moteur tambour, Schneider pompe rincage, TOMZN filtration/UV/deco/mise a niveau. | Must | Tranchée |
 | B-107 | Définir l'interface électrique des entrées pour lecture fiable des capteurs CR18-8DN 3 fils. | Must | À faire |
 | B-108 | Prévoir un sélecteur physique simple AUTO / MAINTENANCE et des boutons physiques momentanés pour TEST_LAVAGE, RESET_ALARME, MANU_TAMBOUR et MANU_RINCAGE. | Must | Tranchée |
 | B-109 | Prévoir l'entrée matérielle nécessaire pour la sonde de température bassin et son câblage. | Must | À faire |
@@ -79,9 +82,11 @@
 | B-111 | Prévoir les composants nécessaires pour l'IHM locale V1 : écran texte ou petit afficheur, bouton reset alarme dédié, commandes physiques essentielles, voyant MARCHE vert, voyant ALARME rouge et voyant LAVAGE optionnel. | Must | À faire |
 | B-112 | Prévoir pour une V2 les composants et interfaces nécessaires à la remontée distante retenue module radio, réseau ou passerelle. | Should | V2 |
 | B-113 | Garder le capteur de position tambour comme option V2 ou V1.1 tardive, seulement si l'indexation au temps pose problème ou si une position reproductible devient nécessaire. | Should | Tranchée |
-| B-114 | Dimensionner la commande 12 V DC du moteur tambour avec fusible, relais/contacteur DC et alimentation adaptés aux appels de courant. | Must | À faire |
-| B-115 | Identifier au multimetre le brochage exact du moteur tambour 5 broches avant tout câblage définitif. | Must | À faire |
-| B-116 | Dimensionner la commande secteur de la pompe de rinçage EKJ-802S avec organe de coupure adapté aux charges moteur, terre et protection. | Must | À faire |
+| B-114 | Valider la commande 12 V DC du moteur tambour avec fusible ATO 7,5 A, relais HELLA 12 V 15 A inductif et alimentation Mean Well NDR-120-12. | Must | En cours |
+| B-115 | Valider le sens de rotation, la connectique et la fixation mécanique du motorreducteur Fyearfly 12 VDC 10 rpm avant câblage définitif. | Must | À faire |
+| B-116 | Valider la commande secteur de la pompe de rinçage EKJ-802S avec disjoncteur 10 A courbe C, contacteur Schneider LC1D12P7 bobine 230 VAC, terre et protection. | Must | En cours |
+| B-117 | Concevoir et imprimer un support rail DIN pour le relais HELLA automobile, avec maintien mécanique, accès aux cosses et repérage clair. | Should | À faire |
+| B-118 | Verifier la compatibilite des relais KC868-A32 avec les bobines des contacteurs TOMZN 12 VDC, la bobine Schneider 230 VAC et la commande du relais HELLA. | Must | À faire |
 
 ## Firmware
 
@@ -160,7 +165,7 @@
 | B-326 | Valider par test que les messages d'alarme restent indirects et n'affirment pas une panne d'organe non instrumentée, notamment lavage inefficace au lieu de pompe rinçage HS ou tambour bloque. | Must | À faire |
 | B-327 | Valider par test les alertes d'absence anormale de lavage, de redémarrages fréquents et de sortie commandée trop longtemps. | Should | V1.1 |
 | B-328 | Mesurer le courant moteur tambour a vide, avec tambour à sec, avec tambour en eau et au démarrage. | Must | À faire |
-| B-329 | Mesurer la vitesse réelle du moteur tambour et la vitesse tambour obtenue avec la réduction 3:1. | Must | À faire |
+| B-329 | Mesurer la vitesse réelle du moteur Fyearfly et la vitesse finale du tambour avec la transmission retenue. | Must | À faire |
 | B-330 | Réaliser un test de blocage contrôlé du tambour pour définir ou confirmer le seuil de protection surintensité. | Must | À faire |
 | B-331 | Mesurer le débit réel de la pompe de rinçage aux buses pendant un cycle type. | Must | À faire |
 | B-332 | Vérifier la qualité du jet de rinçage, l'amorçage, le reamorçage et l'absence d'échauffement anormal sur cycles répétés. | Must | À faire |

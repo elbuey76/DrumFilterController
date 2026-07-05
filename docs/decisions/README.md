@@ -25,3 +25,4 @@ Copier le fichier `_template.md` pour créer une nouvelle decision.
 1. [ADR-0001 - Structurer la documentation projet en Markdown](ADR-0001-structure-documentation.md)
 2. [ADR-0002 - Dimensionner la pompe principale sur une pompe variable avec marge](ADR-0002-dimensionnement-pompe-filtration-principale.md)
 3. [ADR-0003 - Choix de la plateforme de contrôle V1](ADR-0003-choix-plateforme-controle-v1.md)
+4. [ADR-0004 - Architecture electrique V1](ADR-0004-architecture-electrique-v1.md)

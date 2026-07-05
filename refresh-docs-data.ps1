@@ -22,6 +22,7 @@ $paths = @(
   "docs/decisions/ADR-0001-structure-documentation.md",
   "docs/decisions/ADR-0002-dimensionnement-pompe-filtration-principale.md",
   "docs/decisions/ADR-0003-choix-plateforme-controle-v1.md",
+  "docs/decisions/ADR-0004-architecture-electrique-v1.md",
   "docs/backlog/README.md",
   "docs/backlog/backlog.md",
   "docs/validation/README.md",

@@ -136,7 +136,7 @@ Exemples de libellés preferes :
 
 Les auto-diagnostics indirects obligatoires V1 sont : EP_CRITIQUE, incohérence EP_CRITIQUE actif avec EP_LAVAGE inactif, lavage inefficace après 3 tentatives, capot ouvert dangereux, capot ouvert trop longtemps A15, commande UV incohérente, perte sonde température eau/local. Les diagnostics absence anormale de lavage, lavage trop fréquent, moteur tambour bloqué, pompe de rinçage HS, pression absente, fuite local et niveau eau sale sont reportés V1.1 ou V2.
 
-La V1 n'ajoute pas de capteur dédié pour diagnostiquer directement rotation tambour, courant mesuré, fuite local ou niveau eau sale. Les protections matérielles restent obligatoires ; un simple contact défaut fourni par un module de protection peut être lu s'il existe naturellement, sans devenir une mesure détaillée de cause. Les fonctions de parking du moteur d'essuie-glace sont ignorées ou isolées proprement en V1, sauf contrainte de brochage simple ; leur usage pour l'indexation est reporté V1.1.
+La V1 n'ajoute pas de capteur dédié pour diagnostiquer directement rotation tambour, courant mesuré, fuite local ou niveau eau sale. Les protections matérielles restent obligatoires ; un simple contact défaut fourni par un module de protection peut être lu s'il existe naturellement, sans devenir une mesure détaillée de cause. Le moteur Fyearfly retenu n'apporte pas de fonction parking utilisée par le logiciel V1 ; l'indexation reste au temps en V1.1, sauf ajout futur d'un capteur de position.
 
 ## Gestion des modes
 

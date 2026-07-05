@@ -4,7 +4,7 @@
 
 Ce document liste les entrées et sorties à prévoir pour le prototype du contrôleur de filtre à tambour. Il sert de base au choix de la carte de contrôle, au schéma de câblage et aux essais sur table.
 
-La table reste une référence de conception : les références exactes de carte, relais, contacteurs, borniers et protections seront figees plus tard.
+La table reste une référence de conception. La plateforme KC868-A32 et les principaux organes de puissance sont retenus ; les borniers, sections de cable, repérages et validations de schema restent a figer.
 
 Le noyau E/S V1 est gele fonctionnellement avant le choix de plateforme matérielle. Les références exactes pourront ajouter des marges ou des E/S optionnelles, mais ne doivent pas retirer les signaux Must ci-dessous.
 
@@ -45,12 +45,12 @@ Le noyau E/S V1 est gele fonctionnellement avant le choix de plateforme matérie
 
 | ID | Nom | Priorité | État | Interface cible | Comportement attendu |
 | --- | --- | --- | --- | --- | --- |
-| DO-001 | `CMD_TAMBOUR` | Must | À dimensionner | Commande 12 V DC petite vitesse du moteur SWF 403.835 via relais, contacteur DC ou module adapté | Commande rotation tambour pendant lavage, test ou manuel autorisé. L'indexation est une extension V1.1. Inhibée en niveau critique, capot ouvert, maintenance ou défaut critique. |
-| DO-002 | `CMD_RINCAGE` | Must | À dimensionner | Commande 220-240 VAC de la pompe VEVOR / Leo EKJ-802S via relais ou contacteur adapté aux charges moteur | Commande pompe de rinçage pendant lavage ou test. Inhibée en niveau critique, maintenance incompatible ou défaut critique. |
-| DO-003 | `CMD_POMPE_FILTRATION` | Must | À dimensionner | Relais, contacteur ou commande pompe variable | Autorise la pompe principale. Coupé en niveau critique, défaut critique ou stratégie de sécurité retenue. |
-| DO-004 | `CMD_POMPE_DECO` | Must | À dimensionner | Relais ou contacteur | Autorise la pompe décoration. Suit exactement la même sécurité hydraulique que la pompe principale, car elle aspire au même endroit : OFF sur EP_CRITIQUE. |
-| DO-005 | `CMD_UV` | Must | À dimensionner | Relais ou contacteur adapté à l'UV | Autorise l'UV seulement si la filtration est autorisée et qu'aucun niveau critique n'est actif. L'ouverture du capot FAT ne coupe pas l'UV par elle-meme, car l'UV est hors tambour. Après EP_CRITIQUE acquitté, réautorisation après redémarrage filtration et courte stabilisation. |
-| DO-006 | `CMD_MISE_A_NIVEAU` | Must | À dimensionner | Relais ou contacteur selon dispositif d'appoint | Coupé en niveau critique pour éviter un remplissage infini, masquer une fuite ou aggraver une situation hydraulique anormale. |
+| DO-001 | `CMD_TAMBOUR` | Must | Retenu, validation courant à faire | Relais KC868-A32 vers relais HELLA 4RD 933 332-551, 12 V, charge inductive 15 A ; moteur Fyearfly 12 VDC 10 rpm ; fusible 7,5 A | Commande rotation tambour pendant lavage, test ou manuel autorisé. L'indexation est une extension V1.1. Inhibée en niveau critique, capot ouvert, maintenance ou défaut critique. |
+| DO-002 | `CMD_RINCAGE` | Must | Retenu, schema à finaliser | Relais KC868-A32 vers bobine 230 VAC d'un contacteur Schneider TeSys LC1D12P7, 3P, AC-3 12 A ; pompe VEVOR / Leo EKJ-802S | Commande pompe de rinçage pendant lavage ou test. Inhibée en niveau critique, maintenance incompatible ou défaut critique. |
+| DO-003 | `CMD_POMPE_FILTRATION` | Must | Retenu, schema à finaliser | Relais KC868-A32 vers contacteur TOMZN TOCT1-25Z 25 A, bobine 12 VDC | Autorise la pompe principale. Coupé en niveau critique, défaut critique ou stratégie de sécurité retenue. Depart 230 VAC separe de l'UV, de la pompe décoration et de la mise à niveau. |
+| DO-004 | `CMD_POMPE_DECO` | Must | Retenu, schema à finaliser | Relais KC868-A32 vers contacteur TOMZN TOCT1-25Z 25 A, bobine 12 VDC | Autorise la pompe décoration. Suit exactement la même sécurité hydraulique que la pompe principale, car elle aspire au même endroit : OFF sur EP_CRITIQUE. |
+| DO-005 | `CMD_UV` | Must | Retenu, schema à finaliser | Relais KC868-A32 vers contacteur TOMZN TOCT1-25Z 25 A, bobine 12 VDC | Autorise l'UV seulement si la filtration est autorisée et qu'aucun niveau critique n'est actif. L'ouverture du capot FAT ne coupe pas l'UV par elle-meme, car l'UV est hors tambour. Après EP_CRITIQUE acquitté, réautorisation après redémarrage filtration et courte stabilisation. |
+| DO-006 | `CMD_MISE_A_NIVEAU` | Must | Retenu, schema à finaliser | Relais KC868-A32 vers contacteur TOMZN TOCT1-25Z 25 A, bobine 12 VDC ou sortie equivalente selon dispositif final | Coupé en niveau critique pour éviter un remplissage infini, masquer une fuite ou aggraver une situation hydraulique anormale. |
 | DO-007 | `VOYANT_MARCHE` | Must | Retenu V1 | Voyant physique vert, LED ou voyant 12/24 V selon coffret | Indique marche contrôleur, système opérationnel ou auto OK selon le câblage retenu. Complément visuel minimal de l'écran. |
 | DO-008 | `VOYANT_AUTO` | Should | À définir | LED, voyant ou IHM | Indique mode auto actif. |
 | DO-009 | `VOYANT_MANUEL` | Should | À définir | LED, voyant ou IHM | Indique mode manuel actif. |
@@ -95,21 +95,33 @@ Les bulleurs de la cuve bio et du bassin ne sont pas pilotes par le contrôleur.
 | --- | --- | --- | --- |
 | Groupe coupé sécurité hydraulique | Pompe filtration, pompe décoration, UV, mise à niveau automatique | Coupé ou inhibition | Ces équipements peuvent aggraver une marche à sec, une vidange ou un fonctionnement hors eau. |
 | Groupe lavage FAT | Tambour, pompe de rinçage | Inhibe | Aucun lavage ne doit être lance en situation d'eau insuffisante. |
-| Protection moteur tambour | Fusible 10 à 15 A initial, protection matérielle surintensité/blocage | Coupure matérielle obligatoire ; retour défaut automate optionnel | Calibre à ajuster après mesures du courant réel, notamment démarrage et blocage contrôlé. |
-| Protection pompe rinçage | Protection secteur et organe de coupure adaptés à une pompe 230 VAC de 0,6 à 0,8 kW | Coupé ou défaut selon architecture retenue | Pompe classe I à raccorder à la terre ; tenir compte du courant d'appel moteur. |
+| Protection moteur tambour | Fusible ATO 7,5 A, relais HELLA 12 V 15 A inductif | Coupure matérielle par fusible ; retour défaut automate non prévu en V1 | Calibre à confirmer après mesures du courant réel, notamment démarrage et blocage contrôlé. |
+| Protection pompe rinçage | Disjoncteur 10 A courbe C et contacteur Schneider LC1D12P7 | Coupé ou défaut selon architecture retenue | Pompe classe I à raccorder à la terre ; tenir compte du courant d'appel moteur. |
 | Groupe hors contrôleur | Bulleur cuve bio, bulleur bassin | Non piloté | Alimentation directe 220 V, hors sorties contrôlées et hors circuit coupé par niveau critique. |
 | Groupe signalisation | Voyants, écran | Maintenu si possible | La signalisation doit rester disponible pour comprendre l'état de sécurité. |
 
+## Protections électriques retenues
+
+| Circuit | Protection / organe | Remarque |
+| --- | --- | --- |
+| Tete de tableau | Interrupteur differentiel 30 mA | Type et calibre a choisir en backlog. |
+| Alimentation 12 VDC | Disjoncteur 4 A courbe C | Alimente la Mean Well NDR-120-12. |
+| Pompe de rincage | Disjoncteur 10 A courbe C | Alimente le depart pompe commande par contacteur Schneider. |
+| Prises local | Disjoncteur 16 A courbe C | 1 prise bulleur bassin, 1 prise bulleur filtre bio, 2 prises maintenance ponctuelle. |
+| Pompe filtration | Disjoncteur 6 A courbe C | Depart dedie organe essentiel. |
+| UV, pompe decoration, mise a niveau | Disjoncteur 6 A courbe C | Depart separe de la filtration. |
+| Distribution 12 VDC moteur tambour | Fusible ATO 7,5 A | Moteur Fyearfly via relais HELLA. |
+| Distribution 12 VDC automate | Fusible ATO 3 A | KC868-A32. |
+| Distribution 12 VDC capteurs et boutons | Fusible ATO 1 A | Entrees terrain et commandes locales. |
+| Distribution 12 VDC IHM et accessoires | Fusible ATO 1 A | Ecran, voyants, accessoires. |
+
 ## Points à arbitrer avant schéma électrique
 
-- Choisir la tension de commande 12 V ou 24 V.
-- Comparer carte microcontrôleur et automate compact / module industriel DIN selon coût, effort de développement, robustesse et maintenabilité.
-- Dimensionner les E/S à partir du noyau V1 gelé ci-dessus.
-- Dimensionner les relais/contacteurs selon les puissances réelles du moteur tambour, de la pompe de rinçage, de la pompe principale, de la pompe décoration, de l'UV et de la mise à niveau.
-- Identifier le brochage exact du moteur tambour 5 broches avant de figer la commande petite vitesse et l'isolation propre du contact parking en V1.
-- Prévoir une protection matérielle surintensité/blocage du moteur tambour ; retour automate seulement si simple avec le module retenu.
-- Dimensionner la commande de la pompe de rinçage comme une charge moteur secteur 230 VAC, avec terre et protection adaptée.
-- Définir les protections électriques et borniers séparés entre basse tension et puissance.
+- Choisir le type et le calibre de l'interrupteur differentiel 30 mA.
+- Verifier la compatibilite exacte entre sorties du KC868-A32, bobines de contacteurs TOMZN 12 VDC, bobine Schneider 230 VAC et relais HELLA.
+- Mesurer le courant réel du moteur Fyearfly a vide, en charge et au blocage pour confirmer le fusible 7,5 A.
+- Definir les protections, borniers, sections de cable, reperages et cheminements separes entre basse tension et puissance.
+- Finaliser le support rail DIN imprime en 3D du relais HELLA.
 - Confirmer la technologie des sondes de température bassin et local.
 - Vérifier que les bulleurs alimentés directement en 220 V restent électriquement séparés des circuits coupés par le contrôleur.
 - Évaluer empiriquement la consommation d'eau de rinçage à partir des essais.

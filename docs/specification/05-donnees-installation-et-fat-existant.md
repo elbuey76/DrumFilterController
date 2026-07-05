@@ -94,24 +94,32 @@ Le capteur de température ambiante local doit mesurer l'air du local de filtrat
 
 | Element | Valeur | Notes |
 | --- | --- | --- |
-| Moteur candidat | Moteur d'essuie-glace avant Peugeot 106 phase 2 | Moteur avec reducteur intégré et tringlerie |
-| Fabricant / référence | SWF 403.835 / 403835 | Référence longue observée : 7905562055 |
-| Référence PSA probable | 640583 / 6405.83 | Équivalence probable, a ne pas considerer comme preuve directe |
-| Connecteur | 5 broches | Brochage exact à identifier avant câblage |
-| Tension moteur | 12 V DC | Hypothèse de conception |
-| Vitesse retenue | Petite vitesse uniquement | Limité vitesse tambour, bruit, a-coups et consommation |
-| Puissance estimée | environ 40 W | Hypothèse de dimensionnement, non confirmée par fiche constructeur |
-| Courant de fonctionnement à prévoir | 4 à 8 A | À mesurer sur montage réel |
-| Courant de démarrage ou blocage | 10 à 20 A possible | Dimensionnant pour alimentation, fusible et protection |
-| Alimentation recommandée | 12 V DC / 15 A | Minimum prudent : 12 V DC / 10 A |
-| Fusible initial | 10 à 15 A | A ajuster après essais |
-| Vitesse sortie moteur estimée | 40 à 60 tr/min a vide | Valeur typique à valider expérimentalement |
+| Moteur retenu | Motorreducteur Fyearfly 12 VDC 10 rpm | Remplace le candidat initial de moteur d'essuie-glace |
+| Tension moteur | 12 V DC | Alimente par le rail 12 VDC V1 |
+| Vitesse retenue | 10 rpm en sortie motorreducteur | Vitesse finale tambour a valider avec la transmission réelle |
+| Courant nominal annonce | < 1,6 A selon capture produit | Donnee a confirmer par mesure sur montage réel |
+| Courant d'arret annonce | 6,5 A selon capture produit | Sert d'ordre de grandeur pour le fusible 7,5 A, a confirmer par test |
+| Fusible retenu | ATO 7,5 A | Depart 12 VDC moteur tambour |
+| Relais retenu | HELLA 4RD 933 332-551, 12 V, charge inductive 15 A | Relais de puissance moteur, support rail DIN a imprimer en 3D |
 | Couple moteur | Inconnu | Donnée critique à valider par essais |
 | Usage retenu | Intermittent pendant les cycles de lavage | Usage continu 24/24 non recommandé |
 
-La transmission envisagée utilisé un pignon moteur de 10 cm vers un engrenage tambour de 30 cm, soit une réduction 3:1. La vitesse tambour attendue serait donc d'environ 13 à 20 tr/min si la vitesse moteur réelle est bien comprise entre 40 et 60 tr/min.
+La transmission exacte autour du motorreducteur 10 rpm reste a finaliser. Le choix du Fyearfly rend caduque l'hypothèse initiale de moteur d'essuie-glace a 95 tr/min avec réduction 3:1, qui donnait une vitesse tambour probablement trop élevée.
 
-Le moteur doit rester hors eau et protège des projections. Le brochage exact, la vitesse, le courant en charge et le comportement en blocage doivent être valides avant intégration definitive. Le détail du dimensionnement est tracé dans [../calculs/NC-0002-dimensionnement-motorisation-tambour.md](../calculs/NC-0002-dimensionnement-motorisation-tambour.md).
+Le moteur doit rester hors eau et protège des projections. La vitesse finale, le courant en charge, le couple disponible, la fixation mécanique et le comportement en blocage doivent être valides avant intégration definitive. Le détail du dimensionnement est tracé dans [../calculs/NC-0002-dimensionnement-motorisation-tambour.md](../calculs/NC-0002-dimensionnement-motorisation-tambour.md).
+
+### Architecture electrique V1
+
+| Element | Valeur | Notes |
+| --- | --- | --- |
+| Tete de tableau | Interrupteur differentiel 30 mA | Type et calibre a choisir en backlog |
+| Alimentation 12 VDC | Mean Well NDR-120-12, 120 W, 10 A, rail DIN | Protegee par disjoncteur 4 A courbe C |
+| Distribution 12 VDC | Porte-fusibles ATO 4 emplacements | Depart moteur 7,5 A, automate 3 A, capteurs/boutons 1 A, ecran/voyants/accessoires 1 A |
+| Plateforme controle | KC868-A32 | Base automate V1 |
+| Pompe rincage | Disjoncteur 10 A courbe C + contacteur Schneider TeSys LC1D12P7, bobine 230 VAC | La bobine est pilotee par un relais de l'automate |
+| Prises local | Disjoncteur 16 A courbe C | 1 prise bulleur bassin, 1 prise bulleur filtre bio, 2 prises maintenance ponctuelle |
+| Pompe filtration | Disjoncteur 6 A courbe C + contacteur TOMZN TOCT1-25Z 25 A, bobine 12 VDC | Depart separe car organe essentiel |
+| UV, pompe decoration, mise a niveau | Disjoncteur 6 A courbe C + contacteurs TOMZN TOCT1-25Z 25 A, bobine 12 VDC | Separés du depart filtration |
 
 ### Pompe de rinçage
 
@@ -185,10 +193,13 @@ Le point de fonctionnement nominal recherche reste 8 à 10 m3/h, mais la pompe p
 - La logique de pilotage V1 repose sur une cote simple côté eau propre, avec deux niveaux fonctionnels : EP_LAVAGE et EP_CRITIQUE.
 - Les capteurs de niveau doivent être positionnes côté eau propre sur le tube de report en 32 mm, et non directement dans la zone sale.
 - Les capteurs de niveau retenus sont des CR18-8DN en M18, sortie NPN, alimentation 12-24 VDC, câblage 3 fils.
-- Le moteur tambour candidat est un moteur d'essuie-glace avant SWF 403.835 en 12 V DC, a utiliser en petite vitesse et en fonctionnement intermittent.
-- L'alimentation moteur doit être dimensionnée sur les appels de courant de démarrage et de blocage, pas seulement sur la puissance estimée de 40 W.
+- Le moteur tambour retenu est un motorreducteur Fyearfly 12 VDC 10 rpm, en fonctionnement intermittent.
+- L'alimentation moteur et le fusible 7,5 A doivent être confirmés par mesure du courant réel en charge et au blocage.
 - Une protection contre blocage ou surintensité du moteur tambour doit être prévue ou fortement justifiée si elle est absente.
 - La pompe de rinçage retenue est une pompe de surface VEVOR / Leo EKJ-802S en 220-240 VAC ; elle doit être commandée comme une charge moteur secteur.
+- La pompe de rinçage est commandée par un contacteur Schneider TeSys LC1D12P7, bobine 230 VAC, lui-même piloté par un relais de l'automate.
+- L'UV, la pompe décoration, la pompe filtration et la mise à niveau sont commandés via contacteurs TOMZN 25 A a bobine 12 VDC.
+- La pompe de filtration dispose d'un départ séparé de l'UV, de la pompe décoration et de la mise à niveau afin de limiter les coupures communes entre organes essentiels et secondaires.
 - Le débit de rinçage de référence ne doit pas être confondu avec le débit maximal de 60 L/min, car le point de fonctionnement dépendra des buses et des pertes de charge.
 - Le support du FAT devra fixer la cote altimetrique du trop-plein par rapport au niveau hydraulique du bassin. Cette cote doit être mesurée sur site avant fabrication du support ; elle ne doit pas être inventee en spécification.
 - La pompe décoration aspirant au même endroit que la pompe principale, elle doit suivre les mêmes règles de sécurité hydraulique.
@@ -249,8 +260,9 @@ Le point de fonctionnement nominal recherche reste 8 à 10 m3/h, mais la pompe p
 ### Instrumentation et automatisme
 
 - Fixer les capteurs de niveau sur le tube de report en 32 mm.
-- Identifier le brochage exact du moteur d'essuie-glace et valider son sens de rotation.
-- Installer une alimentation 12 V DC et une protection adaptées au courant de démarrage du moteur tambour.
+- Valider le sens de rotation, le courant réel et la fixation du motorreducteur Fyearfly 12 VDC 10 rpm.
+- Installer l'alimentation Mean Well NDR-120-12 et le porte-fusibles ATO 4 departs.
+- Concevoir le support imprime 3D du relais HELLA pour montage rail DIN.
 - Concevoir et integrer toute la partie intelligence et pilotage du FAT.
 - Ajouter un capot transparent de fermeture avec capteur de détection d'ouverture.
 - Ajouter une sonde de température d'eau avec implantation maintenable et représentative.
@@ -272,8 +284,8 @@ Le point de fonctionnement nominal recherche reste 8 à 10 m3/h, mais la pompe p
 
 - Cotes exactes du niveau normal côté sale, du niveau normal côté propre, du seuil de lavage et du niveau bas de sécurité.
 - Nombre exact de capteurs CR18-8DN à installer et implantation précise de chacun.
-- Couple réel, vitesse réelle, courant en charge et seuil de protection du moteur de tambour.
-- Brochage exact du moteur de tambour, y compris fonctions de parking a isoler ou ignorer proprement en V1.
+- Couple réel, vitesse finale tambour, courant en charge et seuil de protection du moteur de tambour Fyearfly.
+- Type et calibre de l'interrupteur differentiel 30 mA en tete de tableau.
 - Débit réel, pression utile aux buses, amorçage et courant réel de la pompe de rinçage.
 - Forme, nombre et surface totale des ouvertures du tambour a calculer avant découpe pour atteindre environ 0,20 à 0,23 m2 de surface filtrante utile.
 - Architecture de puissance pour separer clairement les sorties à couper des équipements hors contrôleur.

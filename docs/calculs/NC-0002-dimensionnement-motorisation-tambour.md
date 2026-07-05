@@ -1,81 +1,84 @@
-﻿# NC-0002 - Dimensionnement de la motorisation du tambour
+# NC-0002 - Dimensionnement de la motorisation du tambour
 
 ## Objet
 
-Documenter les hypothèses de dimensionnement retenues pour le moteur de rotation du tambour du FAT et les validations nécessaires avant intégration definitive.
+Documenter les hypotheses de dimensionnement retenues pour le moteur de rotation du tambour du FAT et les validations necessaires avant integration definitive.
 
-## Données d'entrée
+## Decision de reference
 
-| Donnée | Valeur | Source / commentaire |
+La motorisation tambour V1 retenue est un motorreducteur Fyearfly 12 VDC 10 rpm. Ce choix remplace le candidat initial de moteur d'essuie-glace SWF 403.835.
+
+Le moteur est alimente par le rail 12 VDC issu d'une alimentation Mean Well NDR-120-12, 120 W, 10 A. Son depart est protege par un fusible ATO 7,5 A et commande par un relais HELLA 4RD 933 332-551, 12 V, donne pour 15 A en charge inductive. Un support sera imprime en 3D pour permettre le montage propre du relais sur rail DIN.
+
+## Donnees d'entree
+
+| Donnee | Valeur | Source / commentaire |
 | --- | --- | --- |
-| Type de moteur | Moteur d'essuie-glace avant avec reducteur intégré et tringlerie | Pièce candidate pour entrainer le tambour |
-| Vehicule d'origine | Peugeot 106 phase 2 | Donnée annoncé pièce |
-| Fabricant | SWF | Donnée annoncé pièce |
-| Référence SWF | 403.835 / 403835 | Donnée annoncé pièce |
-| Référence longue observée | 7905562055 | Donnée annoncé pièce |
-| Référence PSA probablement associée | 640583 / 6405.83 | Équivalence probable, non considérée comme preuve directe |
-| Connecteur | 5 broches | Donnée annoncé pièce |
-| Tension nominale | 12 V DC | Hypothèse cohérente avec un moteur automobile d'essuie-glace |
-| Vitesse a utiliser | Petite vitesse uniquement | Choix de conception pour limiter vitesse, bruit, a-coups et consommation |
-| Puissance nominale estimée | environ 40 W | Hypothèse de dimensionnement, non confirmée par fiche constructeur |
-| Vitesse sortie moteur estimée | probablement 40 à 60 tr/min a vide | Valeur typique à mesurer sur la pièce réelle |
-| Couple moteur | inconnu, probablement quelques N.m | Donnée critique à valider expérimentalement |
-| Usage prévu | Intermittent pendant les cycles de lavage | Compatible avec le type de moteur envisagé |
-| Usage continu 24/24 | non recommandé | Risque d'échauffement, moteur non retenu pour fonctionnement permanent |
-| Étanchéité | non compatible immersion | Moteur a garder hors eau et protège des projections |
+| Type de moteur | Motorreducteur a vis sans fin | Piece retenue pour entrainer le tambour |
+| Marque | Fyearfly | Donnee capture produit |
+| Tension nominale | 12 V DC | Rail basse tension V1 |
+| Vitesse selectionnee | 10 rpm | Variante retenue sur la capture produit |
+| Courant nominal annonce | < 1,6 A | Donnee produit, a confirmer par mesure |
+| Courant d'arret annonce | 6,5 A | Donnee produit, utile pour pre-dimensionner le fusible |
+| Sortie mecanique | Arbre en D, diametre 8 mm | Donnee produit |
+| Usage prevu | Intermittent pendant les cycles de lavage | Compatible avec la logique FAT |
+| Usage continu 24/24 | non retenu | Le tambour ne tourne pas en permanence |
+| Etancheite | non documentee pour immersion | Moteur a garder hors eau et protege des projections |
 
-## Hypothèses électriques de dimensionnement
+## Hypotheses electriques de dimensionnement
 
-| Hypothèse | Valeur retenue | Commentaire |
+| Hypothese | Valeur retenue | Commentaire |
 | --- | --- | --- |
-| Tension moteur | 12 V DC | Alimentation moteur distincte ou rail 12 V dimensionne en conséquence |
-| Courant nominal théorique | environ 3,3 A | Calcul indicatif 40 W / 12 V |
-| Courant de fonctionnement à prévoir | 4 à 8 A | Hypothèse prudente en charge legere a modérée |
-| Courant de démarrage ou effort important | 10 à 20 A possible | A prendre en compte pour alimentation, fusible et protection |
-| Alimentation minimale | 12 V / 10 A | Minimum à valider sur essais |
-| Alimentation recommandée | 12 V / 15 A | Marge utile pour démarrage, frottements et encrassement |
-| Fusible initial | 10 à 15 A | A ajuster après mesure du courant réel |
-| Protection blocage | détection surintensité ou limitation de courant | Fortement recommandée, le blocage peut faire monter le courant rapidement |
+| Tension moteur | 12 V DC | Alimentation commune basse tension V1 |
+| Alimentation disponible | Mean Well NDR-120-12, 12 V, 10 A, 120 W | Alimente aussi automate, capteurs, IHM et accessoires via fusibles dedies |
+| Fusible moteur | ATO 7,5 A | Cohérent avec un courant d'arret annonce de 6,5 A, mais a confirmer en essais |
+| Relais moteur | HELLA 4RD 933 332-551, 12 V, 15 A inductif | Marge par rapport au fusible et a l'appel moteur attendu |
+| Distribution 12 V | Porte-fusibles ATO 4 departs | Moteur 7,5 A, automate 3 A, capteurs/boutons 1 A, ecran/voyants/accessoires 1 A |
 
-Le courant nominal théorique ne doit pas être utilisé seul pour dimensionner l'alimentation ou les protections. Le courant de démarrage, le couple résistant du tambour, l'encrassement et un éventuel blocage mécanique sont les cas dimensionnants.
+Le courant nominal annonce ne suffit pas a lui seul pour valider le dimensionnement. Les cas dimensionnants restent le demarrage, l'effort en charge avec tambour mouille, les frottements, l'encrassement et un blocage mecanique.
 
-## Transmission mécanique retenue
+## Transmission mecanique
 
-| Element | Valeur | Commentaire |
-| --- | --- | --- |
-| Pignon moteur | 10 cm | Donnée projet |
-| Engrenage tambour | 30 cm | Donnée projet |
-| Rapport de réduction | 3:1 | 30 cm / 10 cm |
-| Effet théorique sur vitesse | vitesse divisee par 3 | Hors glissement et pertes |
-| Effet théorique sur couple | couple multiplie par environ 3 | Hors pertes mécaniques |
+La vitesse moteur retenue de 10 rpm est beaucoup plus proche d'une vitesse exploitable pour un FAT que l'ancien candidat SWF mesure a 95 tr/min. La transmission exacte reste toutefois a definir selon :
 
-Avec une vitesse moteur estimée de 40 à 60 tr/min, la vitesse tambour attendue serait d'environ 13 à 20 tr/min. Cette valeur reste indicative tant que la vitesse réelle du moteur n'a pas été mesurée.
+- le diametre et la fixation de l'organe d'entrainement cote moteur ;
+- le diametre et la fixation cote tambour ;
+- le couple disponible au tambour ;
+- l'accessibilite maintenance ;
+- la tolerance aux projections et a l'encrassement.
 
-## Contraintes de câblage
+La vitesse finale du tambour doit etre validee en essai reel. Si l'entrainement est direct, l'ordre de grandeur serait 10 tr/min au tambour, ce qui peut encore etre rapide selon la geometrie reelle. Une reduction supplementaire ou une commande par cycles courts pourra donc rester necessaire selon essais.
 
-Le brochage exact du moteur n'est pas encore confirmé. L'architecture probable d'un moteur d'essuie-glace 5 broches comprend :
+## Contraintes de cablage
 
-- masse ;
-- petite vitesse ;
-- grande vitesse ;
-- alimentation ou retour parking ;
-- contact parking.
+Le depart moteur est cable en 12 VDC via fusible ATO 7,5 A et relais HELLA 12 V. Le support du relais doit etre concu pour une fixation propre en coffret, sur rail DIN, sans contrainte mecanique sur les cosses.
 
-Le câblage final doit être identifié au multimetre et par essai 12 V protège. Le projet ne doit pas supposer le brochage exact tant que la pièce n'a pas été caractérisée.
+Le cablage final doit verifier :
+
+- la polarite moteur et le sens de rotation utile ;
+- la section de cable du depart moteur ;
+- la diode ou protection de roue libre si necessaire cote commande relais ;
+- la separation propre entre basse tension et puissance 230 VAC ;
+- l'accessibilite du fusible moteur.
+
+## Ancienne option non retenue
+
+Le moteur d'essuie-glace avant SWF 403.835 de Peugeot 106 phase 2 avait ete etudie comme candidat initial. Il etait mesure a environ 95 tr/min a vide sur batterie 12 V. Avec une reduction mecanique initiale 3:1, la vitesse tambour attendue etait d'environ 31,7 tr/min a vide, probablement trop elevee pour le FAT. Ce candidat n'est plus la base de conception V1.
 
 ## Conclusion de dimensionnement
 
-Le moteur SWF 403.835 de Peugeot 106 phase 2 est un candidat acceptable pour entrainer le tambour du FAT en usage intermittent, avec réduction mécanique 3:1 et petite vitesse uniquement.
+Le motorreducteur Fyearfly 12 VDC 10 rpm est retenu pour simplifier la vitesse de rotation et le cablage V1. Le pre-dimensionnement electrique retient une alimentation 12 VDC 10 A commune, un fusible moteur 7,5 A et un relais HELLA 15 A inductif.
 
-La conception ne doit pas dependre d'une valeur de couple constructeur non disponible. Le dimensionnement final doit être valide par essais reels sur le tambour.
+La conception ne doit pas dependre uniquement des donnees de la capture produit. Le dimensionnement final doit etre valide par essais reels sur le tambour.
 
-## Points à vérifier sur installation réelle
+## Points a verifier sur installation reelle
 
-- identifier le brochage exact du moteur ;
+- valider le sens de rotation du moteur ;
 - mesurer le courant a vide ;
-- mesurer la vitesse a vide ;
-- mesurer le courant avec tambour à sec ;
+- mesurer le courant avec tambour a sec ;
 - mesurer le courant avec tambour en eau ;
-- mesurer le courant au démarrage ;
-- realiser un test de blocage contrôlé pour définir le seuil de sécurité ;
-- valider un cycle de lavage complet sans blocage ni échauffement excessif.
+- mesurer le courant au demarrage ;
+- realiser un test de blocage controle pour confirmer le fusible 7,5 A et le comportement de protection ;
+- mesurer la vitesse finale du tambour avec la transmission retenue ;
+- valider un cycle de lavage complet sans blocage ni echauffement excessif ;
+- verifier la tenue mecanique du support relais HELLA imprime en 3D.

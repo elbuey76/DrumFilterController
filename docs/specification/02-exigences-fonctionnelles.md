@@ -5,8 +5,8 @@
 | ID | Exigence | Priorité | Commentaire |
 | --- | --- | --- | --- |
 | F-001 | Le système doit détecter un besoin de lavage à partir du niveau d'eau côté propre du filtre à tambour. | Must | La logique de pilotage V1 repose sur deux niveaux côté eau propre : EP_LAVAGE et EP_CRITIQUE, mesures sur le report de niveau. |
-| F-002 | Le système doit démarrér une pompe de rinçage pendant le cycle de lavage. | Must | La sortie devra probablement piloter un relais ou contacteur. |
-| F-003 | Le système doit commander la rotation du tambour pendant le cycle de lavage. | Must | La commande dépendra du moteur retenu. |
+| F-002 | Le système doit démarrér une pompe de rinçage pendant le cycle de lavage. | Must | Pompe 230 VAC commandee via contacteur Schneider TeSys LC1D12P7, bobine 230 VAC, pilote par un relais du KC868-A32. |
+| F-003 | Le système doit commander la rotation du tambour pendant le cycle de lavage. | Must | Moteur Fyearfly 12 VDC 10 rpm commande via relais HELLA 12 V, fusible ATO 7,5 A. |
 | F-004 | Le système doit arrêter automatiquement le cycle après une durée configurable. | Must | Valeur initiale V1 : durée maximale 45 s, ajustable après essais. |
 | F-005 | Le système doit imposer un délai minimal entre deux cycles automatiques. | Must | Protection contre un capteur instable ou un filtre saturé. |
 | F-006 | Le système doit proposer un mode manuel. | Must | Le détail des commandes manuelles et des protections associées est précise par F-022 et F-023. |
@@ -127,7 +127,7 @@
 | F-121 | Le débit de rinçage de référence V1 doit être mesure aux buses après montage réel. | Must | La courbe pompe peut servir d'estimation provisoire, mais la valeur de référence pour calculs ou estimations doit venir du montage réel : pompe, rampe, buses et pertes de charge. |
 | F-122 | La V1 ne doit pas ajouter de pressostat, débitmètre ou retour courant pour confirmer le rinçage. | Must | Le diagnostic reste indirect : en cas de non-retour de EP_LAVAGE après lavage, afficher `A04 - LAVAGE INEFFICACE`. Les capteurs dedies de rinçage sont reportés V1.1/V2 si les essais montrent trop d'ambiguite. |
 | F-123 | La V1 ne doit pas ajouter de capteurs dedies de diagnostic direct pour rotation tambour, courant mesuré, fuite local ou niveau eau sale. | Must | Les protections matérielles nécessaires restent obligatoires. Un simple retour défaut fourni nativement par un module de protection peut être exploité sans transformer la V1 en diagnostic direct détaillé. |
-| F-124 | Les fonctions de parking du moteur d'essuie-glace ne doivent pas être utilisées comme fonction logicielle V1. | Must | Sauf contrainte de brochage simple, elles sont isolées ou ignorées proprement. Leur usage pour positionnement ou indexation tambour est reporté V1.1. |
+| F-124 | Le logiciel V1 ne doit pas dépendre d'une fonction de parking ou de position moteur. | Must | Le moteur Fyearfly retenu ne fournit pas de fonction parking utilisée par le controleur. L'indexation reste au temps en V1.1, sauf ajout futur d'un capteur de position. |
 | F-125 | Le mode hiver automatique est hors V1. | Must | La V1 affiche seulement les alertes température eau/local et pertes de sondes. Les adaptations automatiques de circulation, temporisations, protection antigel ou priorité aeration sont reportées V1.1/V2 après observation réelle. |
 | F-126 | Le choix matériel MVP doit rester compatible avec une connectivité Wi-Fi V2 sans remplacement de la plateforme principale. | Must | La connectivité active reste hors MVP, mais le matériel retenu doit permettre Wi-Fi natif ou ajout d'un module Wi-Fi intégré proprement. Ethernet n'est pas requis, BLE seul est insuffisant et SMS n'est pas retenu par défaut. |
 | F-127 | Les notifications V2 doivent appliquer une politique anti-spam. | Should | Envoi à l'apparition, rappel périodique rare si l'état reste actif, et notification de retour à la normale pour les alarmes importantes. |
