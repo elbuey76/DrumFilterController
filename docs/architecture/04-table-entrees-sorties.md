@@ -76,7 +76,8 @@ Cette interface directe ne rend pas les capteurs de niveau intrinsèquement fail
 | DO-011 | `VOYANT_DEGRADE` | Should | À définir | LED, voyant ou IHM | Indique fonctionnement dégradé. |
 | DO-012 | `VOYANT_LAVAGE` | Should | Option V1 | Voyant physique jaune ou ambre, LED, voyant ou IHM | Indique cycle de lavage, test, dégradé ou maintenance si le câblage reste simple. Non bloquant car l'écran affiche le cycle. |
 | DO-013 | `VOYANT_ALARME` | Must | Retenu V1 | Voyant physique rouge, LED ou voyant 12/24 V selon coffret | Signale une alarme active, un défaut critique ou `A15 - CAPOT OUVERT LONG`. Pour A15, le voyant rouge est fixe, sans clignotement et sans maintien après fermeture stable du capot. Complément visuel minimal de l'écran, lisible localement. |
-| COM-001 | `IHM_ECRAN` | Must | Retenu V1 | Écran texte ou petit afficheur local, bus série, I2C, SPI ou autre | Affiche au minimum mode actuel, état niveau, état lavage, alarme active et température eau. Affiche `MAINTENANCE - CAPOT OUVERT` tant que le capot est ouvert hors action dangereuse. Priorise EP_CRITIQUE/incohérence capteurs, capot dangereux, défaut lavage, capot ouvert trop longtemps, température puis infos. Messages au format `Axx - MESSAGE COURT`, liste minimale A01 à A15. `A15` disparaît automatiquement après fermeture stable et ne demande pas d'acquittement. Affiche la cause des resets refusés et tests refusés. Ne présente pas le bypass passif comme mesure ; utiliser MODE DÉGRADÉ - BYPASS SUPPOSÉ. Les détails peuvent être accessibles par page ou défilement. |
+| COM-001 | `IHM_ECRAN` | Must | Retenu V1, validation banc à faire | LCD 2004 / 20x4 I2C 3,3 V, fond bleu, module I2C type PCF8574 ou equivalent, raccordement cible sur port d'extension KC868-A32 `GPIO32` / `GPIO33` en I2C logiciel | Affiche au minimum mode actuel, état niveau, état lavage, alarme active et température eau. Affiche `MAINTENANCE - CAPOT OUVERT` tant que le capot est ouvert hors action dangereuse. Priorise EP_CRITIQUE/incohérence capteurs, capot dangereux, défaut lavage, capot ouvert trop longtemps, température puis infos. Messages au format `Axx - MESSAGE COURT`, liste minimale A01 à A15. `A15` disparaît automatiquement après fermeture stable et ne demande pas d'acquittement. Affiche la cause des resets refusés et tests refusés. Ne présente pas le bypass passif comme mesure ; utiliser MODE DÉGRADÉ - BYPASS SUPPOSÉ. Les détails peuvent être accessibles par page ou défilement. Ne pas connecter l'écran aux bus I2C internes des PCF8574 relais/entrées ; vérifier adresse I2C, contraste, rétroéclairage et absence de pull-up 5 V avant câblage final. |
+| COM-002 | `RTC_DS3231` | Must | Retenu comme voie heure fiable V2, validation banc à faire | Module RTC DS3231 I2C 3,3 V avec batterie rechargeable, adresse attendue `0x68`, raccordement cible sur port d'extension KC868-A32 `GPIO32` / `GPIO33` en I2C logiciel si partage stable avec le LCD | Fournit une heure civile locale pour horodatage, statistiques, dernier lavage, test journalier, programmation horaire, notifications et synthese quotidienne. Le Wi-Fi/NTP peut recaler la RTC en V2 mais ne doit pas etre l'unique source. Si l'heure est invalide ou absente, le controleur reste fonctionnel avec compteurs persistants et horodatage inconnu. Les temporisations de securite et de cycle ne doivent pas dependre de la RTC. |
 
 ## Synthèse du noyau E/S V1
 
@@ -101,7 +102,8 @@ Cette interface directe ne rend pas les capteurs de niveau intrinsèquement fail
 - `CMD_POMPE_DECO`
 - `CMD_UV`
 - `CMD_MISE_A_NIVEAU`
-- `IHM_ECRAN`
+- `IHM_ECRAN` LCD 2004 / 20x4 I2C 3,3 V
+- `RTC_DS3231` module RTC I2C 3,3 V avec batterie rechargeable pour l'heure fiable V2
 - voyant marche vert et voyant alarme rouge comme complément visuel minimal
 - voyant lavage jaune ou ambre optionnel si câblage simple
 
@@ -128,6 +130,7 @@ Les bulleurs de la cuve bio et du bassin ne sont pas pilotes par le contrôleur.
 | Prises local | Disjoncteur 16 A courbe C | 1 prise bulleur bassin, 1 prise bulleur filtre bio, 2 prises maintenance ponctuelle. |
 | Pompe filtration | Disjoncteur 6 A courbe C | Depart dedie organe essentiel. |
 | UV, pompe decoration, mise a niveau | Disjoncteur 6 A courbe C | Depart separe de la filtration. |
+| Eclairage exterieur | Disjoncteur 6 A courbe C | Depart dedie hors automatisme FAT, pour 6 spots LED exterieurs de 3 W avec detecteurs ; charge nominale 18 W, environ 0,08 A sous 230 VAC, cable environ 10 a 15 m. |
 | Distribution 12 VDC moteur tambour | Fusible ATO 7,5 A | Moteur Fyearfly via relais HELLA. |
 | Distribution 12 VDC automate | Fusible ATO 3 A | KC868-A32. |
 | Distribution 12 VDC capteurs et boutons | Fusible ATO 1 A | Entrees terrain et commandes locales. |
@@ -138,6 +141,8 @@ Les bulleurs de la cuve bio et du bassin ne sont pas pilotes par le contrôleur.
 
 - Choisir la référence finale de l'interrupteur differentiel 2P 30 mA, 40 A, type A.
 - Verifier la compatibilite exacte entre sorties du KC868-A32, bobines de contacteurs TOMZN 12 VDC, bobine Schneider 230 VAC et relais HELLA.
+- Valider sur banc le LCD 2004 I2C 3,3 V : adresse, lisibilite, contraste, retroeclairage, affectation `GPIO32` / `GPIO33` et compatibilite des niveaux logiques.
+- Valider sur banc la RTC DS3231 I2C 3,3 V : adresse `0x68`, batterie rechargeable livree, conservation de l'heure apres coupure, absence de pull-up vers 5 V et cohabitation avec le LCD 2004 sur le bus I2C logiciel.
 - Mesurer le courant réel du moteur Fyearfly a vide, en charge et au blocage pour confirmer le fusible 7,5 A.
 - Definir les protections, borniers, sections de cable, reperages et cheminements separes entre basse tension et puissance.
 - Valider sur banc la lecture KC868-A32 des deux CR18-8DN : repos, détection, fil noir débranché, bleu débranché, marron débranché et inversion logique firmware éventuelle.
@@ -145,5 +150,6 @@ Les bulleurs de la cuve bio et du bassin ne sont pas pilotes par le contrôleur.
 - Finaliser l'adaptateur rail DIN imprime en 3D du porte-fusibles ATO si le modele retenu n'est pas DIN natif.
 - Confirmer les références exactes des sondes de température bassin et local.
 - Vérifier que les bulleurs alimentés directement en 220 V restent électriquement séparés des circuits coupés par le contrôleur.
+- Valider la section, le cheminement et la reference materielle du depart eclairage exterieur protege en 6 A courbe C.
 - Évaluer empiriquement la consommation d'eau de rinçage à partir des essais.
 - Conserver le capteur de position tambour comme option V2 ou V1.1 tardive tant que l'indexation au temps n'a pas montre de limité.

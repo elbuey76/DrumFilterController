@@ -9,7 +9,7 @@
 | Machine à états | Decider des transitions, du mode courant et des verrouillages. |
 | Diagnostics | Évaluer auto-tests, cohérence EP_LAVAGE et EP_CRITIQUE, conséquences hydrauliques observables, températures et critères de passage en dégradé ou défaut. |
 | Communication distante | Option V2 : publier et notifier les états et événements importants vers l'exterieur. |
-| Temps système | Option V2 : fournir une heure fiable pour horodatage, historiques, notifications et syntheses. |
+| Temps système | Option V2 : fournir une heure fiable via RTC DS3231 pour horodatage, historiques, notifications et syntheses ; NTP/Wi-Fi seulement en recalage si disponible. |
 | Sorties | Piloter relais, voyants, écran local et autres actionneurs. |
 | Configuration | Stocker les paramètres modifiables et la politique de reprise. |
 | Journalisation | Enregistrer cycles, alarmes et événements importants. |
@@ -87,7 +87,7 @@ Capot ouvert hors action dangereuse, l'IHM doit afficher l'état informatif perm
 
 Si le capot reste ouvert au-delà d'une temporisation configurable, valeur initiale 10 minutes, l'IHM doit afficher `A15 - CAPOT OUVERT LONG` et allumer `VOYANT_ALARME` rouge fixe, sans clignotement en V1. Cette alerte signale un oubli probable et rappelle que le lavage tambour est indisponible tant que le capot reste ouvert. Elle n'ajoute pas de blocage supplémentaire : le blocage provient deja de l'état `CAPOT_OUVERT`. Elle disparaît automatiquement après fermeture stable du capot, sans acquittement ni maintien artificiel du voyant rouge.
 
-Le logiciel conserve une trace minimale persistante et non bloquante de A15. Cette trace est écrite quand A15 survient et doit rester présente après coupure d'alimentation. La V1 conserve au minimum un compteur persistant et, si c'est simple, le dernier événement. Si une horloge fiable existe facilement en MVP, le dernier événement est horodaté ; sinon le compteur persistant suffit. Une mémoire circulaire courte de quelques événements recents est acceptable, mais un historique long n'est pas requis en V1. Au redémarrage, le logiciel relit le capot : si A15 était actif avant coupure et que le capot est encore ouvert, A15 est réaffiché après lecture stable ; si le capot est ouvert mais qu'A15 n'était pas encore actif, l'état informatif `MAINTENANCE - CAPOT OUVERT` est affiche et la temporisation A15 repart.
+Le logiciel conserve une trace minimale persistante et non bloquante de A15. Cette trace est écrite quand A15 survient et doit rester présente après coupure d'alimentation. La V1 conserve au minimum un compteur persistant et, si c'est simple, le dernier événement. Si la RTC DS3231 est disponible et initialisee facilement en MVP, le dernier événement est horodaté ; sinon le compteur persistant suffit. Une mémoire circulaire courte de quelques événements recents est acceptable, mais un historique long n'est pas requis en V1. Au redémarrage, le logiciel relit le capot : si A15 était actif avant coupure et que le capot est encore ouvert, A15 est réaffiché après lecture stable ; si le capot est ouvert mais qu'A15 n'était pas encore actif, l'état informatif `MAINTENANCE - CAPOT OUVERT` est affiche et la temporisation A15 repart.
 
 L'arrêt total n'apparaît pas comme un état logiciel de la machine à états ci-dessus. Il correspond a une consignation ou a une coupure électrique maîtrisée, explicite pour l'exploitation, et geree hors du cycle logiciel nominal.
 
@@ -161,7 +161,7 @@ Une demande de test avec capot ouvert est refusée sans mouvement avec `A13 - TE
 
 ## Statuts a remonter localement
 
-L'IHM locale V1 retient un écran texte ou petit afficheur. Elle doit presenter au minimum :
+L'IHM locale V1 retient un LCD 2004 / 20x4 I2C 3,3 V, fond bleu, pilote depuis le port d'extension KC868-A32 via `GPIO32` / `GPIO33` en I2C logiciel. Elle doit presenter au minimum :
 
 - mode actif : auto, manuel, maintenance, dégradé ou défaut ;
 - état niveau : OK, lavage ou critique ;
@@ -307,6 +307,14 @@ Ces fonctions sont hors V1 stricte. Le logiciel devrait pouvoir gérer plus tard
 
 Ces fonctions doivent rester secondaires par rapport aux verrouillages de sécurité et au mode courant.
 
+## Temps civil et RTC
+
+La source locale retenue pour l'heure fiable est une RTC DS3231 I2C avec batterie rechargeable. Le firmware doit traiter cette heure comme un temps civil utile aux journaux, aux statistiques, aux programmations horaires et aux notifications, pas comme la base des temporisations de securite.
+
+Au demarrage, le logiciel devrait lire la RTC et qualifier l'heure comme valide ou inconnue. Si l'heure est inconnue, absente ou non initialisee, le controleur continue a fonctionner localement : les compteurs persistants restent utilisables et les evenements sont marques sans horodatage fiable.
+
+Les temporisations de cycle et de securite, notamment EP_LAVAGE, EP_CRITIQUE, capot ouvert, duree lavage, pauses, anti-redemarrage et timeouts, doivent rester basees sur des timers monotones internes. Une mise a l'heure RTC, manuelle ou par NTP en V2, ne doit jamais raccourcir, allonger ou contourner une temporisation de securite deja en cours.
+
 ## Gestion programmee de la pompe décoration V1.1 ou V2
 
 Cette fonction est hors V1 stricte. Le logiciel peut aussi gérer plus tard une programmation horaire simple de la pompe décoration. Cette fonction devrait :
@@ -436,8 +444,9 @@ L'état distant ne doit pas exposer un champ `BASSIN NIVEAU BAS` sans capteur ba
 - Coder `CAPOT_OUVERT` comme entrée normalement fermée fail-safe avec temporisation asymetrique ouverture/fermeture.
 - Afficher `MAINTENANCE - CAPOT OUVERT` tant que le capot est ouvert hors action dangereuse, puis revenir au mode demande après fermeture stable si aucune alarme bloquante n'existe.
 - Déclencher `A15 - CAPOT OUVERT LONG` si le capot reste ouvert au-delà de la temporisation configurée, valeur initiale 10 minutes, allumer `VOYANT_ALARME` rouge fixe, puis effacer A15 automatiquement après fermeture stable sans maintien artificiel du voyant.
-- Conserver une trace minimale persistante et non bloquante de A15, sous forme de compteur persistant plus dernier événement si simple ; horodater le dernier événement seulement si une horloge fiable existe facilement en MVP.
-- Ne pas imposer l'implementation d'une horloge fiable en MVP, mais choisir une plateforme qui permet cette fonction en V2 sans remplacement matériel principal et sans dépendance exclusive à Internet.
+- Conserver une trace minimale persistante et non bloquante de A15, sous forme de compteur persistant plus dernier événement si simple ; horodater le dernier événement seulement si la RTC DS3231 est disponible et initialisee facilement en MVP.
+- Ne pas imposer l'implementation logicielle complete de l'heure fiable en MVP, mais prevoir la RTC DS3231 I2C 3,3 V avec batterie rechargeable comme source locale V2 sans remplacement matériel principal et sans dépendance exclusive à Internet.
+- Ne jamais utiliser l'heure RTC pour les temporisations de securite ; utiliser des timers monotones internes pour les delais critiques et les cycles.
 - Commander le tambour et le rinçage manuel uniquement tant que les boutons dedies restent maintenus.
 - Refuser `MANU_TAMBOUR` et `MANU_RINCAGE` capot ouvert sans alarme bloquante si aucune sortie dangereuse n'a démarré.
 - Autoriser le test lavage en AUTO et MAINTENANCE sous préconditions, puis l'interrompre immédiatement sur capot ouvert, EP_CRITIQUE ou défaut critique.

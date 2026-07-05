@@ -27,7 +27,7 @@ Le tableau 230 VAC local retient l'organisation suivante :
 | Prises local | Disjoncteur 16 A courbe C | 1 prise bulleur bassin, 1 prise bulleur filtre bio, 2 prises maintenance ponctuelle | Les bulleurs restent hors controleur et hors coupure niveau critique. Les prises maintenance servent par exemple aspirateur ou pompe de relevage temporaire. |
 | Pompe filtration | Disjoncteur 6 A courbe C | Pompe principale de filtration | Depart separe car organe essentiel. |
 | UV, pompe decoration, mise a niveau | Disjoncteur 6 A courbe C | UV, pompe decoration, mise a niveau automatique | Depart separe de la filtration pour qu'un defaut sur un organe non essentiel ne coupe pas la pompe de filtration. |
-| Eclairage exterieur | Disjoncteur a choisir | Lumieres exterieures sans fonction bassin | Depart supplementaire a prevoir dans le coffret. Il est hors automatisme FAT, sans role de securite bassin, mais doit etre protege et cable comme un circuit distinct. |
+| Eclairage exterieur | Disjoncteur 6 A courbe C | 6 spots LED exterieurs de 3 W, avec detecteurs, environ 10 a 15 m de cable | Depart supplementaire distinct, hors automatisme FAT et sans role de securite bassin. La charge nominale est de 18 W, soit environ 0,08 A sous 230 VAC ; le calibre 6 A est retenu comme depart dedie confortable, a confirmer avec la section et les conditions de pose du cable. |
 
 Le TeSys VCDN20 trouve en atelier est donc retenu comme candidat de coupure locale cadenassable du coffret FAT. Il ne remplace ni l'interrupteur differentiel 30 mA ni les disjoncteurs aval. Son integration finale doit verifier l'etat du composant, le schema monophase phase/neutre, le calibre amont 20 A, le pouvoir de coupure adapte aux charges moteur et le maintien des bulleurs hors coupure automatique du controleur.
 
@@ -61,7 +61,7 @@ L'UV, la pompe de decoration et la pompe de filtration sont commandes par les re
 - Le depart cote maison doit etre cree avec un disjoncteur 20 A dedie, non encore achete ni cable.
 - L'interrupteur differentiel de tete est retenu en 2P 30 mA, 40 A, type A. La notice AquaForte DM-Vario impose une protection differentielle 30 mA mais ne demande pas de type F ou B ; le type A est donc retenu comme choix rationnel pour les charges electroniques du MVP.
 - Le TeSys VCDN20 trouve en atelier peut etre reutilise comme sectionneur de consignation local avant l'interrupteur differentiel du coffret si son etat mecanique/electrique est sain et si le schema final confirme son cablage.
-- Un depart supplementaire d'eclairage exterieur doit etre reserve dans le coffret ; son disjoncteur reste a choisir et ce circuit n'a pas de role fonctionnel dans le controleur du bassin.
+- Un depart supplementaire d'eclairage exterieur est reserve dans le coffret, protege par disjoncteur 6 A courbe C ; ce circuit n'a pas de role fonctionnel dans le controleur du bassin.
 - Les valeurs de fusibles et disjoncteurs restent a confirmer par revue de schema, fiches constructeur, sections de cable, conditions de pose et essais.
 - Les adaptations imprimees en 3D pour le relais HELLA et le porte-fusibles ATO deviennent des pieces du coffret a concevoir et valider mecaniquement.
 

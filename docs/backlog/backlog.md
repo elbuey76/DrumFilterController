@@ -22,7 +22,7 @@
 | B-016 | Définir la fonction de mesure de température bassin : sonde numérique étanche candidate, implantation représentative de l'eau du bassin, plage utile et seuils d'alerte informative V1 < 4 deg C et > 28 deg C. | Must | Tranchée |
 | B-017 | Définir la fonction de mesure de température ambiante local : sonde numérique candidate, implantation représentative de l'air du local, plage utile et seuils d'alerte informative V1 < 2 deg C et > 40 deg C. | Must | Tranchée |
 | B-022 | Figer les paramètres de lavage auto mini 10 s, maxi 45 s, rotation résiduelle 2 à 5 s, anti-redémarrage 30 à 120 s, 3 tentatives, pause 30 à 120 s, seuils horaire et journalier, avec retard EP_LAVAGE initial 5 à 15 s et confirmation EP_CRITIQUE initiale 0,5 à 2 s. | Must | En cours |
-| B-018 | Retenir une IHM locale V1 avec écran texte ou petit afficheur et commandes physiques essentielles. | Must | Tranchée |
+| B-018 | Retenir une IHM locale V1 avec LCD 2004 / 20x4 I2C 3,3 V, fond bleu, et commandes physiques essentielles. | Must | Tranchée |
 | B-019 | Retenir les voyants complémentaires V1 : MARCHE vert et ALARME rouge obligatoires, LAVAGE jaune ou ambre optionnel, en gardant l'écran comme support principal de lecture des états. | Should | Tranchée |
 | B-020 | Retenir pour une V2 une remontée distante Wi-Fi avec notifications actionnables : EP_CRITIQUE, capteurs incohérents, capot dangereux, A15, lavage inefficace, retour courant après coupure et perte sonde température persistante. | Should | Tranchée |
 | B-021 | Choisir pour le MVP une plateforme définitive compatible Wi-Fi V2 sans remplacement matériel principal ; Ethernet non requis, BLE seul insuffisant et SMS non retenu par défaut. | Must | Tranchée |
@@ -44,10 +44,10 @@
 | B-038 | Ne pas dépendre d'une fonction de parking ou de position moteur en V1 ; garder l'indexation au temps en V1.1 sauf ajout futur d'un capteur de position. | Should | Tranchée |
 | B-039 | Mesurer le débit de rinçage de référence sur les buses et la rampe déjà fabriquées après montage réel de la pompe et prise en compte des pertes de charge ; utiliser la courbe pompe seulement comme estimation provisoire. | Must | Tranchée |
 | B-040 | Ne pas ajouter de pressostat, débitmètre ou retour courant pour diagnostiquer le rinçage en V1 ; reporter ces capteurs V1.1/V2 si les essais montrent trop d'ambiguite. | Should | Tranchée |
-| B-041 | Integrer au choix de plateforme V1 la capacité d'heure fiable V2 sans remplacement matériel principal, par RTC, temps local conserve, module temps, synchronisation réseau ou equivalent, sans dépendance exclusive à Internet. | Must | Tranchée |
+| B-041 | Integrer au choix de plateforme V1 la capacité d'heure fiable V2 sans remplacement matériel principal, par RTC DS3231 I2C 3,3 V avec batterie rechargeable, synchronisation réseau seulement en complement, sans dépendance exclusive à Internet. | Must | Tranchée |
 | B-042 | Retenir l'UV hors tambour, après la pompe principale, asservi a filtration autorisée plus absence EP_CRITIQUE, sans coupure sur défaut FAT non critique. | Must | Tranchée |
 | B-043 | Retenir en tete de tableau un interrupteur differentiel 2P 30 mA, 40 A, type A, coherent avec les charges reelles du MVP et la notice AquaForte DM-Vario qui demande 30 mA sans imposer type F ou B. | Must | Tranchée |
-| B-044 | Retenir une distribution 230 VAC avec departs : 4 A courbe C alimentation 12 V, 10 A courbe C pompe rincage, 16 A courbe C prises local, 6 A courbe C pompe filtration, 6 A courbe C UV/pompe decoration/mise a niveau. | Must | Tranchée |
+| B-044 | Retenir une distribution 230 VAC avec departs : 4 A courbe C alimentation 12 V, 10 A courbe C pompe rincage, 16 A courbe C prises local, 6 A courbe C pompe filtration, 6 A courbe C UV/pompe decoration/mise a niveau, 6 A courbe C eclairage exterieur. | Must | Tranchée |
 | B-045 | Retenir une distribution 12 VDC Mean Well NDR-120-12 + porte-fusibles ATO 4 departs : moteur 7,5 A, automate 3 A, capteurs/boutons 1 A, ecran/voyants/accessoires 1 A. | Must | Tranchée |
 
 ## FAT existant a finaliser
@@ -79,7 +79,9 @@
 | B-108 | Prévoir un sélecteur physique simple AUTO / MAINTENANCE et des boutons physiques momentanés pour TEST_LAVAGE, RESET_ALARME, MANU_TAMBOUR et MANU_RINCAGE. | Must | Tranchée |
 | B-109 | Prévoir l'entrée matérielle nécessaire pour la sonde de température bassin et son câblage. | Must | À faire |
 | B-110 | Prévoir l'entrée matérielle nécessaire pour la sonde de température ambiante local et son câblage. | Must | À faire |
-| B-111 | Prévoir les composants nécessaires pour l'IHM locale V1 : écran texte ou petit afficheur, bouton reset alarme dédié, commandes physiques essentielles, voyant MARCHE vert, voyant ALARME rouge et voyant LAVAGE optionnel. | Must | À faire |
+| B-111 | Prévoir les composants nécessaires pour l'IHM locale V1 : LCD 2004 / 20x4 I2C 3,3 V fond bleu, bouton reset alarme dédié, commandes physiques essentielles, voyant MARCHE vert, voyant ALARME rouge et voyant LAVAGE optionnel. | Must | À faire |
+| B-111A | Valider sur banc le LCD 2004 I2C retenu : adresse I2C, contraste, retroeclairage, lisibilite, affectation `GPIO32` / `GPIO33`, compatibilite 3,3 V des lignes `SDA` / `SCL` et absence de perturbation des bus I2C internes du KC868-A32. | Must | À faire |
+| B-111B | Prévoir et valider sur banc la RTC DS3231 I2C 3,3 V avec batterie rechargeable : adresse `0x68`, conservation de l'heure après coupure, absence de pull-up 5 V, cohabitation avec le LCD 2004 sur `GPIO32` / `GPIO33` ou bus I2C separé si nécessaire. | Must | À faire |
 | B-112 | Prévoir pour une V2 les composants et interfaces nécessaires à la remontée distante retenue module radio, réseau ou passerelle. | Should | V2 |
 | B-113 | Garder le capteur de position tambour comme option V2 ou V1.1 tardive, seulement si l'indexation au temps pose problème ou si une position reproductible devient nécessaire. | Should | Tranchée |
 | B-114 | Valider la commande 12 V DC du moteur tambour avec fusible ATO 7,5 A, relais HELLA 12 V 15 A inductif, alimentation Mean Well NDR-120-12 et courant de blocage annoncé 6,5 A. | Must | En cours |
@@ -110,10 +112,10 @@
 | B-214A | Implémenter les priorités opérateur V1 : capot ouvert prioritaire sur AUTO, commandes manuelles a action maintenue refusées capot ouvert sans alarme bloquante preventive, test lavage autonome refusé avec message si capot ouvert ou sécurité critique, et interrompu par sécurité pendant le cycle. | Must | Tranchée |
 | B-215 | Implémenter l'acquisition de température bassin, la détection de perte de mesure `A11 - SONDE EAU ABSENTE` et les alertes associées, seuils initiaux < 4 deg C et > 28 deg C. | Must | À faire |
 | B-216 | Implémenter l'acquisition de température ambiante local, la détection de perte de mesure `A12 - SONDE LOCAL ABSENTE` et les alertes associées, seuils initiaux < 2 deg C et > 40 deg C. | Must | À faire |
-| B-217 | Implémenter la logique de remontée de statut sur l'IHM locale avec priorité EP_CRITIQUE/incohérence capteurs, capot dangereux, défaut lavage, capot ouvert trop longtemps, température puis infos et messages `Axx - MESSAGE COURT`. | Must | À faire |
+| B-217 | Implémenter la logique de remontée de statut sur le LCD 2004 I2C local avec priorité EP_CRITIQUE/incohérence capteurs, capot dangereux, défaut lavage, capot ouvert trop longtemps, température puis infos et messages `Axx - MESSAGE COURT`. | Must | À faire |
 | B-217A | Implémenter l'alerte V1 capot ouvert trop longtemps avec temporisation configurable, valeur initiale 10 minutes, message `A15 - CAPOT OUVERT LONG`, allumage fixe du voyant rouge, sans clignotement, et effacement automatique après fermeture stable sans maintien du voyant. | Must | À faire |
 | B-217B | Implémenter l'état IHM `MAINTENANCE - CAPOT OUVERT` et le retour automatique au mode demande après fermeture stable si aucune alarme bloquante capot dangereux n'existe. | Must | À faire |
-| B-217C | Conserver une trace minimale persistante et non bloquante de `A15 - CAPOT OUVERT LONG`, écrite au moment de l'événement et conservée après coupure, sous forme de compteur persistant plus dernier événement si simple ; horodater le dernier événement seulement si une horloge fiable existe facilement dans le MVP. Une mémoire circulaire courte est acceptable, sans historique long. | Must | À faire |
+| B-217C | Conserver une trace minimale persistante et non bloquante de `A15 - CAPOT OUVERT LONG`, écrite au moment de l'événement et conservée après coupure, sous forme de compteur persistant plus dernier événement si simple ; horodater le dernier événement seulement si la RTC DS3231 est disponible et initialisee facilement dans le MVP. Une mémoire circulaire courte est acceptable, sans historique long. | Must | À faire |
 | B-217D | Au redémarrage, redétecter `A15 - CAPOT OUVERT LONG` si l'alerte était active avant coupure et que le capot est encore ouvert ; sinon relancer la temporisation A15 si le capot est ouvert. | Must | À faire |
 | B-217E | Implémenter le mini-journal persistant V1 : compteurs par code d'événement plus dernier événement global, ou mémoire circulaire 8/16 événements si simple ; persister A15, EP_CRITIQUE, capot ouvert dangereux, lavage inefficace, redémarrage après coupure et acquittements réussis des alarmes bloquantes. | Must | À faire |
 | B-218 | Implémenter pour une V2 la logique de remontée d'état et de notifications à distance selon l'architecture retenue. | Should | V2 |
@@ -133,6 +135,7 @@
 | B-232 | Implémenter la détection capteurs incohérents, le comportement au démarrage avec niveau bas et la mise en sécurité associée, dont EP_CRITIQUE actif avec EP_LAVAGE inactif comme défaut bloquant. | Must | À faire |
 | B-233 | Implémenter les alertes de commande incohérente UV, absence anormale de lavage, redémarrages fréquents et sorties commandées trop longtemps. | Should | V1.1 |
 | B-234 | Etendre les statistiques avec temps de retour EP_LAVAGE, tentatives par lavage, activations EP_CRITIQUE, températures min/max/moyenne et historiques capot. | Should | V1.1 |
+| B-235 | Integrer le temps civil RTC DS3231 pour les logs, statistiques, dernier lavage, test journalier et programmation horaire, avec heure inconnue si RTC absente/non initialisee et sans utiliser la RTC pour les temporisations de securite. | Should | V1.1/V2 |
 
 ## Documentation et validation
 

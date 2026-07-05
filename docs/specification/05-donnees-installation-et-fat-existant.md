@@ -127,11 +127,13 @@ Le moteur doit rester hors eau et protège des projections. Le courant de blocag
 | Alimentation 12 VDC | Mean Well NDR-120-12, 120 W, 10 A, rail DIN | Protegee par disjoncteur 4 A courbe C |
 | Distribution 12 VDC | Porte-fusibles ATO 4 emplacements | Depart moteur 7,5 A, automate 3 A, capteurs/boutons 1 A, ecran/voyants/accessoires 1 A ; adaptateur rail DIN imprime en 3D probable selon modele retenu |
 | Plateforme controle | KC868-A32 | Base automate V1 |
+| Ecran local | LCD 2004 / 20x4 I2C 3,3 V, fond bleu | Raccordement cible sur port d'extension KC868-A32 via `GPIO32` / `GPIO33` en I2C logiciel ; validation banc requise avant cablage final |
+| Horloge temps reel | Module RTC DS3231 I2C 3,3 V avec batterie rechargeable | Source locale d'heure fiable V2 ; adresse attendue `0x68`, raccordement cible sur le bus I2C logiciel du port d'extension KC868-A32 si cohabitation validee avec le LCD 2004 |
 | Pompe rincage | Disjoncteur 10 A courbe C + contacteur Schneider TeSys LC1D12P7, bobine 230 VAC | La bobine est pilotee par un relais de l'automate |
 | Prises local | Disjoncteur 16 A courbe C | 1 prise bulleur bassin, 1 prise bulleur filtre bio, 2 prises maintenance ponctuelle |
 | Pompe filtration | Disjoncteur 6 A courbe C + contacteur TOMZN TOCT1-25Z 25 A, bobine 12 VDC | Depart separe car organe essentiel |
 | UV, pompe decoration, mise a niveau | Disjoncteur 6 A courbe C + contacteurs TOMZN TOCT1-25Z 25 A, bobine 12 VDC | Separés du depart filtration |
-| Eclairage exterieur | Disjoncteur a choisir | Depart supplementaire dans le coffret pour lumieres exterieures. Circuit hors fonctions bassin, sans commande ni securite FAT |
+| Eclairage exterieur | Disjoncteur 6 A courbe C | Depart supplementaire dans le coffret pour 6 spots LED exterieurs de 3 W avec detecteurs, environ 10 a 15 m de cable. Circuit hors fonctions bassin, sans commande ni securite FAT |
 
 ### Pompe de rinçage
 
@@ -215,7 +217,7 @@ Le point de fonctionnement nominal recherche reste 8 à 10 m3/h, mais la pompe p
 - La pompe de filtration dispose d'un départ séparé de l'UV, de la pompe décoration et de la mise à niveau afin de limiter les coupures communes entre organes essentiels et secondaires.
 - Le depart cote maison vers le coffret bassin devra etre protege par un disjoncteur dedie 20 A, non encore achete ni cable.
 - Le TeSys VCDN20 trouve en atelier est un candidat de coupure locale cadenassable du coffret FAT, place avant l'interrupteur differentiel local, a valider au schema electrique final.
-- Un depart eclairage exterieur supplementaire doit etre reserve dans le coffret ; il reste hors fonctions bassin et son disjoncteur est a choisir.
+- Un depart eclairage exterieur supplementaire doit etre reserve dans le coffret ; il reste hors fonctions bassin et il est protege par disjoncteur 6 A courbe C.
 - Le débit de rinçage de référence ne doit pas être confondu avec le débit maximal de 60 L/min, car le point de fonctionnement dépendra des buses déjà fabriquées et des pertes de charge.
 - Le support du FAT devra fixer la cote altimetrique du trop-plein par rapport au niveau hydraulique du bassin. Cette cote doit être mesurée sur site avant fabrication du support ; elle ne doit pas être inventee en spécification.
 - La pompe décoration aspirant au même endroit que la pompe principale, elle doit suivre les mêmes règles de sécurité hydraulique.
@@ -280,14 +282,14 @@ Le point de fonctionnement nominal recherche reste 8 à 10 m3/h, mais la pompe p
 - Installer l'alimentation Mean Well NDR-120-12 et le porte-fusibles ATO 4 departs.
 - Choisir, acheter et cabler le disjoncteur 20 A dedie cote maison pour alimenter le coffret bassin.
 - Integrer le TeSys VCDN20 comme sectionneur local cadenassable avant l'interrupteur differentiel du coffret, si son etat est valide.
-- Prevoir le depart eclairage exterieur dans le coffret et choisir son disjoncteur.
+- Prevoir le depart eclairage exterieur dans le coffret avec disjoncteur 6 A courbe C.
 - Concevoir le support imprime 3D du relais HELLA pour montage rail DIN.
 - Concevoir l'adaptateur imprime 3D du porte-fusibles ATO pour montage rail DIN si le composant retenu n'est pas DIN natif.
 - Concevoir et integrer toute la partie intelligence et pilotage du FAT.
 - Ajouter un capot transparent de fermeture avec capteur de détection d'ouverture.
 - Ajouter une sonde de température d'eau maintenable dans une eau représentative : arrivée gravitaire avant pompe/UV ou bassin en zone brassée.
 - Ajouter une sonde de température ambiante hors coffret, sur support ventilé et représentatif de l'air du local.
-- Définir une IHM locale permettant de remonter clairement le statut du système.
+- Integrer l'IHM locale retenue : LCD 2004 / 20x4 I2C 3,3 V, commandes physiques et voyants complémentaires.
 - Prévoir une extension Wi-Fi V2 de remontée à distance de l'état et des alarmes sans remplacement de la plateforme principale.
 - Prévoir pour une V2 les notifications immédiates actionnables et leur politique anti-repetition : apparition, rappel rare et retour à la normale.
 - Prévoir pour une V2 une synthèse quotidienne de fonctionnement et la possibilité de la désactiver.
@@ -318,8 +320,8 @@ Les choix de principe sont maintenant tranchés pour le MVP, sauf les cotes de n
 - Référence finale du disjoncteur 20 A dedie cote maison et validation de la liaison jusqu'au coffret bassin.
 - Référence finale de l'interrupteur différentiel 2P 30 mA 40 A, type A.
 - Cablage final de l'interrupteur-sectionneur cadenassable TeSys VCDN20 avant le differentiel local si reutilise.
-- Référence finale du disjoncteur pour l'eclairage exterieur et separation claire avec les fonctions bassin.
+- Référence finale materielle du disjoncteur 6 A courbe C pour l'eclairage exterieur, section du cable et separation claire avec les fonctions bassin.
 - Références finales des sondes de température eau et local.
-- Référence finale de l'écran ou petit afficheur local.
+- Validation banc du LCD 2004 / 20x4 I2C 3,3 V : adresse, contraste, retroeclairage, lisibilite et niveaux logiques `SDA` / `SCL`.
 - Validation physique de l'ordre EP_LAVAGE au-dessus de EP_CRITIQUE, et des règles d'incohérence associées.
 - Mesure empirique de la consommation d'eau de rinçage après mesure du débit réel et des durées de cycle.

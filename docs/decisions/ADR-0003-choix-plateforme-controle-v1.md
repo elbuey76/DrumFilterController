@@ -41,6 +41,8 @@ La tension de commande V1 est fixee a 12 VDC. L'alimentation basse tension reten
 
 L'horodatage fiable n'est pas une fonction obligatoire du MVP, mais le choix V1 ne doit pas empecher son ajout en V2. Une plateforme candidate doit donc documenter une voie réaliste vers une heure fiable sans remplacement matériel principal. Cette voie ne doit pas reposer uniquement sur Internet : une RTC, un temps local conserve, un module temps ou une capacité equivalente doit rester possible, avec synchronisation réseau seulement comme amelioration si elle est disponible.
 
+La voie d'implementation retenue pour cette heure fiable est documentee par [ADR-0005 - Choix de la RTC pour l'heure fiable](ADR-0005-choix-rtc-heure-fiable.md) : module RTC DS3231 I2C 3,3 V avec batterie rechargeable, synchronisation reseau eventuelle seulement en complement.
+
 La connectivité active n'est pas une fonction obligatoire du MVP, mais le matériel commandé pour le MVP doit être prêt pour une V2 Wi-Fi. Ethernet n'est pas disponible sur site, BLE seul n'a pas la portée nécessaire et SMS n'est pas retenu par défaut pour des raisons de coût. Une plateforme sans Wi-Fi natif doit donc permettre l'ajout propre d'un module Wi-Fi sans remplacement de la plateforme principale.
 
 ## Consequences
@@ -49,4 +51,6 @@ La connectivité active n'est pas une fonction obligatoire du MVP, mais le maté
 - Les choix matériels MVP doivent être considérés comme définitifs pour la base V1/V2 ; les validations restantes servent à figer le câblage, les protections, les réglages et l'implantation, pas à commander une plateforme d'essai différente.
 - Les sorties de puissance ne sont pas raccordees directement aux charges secteur : elles pilotent des contacteurs ou relais adaptes.
 - Les entrées capteurs, boutons, écran et voyants doivent être vérifies contre les interfaces exactes du KC868-A32 avant cablage final.
+- L'ecran local V1 retenu est un LCD 2004 / 20x4 I2C 3,3 V, raccorde de preference sur le port d'extension du KC868-A32 avec `GPIO32` / `GPIO33` en I2C logiciel, afin de ne pas ajouter de peripherique sur les bus I2C internes des relais et entrees.
+- L'heure fiable V2 est couverte par une RTC DS3231 I2C 3,3 V avec batterie rechargeable ; le schema doit prevoir son raccordement, de preference sur le bus I2C logiciel du port d'extension si la validation banc confirme la cohabitation avec l'ecran.
 - La question n'est plus de choisir entre automate compact, module industriel DIN et carte microcontrôleur, mais de documenter proprement les interfaces du KC868-A32.

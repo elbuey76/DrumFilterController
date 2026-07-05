@@ -26,3 +26,4 @@ Copier le fichier `_template.md` pour créer une nouvelle decision.
 2. [ADR-0002 - Dimensionner la pompe principale sur une pompe variable avec marge](ADR-0002-dimensionnement-pompe-filtration-principale.md)
 3. [ADR-0003 - Choix de la plateforme de contrôle V1](ADR-0003-choix-plateforme-controle-v1.md)
 4. [ADR-0004 - Architecture electrique V1](ADR-0004-architecture-electrique-v1.md)
+5. [ADR-0005 - Choix de la RTC pour l'heure fiable](ADR-0005-choix-rtc-heure-fiable.md)

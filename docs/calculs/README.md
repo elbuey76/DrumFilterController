@@ -21,3 +21,4 @@ NC-0002-titre-court.md
 1. [Dimensionnement de la pompe de filtration principale](NC-0001-dimensionnement-pompe-filtration.md)
 2. [Dimensionnement de la motorisation du tambour](NC-0002-dimensionnement-motorisation-tambour.md)
 3. [Dimensionnement de la pompe de rinçage](NC-0003-dimensionnement-pompe-rincage.md)
+4. [Dimensionnement du depart eclairage exterieur](NC-0004-dimensionnement-eclairage-exterieur.md)

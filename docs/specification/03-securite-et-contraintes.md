@@ -66,7 +66,7 @@ Le contrôleur doit separer la basse tension de commande de la puissance moteur/
 | S-055 | Un capot ouvert hors action dangereuse doit rester un état informatif de maintenance sans acquittement. | Must | L'IHM affiche `MAINTENANCE - CAPOT OUVERT`; les sorties dangereuses restent inhibées. |
 | S-056 | Après fermeture stable du capot, la reprise automatique vers le mode demande doit être autorisée uniquement s'il n'existe pas d'alarme capot dangereux bloquante. | Must | Si le capot s'est ouvert pendant une action dangereuse, la fermeture ne suffit pas : un acquittement valide reste requis. |
 | S-057 | Le coffret FAT devrait disposer d'une coupure locale visible et cadenassable pour maintenance. | Should | Candidat disponible : Schneider Electric TeSys VCDN20, interrupteur-sectionneur 3P 690 V 20 A a poignee rouge cadenassable. A utiliser uniquement comme organe de coupure/consignation avant l'interrupteur differentiel du coffret, pas comme protection differentielle ou surintensite. Validation obligatoire du schema phase/neutre, du calibre amont 20 A, de l'etat du composant et de son montage en coffret. |
-| S-058 | Le circuit d'eclairage exterieur ajoute dans le coffret doit rester distinct des fonctions bassin. | Should | Les lumieres exterieures n'ont pas de role dans la securite ni dans l'automatisme FAT. Elles doivent avoir un depart protege dedie, avec disjoncteur a choisir selon le schema final et les luminaires retenus. |
+| S-058 | Le circuit d'eclairage exterieur ajoute dans le coffret doit rester distinct des fonctions bassin. | Should | Les lumieres exterieures n'ont pas de role dans la securite ni dans l'automatisme FAT. Elles sont protegees par un depart dedie avec disjoncteur 6 A courbe C. Hypothese retenue : 6 spots LED de 3 W, soit 18 W et environ 0,08 A sous 230 VAC, avec detecteurs et environ 10 a 15 m de cable. |
 
 ## Politique de repli en niveau bas
 
@@ -119,7 +119,7 @@ Le mode dégradé doit être conçu pour maintenir le bassin en vie tout en sign
 - les prises classiques du local sont protegees par un disjoncteur 16 A courbe C ;
 - la pompe de filtration est protegee par un depart dedie 6 A courbe C ;
 - l'UV, la pompe decoration et la mise a niveau sont sur un depart 6 A courbe C separe de la filtration ;
-- un depart supplementaire pour lumieres exterieures est a prevoir dans le coffret, avec disjoncteur a choisir et sans interaction avec la logique bassin ;
+- un depart supplementaire pour lumieres exterieures est a prevoir dans le coffret, protege par disjoncteur 6 A courbe C et sans interaction avec la logique bassin ;
 - les departs 12 VDC sont proteges par fusibles ATO : moteur tambour 7,5 A, automate 3 A, capteurs/boutons 1 A, ecran/voyants/accessoires 1 A.
 
 Le capteur de température ambiante doit mesurer l'air du local de filtration. Il ne doit donc pas être considere comme une simple mesure interne du coffret, sauf si l'implantation retenue permet de représenter correctement l'ambiance du local.
