@@ -11,7 +11,7 @@
 | F-005 | Le système doit imposer un délai minimal entre deux cycles automatiques. | Must | Protection contre un capteur instable ou un filtre saturé. |
 | F-006 | Le système doit proposer un mode manuel. | Must | Le détail des commandes manuelles et des protections associées est précise par F-022 et F-023. |
 | F-007 | Le système doit signaler les états marche, cycle en cours et défaut. | Should | Voyants, écran ou interface réseau selon architecture. |
-| F-008 | Le système devrait journaliser les cycles et défauts au-delà du mini-journal persistant V1 obligatoire. | Could | Utile pour diagnostic avancé mais non bloquant au prototype. Le socle persistant minimal de sécurité est défini par F-114 a F-116. |
+| F-008 | Le système devrait journaliser les cycles et défauts au-delà du mini-journal persistant V1 obligatoire. | Could | Utile pour diagnostic avancé mais non bloquant au MVP. Le socle persistant minimal de sécurité est défini par F-114 a F-116. |
 | F-009 | Le système doit commander un seuil de niveau bas de sécurité distinct du seuil de lavage. | Must | Ce seuil protège l'installation en cas de manque d'eau. |
 | F-010 | Le système doit couper la pompe principale de filtration lorsque le seuil bas est atteint. | Must | Le seuil bas V1 correspond à EP_CRITIQUE confirmé. Évite de vider le bassin et protège la pompe contre la marche à sec. |
 | F-011 | Le système doit couper la pompe décoration lorsque le seuil bas est atteint. | Must | La pompe décoration suit exactement la même sécurité hydraulique que la filtration, car elle aspire au même endroit. |

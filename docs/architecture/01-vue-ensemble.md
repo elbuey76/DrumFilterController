@@ -24,6 +24,6 @@ flowchart LR
 
 - Garder la logique de commande en basse tension.
 - Isoler clairement la partie puissance.
-- Préférer des modules du commerce pour le prototype.
+- Préférer des modules du commerce pour le MVP.
 - Documenter toute décision structurante dans le journal de décisions.
 - Organiser le firmware autour d'une machine à états testable.

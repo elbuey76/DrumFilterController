@@ -10,7 +10,7 @@ Le projet doit aboutir a :
 
 - une definition claire des fonctions attendues ;
 - une architecture matérielle et logicielle documentée ;
-- un prototype validable sur table puis sur installation réelle ;
+- un MVP validable sur table puis sur installation réelle ;
 - une base de firmware maintenable ;
 - une documentation suffisante pour câblage, configuration, tests et dépannage ;
 - une stratégie de mise en sécurité des équipements auxiliaires en cas de niveau bas ;
@@ -53,7 +53,7 @@ La frontiere V1 est volontairement stricte : lavage automatique, sécurités niv
 
 ## Hors périmètre initial
 
-Les points suivants sont envisagéables, mais ne doivent pas bloquer le premier prototype :
+Les points suivants sont envisagéables, mais ne doivent pas bloquer le MVP :
 
 - application mobile ;
 - connectivité distante active et notifications associées ;

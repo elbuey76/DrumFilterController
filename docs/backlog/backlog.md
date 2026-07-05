@@ -4,10 +4,10 @@
 
 | ID | Element | Priorité | Statut |
 | --- | --- | --- | --- |
-| B-001 | Consolider par essais les caractéristiques du moteur de tambour retenu Fyearfly 12 VDC 10 rpm : courant a vide, courant en charge, courant au démarrage, blocage, couple utile et vitesse finale tambour. | Must | En cours |
-| B-002 | Consolider les caractéristiques de la pompe de rinçage VEVOR / Leo EKJ-802S et mesurer son point de fonctionnement réel aux buses. | Must | En cours |
-| B-003 | Définir l'implantation des deux capteurs CR18-8DN V1, EP_LAVAGE et EP_CRITIQUE, en prévoyant une réserve mécanique pour un éventuel troisieme capteur futur si les essais le justifiént. | Must | En cours |
-| B-004 | Définir l'environnement du coffret et l'indice de protection attendu. | Must | En cours |
+| B-001 | Consolider sur le montage MVP les caractéristiques du moteur de tambour retenu Fyearfly 12 VDC 10 rpm : courant a vide, courant en charge, courant au démarrage, comportement en blocage avec courant annoncé 6,5 A, couple utile et vitesse finale tambour. | Must | En cours |
+| B-002 | Consolider les caractéristiques de la pompe de rinçage VEVOR / Leo EKJ-802S et mesurer son point de fonctionnement réel sur la rampe et les buses déjà achetées et fabriquées. | Must | En cours |
+| B-003 | Définir l'implantation des deux capteurs CR18-8DN V1, EP_LAVAGE et EP_CRITIQUE, en prévoyant une réserve mécanique pour un éventuel troisieme capteur futur si les essais le justifiént. | Must | Tranchée |
+| B-004 | Définir l'environnement du coffret et l'indice de protection attendu. | Must | Tranchée |
 | B-005 | Définir les cotes exactes du niveau normal côté sale, du niveau normal côté propre, du seuil de lavage et du niveau bas sur le tube de report en 32 mm. | Must | À faire |
 | B-006 | Mesurer sur site la hauteur finale du support du FAT par rapport au niveau hydraulique du bassin avant fabrication. | Must | À faire |
 | B-007 | Determiner si la logique de lavage repose sur une cote simple côté propre, sur une comparaison sale/propre, ou sur une combinaison des deux. | Must | Tranchée |
@@ -25,7 +25,7 @@
 | B-018 | Retenir une IHM locale V1 avec écran texte ou petit afficheur et commandes physiques essentielles. | Must | Tranchée |
 | B-019 | Retenir les voyants complémentaires V1 : MARCHE vert et ALARME rouge obligatoires, LAVAGE jaune ou ambre optionnel, en gardant l'écran comme support principal de lecture des états. | Should | Tranchée |
 | B-020 | Retenir pour une V2 une remontée distante Wi-Fi avec notifications actionnables : EP_CRITIQUE, capteurs incohérents, capot dangereux, A15, lavage inefficace, retour courant après coupure et perte sonde température persistante. | Should | Tranchée |
-| B-021 | Choisir pour le MVP une plateforme compatible Wi-Fi V2 sans remplacement matériel principal ; Ethernet non requis, BLE seul insuffisant et SMS non retenu par défaut. | Must | Tranchée |
+| B-021 | Choisir pour le MVP une plateforme définitive compatible Wi-Fi V2 sans remplacement matériel principal ; Ethernet non requis, BLE seul insuffisant et SMS non retenu par défaut. | Must | Tranchée |
 | B-023 | Définir le test journalier automatique V1.1 avec fenêtre configurable par défaut 11h-15h, report automatique si sécurité active, capot ouvert, EP_CRITIQUE, lavage en cours ou alarme bloquante, puis critères de succès et diagnostic attendu. | Should | Tranchée |
 | B-024 | Retenir pour V1.1 une indexation tambour au temps, par courte rotation configurable après certains lavages réussis ou périodiquement, sans angle précis tant qu'aucun capteur position n'est retenu. | Should | Tranchée |
 | B-025 | Définir les statistiques de lavage V1.1 en separant lavages automatiques réussis, tests, échecs et interruptions ; restitution locale simple : compteurs jour, dernier lavage et nombre d'échecs. | Should | Tranchée |
@@ -42,11 +42,11 @@
 | B-036 | Documenter que la pompe décoration suit les mêmes sécurités que la filtration car elle aspire au même endroit. | Must | Tranchée |
 | B-037 | Prévoir une protection matérielle obligatoire contre la surintensité ou le blocage du moteur tambour ; remonter l'information à l'automate seulement si le module choisi le permet simplement. | Must | Tranchée |
 | B-038 | Ne pas dépendre d'une fonction de parking ou de position moteur en V1 ; garder l'indexation au temps en V1.1 sauf ajout futur d'un capteur de position. | Should | Tranchée |
-| B-039 | Mesurer le débit de rinçage de référence aux buses après montage réel de la pompe, de la rampe et des pertes de charge ; utiliser la courbe pompe seulement comme estimation provisoire. | Must | Tranchée |
+| B-039 | Mesurer le débit de rinçage de référence sur les buses et la rampe déjà fabriquées après montage réel de la pompe et prise en compte des pertes de charge ; utiliser la courbe pompe seulement comme estimation provisoire. | Must | Tranchée |
 | B-040 | Ne pas ajouter de pressostat, débitmètre ou retour courant pour diagnostiquer le rinçage en V1 ; reporter ces capteurs V1.1/V2 si les essais montrent trop d'ambiguite. | Should | Tranchée |
 | B-041 | Integrer au choix de plateforme V1 la capacité d'heure fiable V2 sans remplacement matériel principal, par RTC, temps local conserve, module temps, synchronisation réseau ou equivalent, sans dépendance exclusive à Internet. | Must | Tranchée |
 | B-042 | Retenir l'UV hors tambour, après la pompe principale, asservi a filtration autorisée plus absence EP_CRITIQUE, sans coupure sur défaut FAT non critique. | Must | Tranchée |
-| B-043 | Choisir le type et le calibre de l'interrupteur differentiel 30 mA en tete de tableau, avec coordination des departs aval et contraintes du local humide. | Must | À faire |
+| B-043 | Retenir en tete de tableau un interrupteur differentiel 2P 30 mA, 40 A, type A, coherent avec les charges reelles du MVP et la notice AquaForte DM-Vario qui demande 30 mA sans imposer type F ou B. | Must | Tranchée |
 | B-044 | Retenir une distribution 230 VAC avec departs : 4 A courbe C alimentation 12 V, 10 A courbe C pompe rincage, 16 A courbe C prises local, 6 A courbe C pompe filtration, 6 A courbe C UV/pompe decoration/mise a niveau. | Must | Tranchée |
 | B-045 | Retenir une distribution 12 VDC Mean Well NDR-120-12 + porte-fusibles ATO 4 departs : moteur 7,5 A, automate 3 A, capteurs/boutons 1 A, ecran/voyants/accessoires 1 A. | Must | Tranchée |
 
@@ -56,7 +56,7 @@
 | --- | --- | --- | --- |
 | B-050 | Réaliser les ouvertures dans le tuyau servant de tambour après validation du calcul de surface utile. | Must | À faire |
 | B-051 | Poser la maille inox autour du tambour. | Must | À faire |
-| B-052 | Raccorder la rampe d'aspersion de 32 mm à la pompe de rinçage. | Must | À faire |
+| B-052 | Raccorder la rampe d'aspersion de 32 mm déjà fabriquée à la pompe de rinçage. | Must | À faire |
 | B-053 | Percer la prise d'eau de la pompe de rinçage sur une paroi du filtre. | Must | À faire |
 | B-054 | Percer et equiper la vidange du filtre. | Must | À faire |
 | B-055 | Poser le joint a levre de séparation eau propre / eau sale autour du tambour. | Must | À faire |
@@ -69,24 +69,25 @@
 | ID | Element | Priorité | Statut |
 | --- | --- | --- | --- |
 | B-101 | Documenter le choix de plateforme V1 KC868-A32 et vérifier ses interfaces exactes avec capteurs, boutons, relais, contacteurs, écran et voyants. | Must | Tranchée |
-| B-102 | Définir les entrées/sorties nécessaires au prototype, compatibles avec les capteurs CR18-8DN NPN 12-24 VDC. | Must | Tranchée |
+| B-102 | Définir les entrées/sorties nécessaires au MVP, compatibles avec les capteurs CR18-8DN NPN 12-24 VDC. | Must | Tranchée |
 | B-100 | Geler le nombre minimal d'entrées/sorties V1 avant de rechercher et comparer des références matérielles candidates. | Must | Tranchée |
 | B-103 | Réaliser un schéma de câblage de principe intégrant differentiel 30 mA, disjoncteurs, Mean Well NDR-120-12, KC868-A32, fusibles ATO, relais HELLA, contacteur Schneider et contacteurs TOMZN. | Must | À faire |
-| B-104 | Monter un prototype basse tension avec boutons, voyant MARCHE vert, voyant ALARME rouge et voyant LAVAGE optionnel jaune ou ambre. | Should | À faire |
+| B-104 | Monter le coffret basse tension MVP avec boutons, voyant MARCHE vert, voyant ALARME rouge et voyant LAVAGE optionnel jaune ou ambre. | Should | À faire |
 | B-105 | Réserver des sorties distinctes pour les équipements à couper sur niveau bas, sans integrer les bulleurs branchés directement sur le 220 V. | Must | À faire |
 | B-106 | Définir l'architecture de contacteurs ou relais permettant la coupure de sécurité des équipements controles : HELLA moteur tambour, Schneider pompe rincage, TOMZN filtration/UV/deco/mise a niveau. | Must | Tranchée |
-| B-107 | Définir l'interface électrique des entrées pour lecture fiable des capteurs CR18-8DN 3 fils. | Must | À faire |
+| B-107 | Définir l'interface électrique des entrées pour lecture fiable des capteurs CR18-8DN 3 fils : sortie NPN directe vers entrée optocouplée KC868-A32, marron +12 VDC, bleu 0 V commun, noir vers `INPUT_Dx`, avec validation banc avant câblage final. | Must | Tranchée |
 | B-108 | Prévoir un sélecteur physique simple AUTO / MAINTENANCE et des boutons physiques momentanés pour TEST_LAVAGE, RESET_ALARME, MANU_TAMBOUR et MANU_RINCAGE. | Must | Tranchée |
 | B-109 | Prévoir l'entrée matérielle nécessaire pour la sonde de température bassin et son câblage. | Must | À faire |
 | B-110 | Prévoir l'entrée matérielle nécessaire pour la sonde de température ambiante local et son câblage. | Must | À faire |
 | B-111 | Prévoir les composants nécessaires pour l'IHM locale V1 : écran texte ou petit afficheur, bouton reset alarme dédié, commandes physiques essentielles, voyant MARCHE vert, voyant ALARME rouge et voyant LAVAGE optionnel. | Must | À faire |
 | B-112 | Prévoir pour une V2 les composants et interfaces nécessaires à la remontée distante retenue module radio, réseau ou passerelle. | Should | V2 |
 | B-113 | Garder le capteur de position tambour comme option V2 ou V1.1 tardive, seulement si l'indexation au temps pose problème ou si une position reproductible devient nécessaire. | Should | Tranchée |
-| B-114 | Valider la commande 12 V DC du moteur tambour avec fusible ATO 7,5 A, relais HELLA 12 V 15 A inductif et alimentation Mean Well NDR-120-12. | Must | En cours |
+| B-114 | Valider la commande 12 V DC du moteur tambour avec fusible ATO 7,5 A, relais HELLA 12 V 15 A inductif, alimentation Mean Well NDR-120-12 et courant de blocage annoncé 6,5 A. | Must | En cours |
 | B-115 | Valider le sens de rotation, la connectique et la fixation mécanique du motorreducteur Fyearfly 12 VDC 10 rpm avant câblage définitif. | Must | À faire |
 | B-116 | Valider la commande secteur de la pompe de rinçage EKJ-802S avec disjoncteur 10 A courbe C, contacteur Schneider LC1D12P7 bobine 230 VAC, terre et protection. | Must | En cours |
 | B-117 | Concevoir et imprimer un support rail DIN pour le relais HELLA automobile, avec maintien mécanique, accès aux cosses et repérage clair. | Should | À faire |
 | B-118 | Verifier la compatibilite des relais KC868-A32 avec les bobines des contacteurs TOMZN 12 VDC, la bobine Schneider 230 VAC et la commande du relais HELLA. | Must | À faire |
+| B-119 | Concevoir et imprimer si necessaire un adaptateur rail DIN pour le porte-fusibles ATO 4 emplacements, avec maintien mécanique, accès aux fusibles et repérage des departs. | Should | À faire |
 
 ## Firmware
 

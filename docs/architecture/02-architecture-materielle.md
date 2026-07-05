@@ -20,9 +20,10 @@
 | Capteurs de niveau | CR18-8DN | Imposent une interface d'entrée compatible NPN, 12-24 VDC, 3 fils |
 | Plateforme de contrôle | KC868-A32 | Fixe la base des entrées/sorties V1 et la logique de cablage |
 | Alimentation 12 VDC | Mean Well NDR-120-12, 120 W, 10 A, rail DIN | Alimente automate, capteurs, IHM, accessoires et moteur tambour via départs fusibles |
+| Porte-fusibles 12 VDC | Porte-fusibles ATO 4 emplacements | Distribution 12 VDC ; adaptateur rail DIN imprime en 3D probable selon modele retenu |
 | Moteur tambour | Motorreducteur Fyearfly 12 VDC 10 rpm | Simplifie la vitesse de tambour par rapport au moteur d'essuie-glace candidat |
 | Relais moteur tambour | HELLA 4RD 933 332-551, 12 V, charge inductive 15 A | Commande le moteur tambour ; support rail DIN a imprimer en 3D |
-| Pompe de rinçage | VEVOR / Leo EKJ-802S, 220-240 VAC, 800 W indique projet | Impose une commande secteur adaptée à une charge moteur et une mesure du débit réel aux buses |
+| Pompe de rinçage | VEVOR / Leo EKJ-802S, 220-240 VAC, 800 W indique projet | Impose une commande secteur adaptée à une charge moteur et une mesure du débit réel sur la rampe et les buses déjà achetées et fabriquées |
 | Contacteur pompe de rinçage | Schneider Electric TeSys LC1D12P7, 3P, AC-3 12 A, bobine 230 VAC | Piloté par un relais du KC868-A32 pour commander la pompe de rinçage |
 | Contacteurs filtration, UV, décoration, mise à niveau | TOMZN TOCT1-25Z, 25 A, bobine 12 VDC | Pilotés en 12 VDC par les relais de l'automate selon les sécurités |
 
@@ -41,13 +42,13 @@ L'installation cible a contrôler comprend un FAT avec :
 
 La rotation du tambour est retenue avec un motorreducteur Fyearfly 12 VDC 10 rpm, en fonctionnement intermittent pendant les cycles de lavage, tests ou commandes manuelles autorisées. Ce choix remplace le candidat initial de moteur d'essuie-glace SWF 403.835 et évite de dépendre d'une réduction mécanique importante pour atteindre une vitesse exploitable.
 
-Le rinçage est envisagé avec une pompe de surface VEVOR / Leo EKJ-802S en 220-240 VAC. La courbe disponible indique environ 3,6 m3/h a très faible hauteur utile et environ 2,4 m3/h à 21 m ; le débit effectif aux buses devra être mesure sur la rampe réelle.
+Le rinçage est envisagé avec une pompe de surface VEVOR / Leo EKJ-802S en 220-240 VAC. La rampe d'aspersion 32 mm et les buses sont déjà achetées et fabriquées ; elles font donc partie du périmètre matériel MVP. La courbe disponible indique environ 3,6 m3/h a très faible hauteur utile et environ 2,4 m3/h à 21 m ; le débit effectif devra être mesuré sur cette rampe réelle.
 
 Le FAT sera installe dans un local de filtration maconne, isole en XPS 5 cm, sans pluie directe sur le FAT. Un capot transparent relevable est prévu au-dessus du petit batiment pour permettre de voir le tambour tourner sans ouvrir le FAT ; ce capot et le couvercle transparent désignent la même pièce physique. Sa matiere et son niveau d'isolation restent à définir.
 
 Ces données doivent être prises en compte pour les choix de capteurs, l'implantation du niveau de lavage côté eau propre, l'ajout d'une mesure de température bassin, l'ajout d'une mesure de température ambiante local et les contraintes de débit autour du filtre.
 
-La liste de signaux à prévoir pour le prototype est détaillée dans [04-table-entrees-sorties.md](04-table-entrees-sorties.md).
+La liste de signaux à prévoir pour le MVP est détaillée dans [04-table-entrees-sorties.md](04-table-entrees-sorties.md).
 
 ## Chaine hydraulique de référence
 
@@ -77,20 +78,20 @@ flowchart LR
 | Sous-ensemble | Interface connue | Impact de conception |
 | --- | --- | --- |
 | Tube de report de niveau | 32 mm, bouche en partie haute avec event de 1 mm | Permet une fixation protégée des deux capteurs côté eau propre EP_LAVAGE et EP_CRITIQUE, et facilite le nettoyage |
-| Capteurs de niveau | CR18-8DN, M18, distance ajustable 8 mm, sortie NPN, alimentation 12-24 VDC, 10 mA, DC 3 fils | Necessitent un support mécanique adapté et des entrées compatibles ou conditionnees |
+| Capteurs de niveau | 2 x CR18-8DN câblés en MVP, M18, distance ajustable 8 mm, sortie NPN normalement ouverte, alimentation 12-24 VDC, 10 mA max, DC 3 fils | EP_LAVAGE au-dessus de EP_CRITIQUE sur supports réglables en hauteur ; réserve mécanique non câblée possible pour un troisième capteur futur ; interface directe sur entrées digitales KC868-A32 retenue par défaut, avec validation banc obligatoire avant câblage final |
 | Goutiere de trop-plein | seuil fixe à 30,5 cm | Fixe la cote maximale exploitable pour les seuils de pilotage |
 | Support du FAT | a fabriquer | Conditionne tout le régime gravitaire par rapport au bassin |
 | Capot | à créer avec capteur d'ouverture | Ajoute une entrée de sécurité supplémentaire |
 | Joint a levre tambour | a poser | Indispensable pour separer correctement eau sale et eau propre |
 | Moteur tambour | Fyearfly 12 VDC 10 rpm | Courant réel, couple disponible, sens de rotation et fixation mécanique à valider avant schéma définitif |
 | Transmission tambour | A définir autour du motorreducteur 10 rpm | La vitesse finale tambour doit être validée en essai réel ; la réduction 3:1 du candidat SWF n'est plus l'hypothèse de base |
-| Protection moteur tambour | Fusible ATO 7,5 A sur le départ moteur et relais HELLA 12 V 15 A inductif | Le courant réel et le comportement au blocage restent à mesurer |
+| Protection moteur tambour | Fusible ATO 7,5 A sur le départ moteur et relais HELLA 12 V 15 A inductif | Courant de blocage annoncé 6,5 A d'après screenshot fournisseur ; comportement réel de protection à vérifier sur montage MVP |
 | Pompe de rinçage | VEVOR / Leo EKJ-802S, raccords 1 pouce, IPX4, classe I | Pompe 230 VAC de surface, a protéger electriquement et a maintenir hors immersion |
-| Rampe de rinçage | Tuyau 32 mm + buses | Le choix des buses fixera le point débit/pression réel de la pompe |
-| Sonde température bassin | sonde numérique étanche type DS18B20 candidate | A implanter dans le bassin ou une zone très représentative de l'eau du bassin ; alerte informative en V1 avec seuils initiaux < 4 deg C et > 28 deg C |
-| Sonde température ambiante local | sonde numérique simple candidate | Fournit une mesure représentative de l'air du local de filtration ; alerte informative en V1 avec seuils initiaux < 2 deg C et > 40 deg C |
+| Rampe de rinçage | Tuyau 32 mm + buses déjà achetés et fabriqués | Le point débit/pression réel de la pompe devra être mesuré sur cet ensemble |
+| Sonde température bassin | sonde numérique étanche type DS18B20 ou equivalent | A implanter dans une eau représentative : arrivée gravitaire avant pompe/UV ou bassin en zone brassée, ombragée et accessible ; montage protégé et démontable ; alerte informative en V1 avec seuils initiaux < 4 deg C et > 28 deg C |
+| Sonde température ambiante local | sonde numérique simple ou equivalent | Hors coffret, dans l'air du local, loin de l'alimentation, des contacteurs, des pompes, du soleil et du volume chaud sous capot ; support ventilé et accessible ; alerte informative en V1 avec seuils initiaux < 2 deg C et > 40 deg C |
 | IHM locale | écran texte ou petit afficheur, commandes physiques, voyants MARCHE et ALARME | L'écran porte le détail ; voyant MARCHE vert et voyant ALARME rouge sont retenus en V1, voyant LAVAGE jaune ou ambre optionnel |
-| Liaison distante | option V2 Wi-Fi | Le matériel MVP doit être prêt pour une V2 Wi-Fi sans remplacement de plateforme principale ; la notification ne doit pas compromettre le fonctionnement local |
+| Liaison distante | option V2 Wi-Fi | Le matériel MVP est la base définitive de la V2 et doit être prêt pour une V2 Wi-Fi sans remplacement de plateforme principale ; la notification ne doit pas compromettre le fonctionnement local |
 | Horloge fiable | capacité plateforme V2 obligatoire, implementation MVP optionnelle | La plateforme V1 doit permettre une heure fiable en V2 sans remplacement matériel principal, par RTC, temps local conserve, module temps, synchronisation réseau ou equivalent, sans dépendance exclusive à Internet |
 | Position tambour | option V1.1 à étudier | Peut aider pour l'indexation et certains diagnostics avances |
 
@@ -100,11 +101,13 @@ L'UV est retenu hors tambour dans la chaine de filtration, après la pompe princ
 
 La decision de reference est [ADR-0004 - Architecture electrique V1](../decisions/ADR-0004-architecture-electrique-v1.md).
 
+La commande matérielle visée correspond au MVP définitif, pas à une commande d'essais séparée. Les validations restantes servent à figer le schéma, les protections, les réglages et l'implantation, en conservant la même plateforme matérielle pour la V2.
+
 ### Tableau 230 VAC
 
 | Depart | Protection retenue | Equipements | Commentaire |
 | --- | --- | --- | --- |
-| Tete de tableau | Interrupteur differentiel 30 mA | Tableau local complet | Type et calibre definitifs a arbitrer en backlog. |
+| Tete de tableau | Interrupteur differentiel 2P 30 mA, 40 A, type A | Tableau local complet | Choix coherent avec les charges reelles du MVP ; la notice AquaForte DM-Vario demande 30 mA sans imposer type F ou B. |
 | Alimentation 12 VDC | Disjoncteur 4 A courbe C | Mean Well NDR-120-12 | Depart dedie au controle basse tension. |
 | Pompe de rincage | Disjoncteur 10 A courbe C | Pompe VEVOR / Leo EKJ-802S | Commande par contacteur Schneider LC1D12P7, bobine 230 VAC. |
 | Prises local | Disjoncteur 16 A courbe C | 1 prise bulleur bassin, 1 prise bulleur filtre bio, 2 prises maintenance | Les bulleurs restent hors controleur ; les prises maintenance sont reservees aux usages ponctuels. |
@@ -119,6 +122,14 @@ La decision de reference est [ADR-0004 - Architecture electrique V1](../decision
 | Automate | 3 A | KC868-A32 |
 | Capteurs et boutons | 1 A | Capteurs de niveau, capot et commandes locales |
 | Ecran, voyants, accessoires | 1 A | IHM locale, signalisation et accessoires |
+
+Le porte-fusibles ATO devra etre fixe proprement dans le coffret. Preference si l'achat reste ouvert : porte-fusibles ou repartiteur fusible DC natif rail DIN. Si le modele ATO 4 emplacements est conserve et n'a pas de fixation rail DIN native, un adaptateur imprime en 3D uniquement mecanique sera concu pour assurer le maintien, l'acces aux fusibles, l'absence de contrainte sur les cosses et le reperage des quatre departs.
+
+### Interface des capteurs CR18-8DN
+
+Les entrées digitales du KC868-A32 sont optocouplées par `EL357`. D'après le schéma KC868-A32, chaque entrée `INPUT_Dx` est alimentée par `12VIN` au travers d'une résistance série `2 kΩ` et s'active lorsque le signal terrain est ramené à `GND`. Le CR18-8DN fournit justement une sortie `NPN` collecteur ouvert : marron sur `+12 VDC`, bleu sur `0 V`, noir vers l'entrée digitale.
+
+Le câblage direct est donc retenu pour `EP_LAVAGE` et `EP_CRITIQUE`, sans relais d'interface ni conditionneur supplémentaire par défaut. Cette décision reste soumise à un test banc avec les vrais capteurs et le KC868-A32, afin de confirmer le sens logique, la stabilité de lecture, le comportement en fil coupé et l'absence de déclenchements parasites avec les longueurs de câble réelles.
 
 ### Commandes de puissance
 
@@ -170,16 +181,15 @@ flowchart TB
 
 ## Decisions matérielles a prendre
 
-- type et calibre de l'interrupteur differentiel 30 mA en tete de tableau ;
-- nombre de capteurs CR18-8DN et implantation exacte sur le tube de report ;
+- reference finale de l'interrupteur differentiel 2P 30 mA, 40 A, type A ;
+- cotes exactes EP_LAVAGE et EP_CRITIQUE sur le tube de report après mesure du niveau normal réel ;
 - courant réel, fixation et sens de rotation du motorreducteur Fyearfly 12 VDC 10 rpm ;
-- validation du fusible 7,5 A moteur tambour après mesure du courant en charge et au blocage ;
+- validation du fusible 7,5 A moteur tambour en référence au courant de blocage annoncé 6,5 A, avec mesure du courant en charge et vérification du comportement en blocage ;
 - commande secteur de la pompe de rinçage, raccordement à la terre et validation du contacteur Schneider LC1D12P7 dans le schema final ;
-- débit ou pression de rinçage de référence après essais sur la rampe et les buses ;
+- débit ou pression de rinçage de référence après mesure sur la rampe et les buses déjà fabriquées ;
 - mesure terrain de la cote support FAT avant fabrication, afin d'aligner trop-plein physique et niveau hydraulique cible du bassin ;
 - calcul final de la geometrie des ouvertures du tambour avant découpe ou perçage, avec objectif 0,20 à 0,23 m2 de surface filtrante utile ;
-- type de sonde de température bassin et implantation exacte ;
-- type de sonde de température ambiante local et implantation exacte ;
+- référence finale des sondes de température bassin et local ;
 - type d'IHM locale : LED, écran ou combinaison ;
 - nombre de voyants, couleurs et signification ;
 - architecture Wi-Fi V2 autour du KC868-A32, sans remplacement de plateforme principale ;
@@ -187,9 +197,10 @@ flowchart TB
 - besoin ou non d'un capteur de position tambour ;
 - stratégie matérielle d'indexation du tambour hors lavage pour V1.1 ;
 - methode empirique d'estimation de la consommation d'eau de rinçage pour V1.1 ou V2 ;
-- compatibilité native ou conditionnement des entrées pour capteurs NPN 12-24 VDC ;
+- validation banc de l'interface directe KC868-A32 / CR18-8DN, notamment sens logique, stabilité, rupture de fil et comportement avec longueurs de câble réelles ;
 - interface d'entrée nécessaire pour la sonde de température ;
 - interface d'entrée nécessaire pour la sonde de température ambiante ;
 - sections de cables, borniers, repérage et implantation physique des protections ;
-- niveau de protection du coffret dans un local humide non expose à la pluie directe ;
+- adaptateur rail DIN imprime en 3D du porte-fusibles ATO si le composant retenu n'est pas DIN natif ;
+- référence finale du coffret, minimum IP55, préférence IP65, avec presse-etoupes et gestion de condensation si necessaire ;
 - connecteurs et borniers.

@@ -8,22 +8,30 @@ Acceptee
 
 Le controleur du FAT doit separer proprement la distribution secteur 230 VAC, les sorties de puissance et la basse tension 12 VDC. L'installation est dans un local humide protege de la pluie directe, avec des organes essentiels pour la survie du bassin et des organes secondaires qui ne doivent pas pouvoir arreter la filtration principale en cas de defaut.
 
-Les choix ci-dessous documentent l'architecture retenue avant schema electrique detaille. Les calibres definitifs devront rester coherents avec les caracteristiques constructeur, les longueurs de cables, le coffret retenu et les regles applicables.
+Les choix ci-dessous documentent l'architecture retenue pour la commande definitive du MVP, avant schema electrique detaille. Les calibres definitifs devront rester coherents avec les caracteristiques constructeur, les longueurs de cables, le coffret retenu et les regles applicables.
 
 ## Decision
 
-Le tableau 230 VAC retient l'organisation suivante :
+L'alimentation du coffret FAT doit venir d'un depart dedie cote maison, protege par un disjoncteur 20 A. Ce disjoncteur cote maison n'est pas encore achete ni cable ; il reste a choisir avec le cable, la longueur de liaison et le tableau existant.
+
+La sequence cible est : disjoncteur 20 A cote maison, interrupteur-sectionneur local TeSys VCDN20 20 A dans le coffret bassin, interrupteur differentiel 30 mA type A 40 A, puis disjoncteurs des departs.
+
+Le tableau 230 VAC local retient l'organisation suivante :
 
 | Depart | Protection retenue | Equipements alimentes | Commentaire |
 | --- | --- | --- | --- |
-| Tete de tableau | Interrupteur differentiel 30 mA | Ensemble du tableau local | Type et calibre definitifs a arbitrer en backlog. |
+| Coupure generale locale | Schneider Electric TeSys VCDN20, interrupteur-sectionneur 3P, 690 V, 20 A, poignee rouge cadenassable | Ensemble de la partie coffret placee en aval | Utilise comme sectionneur de consignation local, place avant l'interrupteur differentiel du coffret. En monophase, couper phase et neutre avec deux poles ; le troisieme pole reste inutilise ou reserve selon schema final. |
+| Tete de tableau | Interrupteur differentiel 2P 30 mA, 40 A, type A | Ensemble du tableau local | Calibre coherent avec les charges reelles du MVP, la pompe AquaForte DM-Vario 20 000 limitee a 187 W, les prises maintenance ponctuelles et les disjoncteurs aval dimensionnes aussi pour les appels moteurs. |
 | Alimentation 12 VDC | Disjoncteur 4 A courbe C | Alimentation Mean Well NDR-120-12 | Depart dedie basse tension controle. |
 | Pompe de rincage | Disjoncteur 10 A courbe C | Pompe de rincage 230 VAC | Commandee par contacteur moteur Schneider TeSys LC1D12P7, bobine 230 VAC. |
 | Prises local | Disjoncteur 16 A courbe C | 1 prise bulleur bassin, 1 prise bulleur filtre bio, 2 prises maintenance ponctuelle | Les bulleurs restent hors controleur et hors coupure niveau critique. Les prises maintenance servent par exemple aspirateur ou pompe de relevage temporaire. |
 | Pompe filtration | Disjoncteur 6 A courbe C | Pompe principale de filtration | Depart separe car organe essentiel. |
 | UV, pompe decoration, mise a niveau | Disjoncteur 6 A courbe C | UV, pompe decoration, mise a niveau automatique | Depart separe de la filtration pour qu'un defaut sur un organe non essentiel ne coupe pas la pompe de filtration. |
+| Eclairage exterieur | Disjoncteur a choisir | Lumieres exterieures sans fonction bassin | Depart supplementaire a prevoir dans le coffret. Il est hors automatisme FAT, sans role de securite bassin, mais doit etre protege et cable comme un circuit distinct. |
 
-La basse tension V1 retient une alimentation Mean Well NDR-120-12, 12 VDC, 120 W, 10 A, montee sur rail DIN. Le 12 V est distribue par un porte-fusibles ATO 4 emplacements :
+Le TeSys VCDN20 trouve en atelier est donc retenu comme candidat de coupure locale cadenassable du coffret FAT. Il ne remplace ni l'interrupteur differentiel 30 mA ni les disjoncteurs aval. Son integration finale doit verifier l'etat du composant, le schema monophase phase/neutre, le calibre amont 20 A, le pouvoir de coupure adapte aux charges moteur et le maintien des bulleurs hors coupure automatique du controleur.
+
+La basse tension V1 retient une alimentation Mean Well NDR-120-12, 12 VDC, 120 W, 10 A, montee sur rail DIN. Le 12 V est distribue par un porte-fusibles ATO 4 emplacements. Si le modele retenu n'est pas directement compatible rail DIN, un adaptateur imprime en 3D sera prevu pour le fixer proprement dans le coffret :
 
 | Depart 12 VDC | Fusible retenu | Usage |
 | --- | --- | --- |
@@ -33,6 +41,8 @@ La basse tension V1 retient une alimentation Mean Well NDR-120-12, 12 VDC, 120 W
 | Ecran, voyants, accessoires | 1 A | IHM locale et signalisation. |
 
 La plateforme de controle retenue est un KC868-A32.
+
+Cette plateforme et cette architecture de puissance constituent la base matérielle MVP et doivent rester compatibles avec la V2 sans remplacement de la plateforme principale.
 
 La motorisation tambour retenue est un motorreducteur Fyearfly 12 VDC, 10 rpm. Elle est commandee par un relais HELLA 12 V, reference 4RD 933 332-551, avec charge inductive 15 A. Un support sera imprime en 3D pour monter proprement ce relais automobile sur rail DIN.
 
@@ -44,14 +54,20 @@ L'UV, la pompe de decoration et la pompe de filtration sont commandes par les re
 
 - La tension de commande V1 est maintenant fixee a 12 VDC.
 - Le KC868-A32 devient la base du schema de cablage et du futur firmware.
+- La commande materielle MVP est definitive dans son principe : les validations restantes portent sur le schema, les interfaces, les sections, les protections et l'implantation, pas sur une plateforme temporaire.
 - Le moteur d'essuie-glace SWF 403.835 n'est plus la reference principale de motorisation tambour ; il est remplace par le motorreducteur Fyearfly 12 VDC 10 rpm.
 - La separation des departs 230 VAC evite qu'un defaut sur l'UV, la pompe decoration ou la mise a niveau coupe directement le depart de pompe filtration.
 - Les bulleurs sont alimentes par les prises classiques du local, mais restent hors sorties controlees afin de maintenir l'aeration independante.
-- Le choix du type et du calibre de l'interrupteur differentiel 30 mA reste a documenter avant achat et cablage final.
+- Le depart cote maison doit etre cree avec un disjoncteur 20 A dedie, non encore achete ni cable.
+- L'interrupteur differentiel de tete est retenu en 2P 30 mA, 40 A, type A. La notice AquaForte DM-Vario impose une protection differentielle 30 mA mais ne demande pas de type F ou B ; le type A est donc retenu comme choix rationnel pour les charges electroniques du MVP.
+- Le TeSys VCDN20 trouve en atelier peut etre reutilise comme sectionneur de consignation local avant l'interrupteur differentiel du coffret si son etat mecanique/electrique est sain et si le schema final confirme son cablage.
+- Un depart supplementaire d'eclairage exterieur doit etre reserve dans le coffret ; son disjoncteur reste a choisir et ce circuit n'a pas de role fonctionnel dans le controleur du bassin.
 - Les valeurs de fusibles et disjoncteurs restent a confirmer par revue de schema, fiches constructeur, sections de cable, conditions de pose et essais.
+- Les adaptations imprimees en 3D pour le relais HELLA et le porte-fusibles ATO deviennent des pieces du coffret a concevoir et valider mecaniquement.
 
 ## Alternatives considerees
 
 - Garder un seul depart 230 VAC pour filtration, UV et decoration : non retenu, car un defaut sur un organe secondaire pourrait couper la filtration principale.
 - Conserver le moteur d'essuie-glace SWF 403.835 : non retenu pour la V1 documentee ici, car le motorreducteur Fyearfly 12 VDC 10 rpm simplifie la reduction mecanique et le dimensionnement de vitesse.
 - Commander directement les charges secteur par les relais de l'automate : non retenu pour les charges moteur et les departs de puissance, qui passent par des contacteurs adaptes.
+- Retenir un differentiel 63 A ou type F par defaut : non retenu, car les charges reelles du MVP ne justifient pas 63 A et la notice de la pompe de filtration variable ne demande pas de type F. Ces options restent possibles seulement si le schema amont ou un retour terrain les justifie.

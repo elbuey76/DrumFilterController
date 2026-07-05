@@ -2,9 +2,9 @@
 
 ## Objet
 
-Ce document liste les entrées et sorties à prévoir pour le prototype du contrôleur de filtre à tambour. Il sert de base au choix de la carte de contrôle, au schéma de câblage et aux essais sur table.
+Ce document liste les entrées et sorties à prévoir pour le MVP du contrôleur de filtre à tambour. Il sert de base au choix de la carte de contrôle, au schéma de câblage et aux essais sur table.
 
-La table reste une référence de conception. La plateforme KC868-A32 et les principaux organes de puissance sont retenus ; les borniers, sections de cable, repérages et validations de schema restent a figer.
+La table reste une référence de conception. La plateforme KC868-A32 et les principaux organes de puissance sont retenus pour la commande définitive du MVP ; les borniers, sections de cable, repérages et validations de schema restent a figer. La même plateforme matérielle doit rester la base de la V2.
 
 Le noyau E/S V1 est gele fonctionnellement avant le choix de plateforme matérielle. Les références exactes pourront ajouter des marges ou des E/S optionnelles, mais ne doivent pas retirer les signaux Must ci-dessous.
 
@@ -23,8 +23,8 @@ Le noyau E/S V1 est gele fonctionnellement avant le choix de plateforme matérie
 
 | ID | Nom | Priorité | État | Interface cible | Comportement attendu |
 | --- | --- | --- | --- | --- | --- |
-| DI-001 | `EP_LAVAGE` | Must | Retenu, position à régler | CR18-8DN, NPN, 12-24 VDC, 3 fils | Premier niveau côté eau propre sur le report 32 mm. Demande de lavage lorsque le niveau eau propre est abaissé. Le signal doit être filtré par retard configurable avant lancement d'un cycle, cible initiale 5 à 15 s. Si seul ce capteur est douteux, inhiber les lavages automatiques mais maintenir filtration si EP_CRITIQUE est sain. |
-| DI-002 | `EP_CRITIQUE` | Must | Retenu, position à régler | CR18-8DN, NPN, 12-24 VDC, 3 fils | Deuxième niveau côté eau propre sur le report 32 mm. Force la mise en sécurité après anti-rebond très court, cible initiale 0,5 à 2 s : arrêt filtration, arrêt UV, inhibition tambour et rinçage. Toute perte de confiance dans ce signal est bloquante hydraulique. Redémarrage seulement après retour normal stable et acquittement local valide. |
+| DI-001 | `EP_LAVAGE` | Must | Retenu, position à régler | CR18-8DN, NPN, 12-24 VDC, 3 fils, support réglable | Premier niveau côté eau propre sur le report 32 mm, placé au-dessus de EP_CRITIQUE. Demande de lavage lorsque le niveau eau propre est abaissé. Le signal doit être filtré par retard configurable avant lancement d'un cycle, cible initiale 5 à 15 s. Si seul ce capteur est douteux, inhiber les lavages automatiques mais maintenir filtration si EP_CRITIQUE est sain. |
+| DI-002 | `EP_CRITIQUE` | Must | Retenu, position à régler | CR18-8DN, NPN, 12-24 VDC, 3 fils, support réglable | Deuxième niveau côté eau propre sur le report 32 mm, placé sous EP_LAVAGE. Force la mise en sécurité après anti-rebond très court, cible initiale 0,5 à 2 s : arrêt filtration, arrêt UV, inhibition tambour et rinçage. Toute perte de confiance dans ce signal est bloquante hydraulique. Redémarrage seulement après retour normal stable et acquittement local valide. |
 | DI-003 | `CAPOT_OUVERT` | Must | À intégrer | Contact sec normalement fermé, interrupteur de sécurité ou capteur adapté au capot transparent | Prioritaire sur le sélecteur AUTO / MAINTENANCE. Le capot et le couvercle transparent désignent la même pièce physique. Capot fermé = contact fermé ; capot ouvert, fil coupé ou connecteur débranché = capot ouvert. Anti-rebond ouverture 100 à 500 ms ; fermeture stable 1 à 2 s avant réautorisation. Capot ouvert hors action dangereuse : afficher `MAINTENANCE - CAPOT OUVERT`, sans acquittement. Après fermeture stable, retour au mode demande si aucune alarme bloquante capot dangereux n'existe. Interdit le lavage automatique, coupe la rotation tambour et le rinçage. L'UV reste asservi à la filtration autorisée et à l'absence de EP_CRITIQUE. Force maintenance ou sécurité selon la situation. |
 | DI-004 | `MODE_AUTO` | Must | Retenu V1 | Sélecteur physique simple `AUTO / MAINTENANCE` | Demande d'exploitation nominale. Ne doit être acceptée que si les sécurités critiques sont saines. |
 | DI-005 | `MODE_MANUEL` | Must | Retenu V1 | Boutons momentanés locaux `MANU_TAMBOUR` et `MANU_RINCAGE` | Le mode manuel V1 est limité aux commandes FAT ponctuelles, tout en conservant les verrouillages critiques. |
@@ -36,16 +36,34 @@ Le noyau E/S V1 est gele fonctionnellement avant le choix de plateforme matérie
 | DI-011 | `MANU_POMPE_FILTRATION` | Won't for now | Exclu V1 | Non retenu pour le mode manuel V1 | La pompe principale reste pilotée par les autorisations et sécurités globales, sans commande manuelle independante sur l'IHM V1. |
 | DI-012 | `MANU_POMPE_DECO` | Won't for now | Exclu V1 | Non retenu pour le mode manuel V1 | La pompe décoration reste pilotée par les autorisations et sécurités globales, sans commande manuelle independante sur l'IHM V1. |
 | DI-013 | `MANU_UV` | Won't for now | Exclu V1 | Non retenu pour le mode manuel V1 | L'UV reste asservi à l'autorisation filtration et à l'absence de niveau critique, sans commande manuelle independante sur l'IHM V1. |
-| AI-001 | `TEMP_BASSIN` | Must | Retenu V1, technologie candidate | Sonde numérique étanche type DS18B20 ou équivalent adapté à la plateforme | Mesure une température représentative de l'eau du bassin, avec détection de perte de mesure et seuils d'alerte. Seuils initiaux configurables : basse < 4 deg C, haute > 28 deg C. Perte de mesure : `A11 - SONDE EAU ABSENTE`. Alerte informative uniquement en V1. |
-| AI-002 | `TEMP_LOCAL` | Must | Retenu V1, technologie candidate | Sonde numérique simple ou équivalent adapté à la plateforme | Mesure la température de l'air du local de filtration, avec détection de perte de mesure et seuils d'alerte. Seuils initiaux configurables : basse < 2 deg C, haute > 40 deg C. Perte de mesure : `A12 - SONDE LOCAL ABSENTE`. Alerte informative uniquement en V1. |
+| AI-001 | `TEMP_BASSIN` | Must | Retenu V1 | Sonde numérique étanche type DS18B20 ou équivalent adapté à la plateforme | Mesure une température représentative de l'eau du bassin, en arrivée gravitaire avant pompe/UV ou directement dans le bassin en zone brassée, ombragée et accessible. Détection de perte de mesure et seuils d'alerte : basse < 4 deg C, haute > 28 deg C. Perte de mesure : `A11 - SONDE EAU ABSENTE`. Alerte informative uniquement en V1. |
+| AI-002 | `TEMP_LOCAL` | Must | Retenu V1 | Sonde numérique simple ou équivalent adapté à la plateforme | Mesure la température de l'air du local de filtration, hors coffret, à distance des alimentations, contacteurs, pompes, soleil et volume chaud sous capot. Détection de perte de mesure et seuils d'alerte : basse < 2 deg C, haute > 40 deg C. Perte de mesure : `A12 - SONDE LOCAL ABSENTE`. Alerte informative uniquement en V1. |
 | DI-014 | `POSITION_TAMBOUR` | Should | Option V2 ou V1.1 tardive | Capteur de position à étudier | Non retenu par défaut en V1.1. À ajouter seulement si l'indexation au temps pose problème ou si une position reproductible devient nécessaire. Non requis et non ajoute en V1 pour rester en diagnostic indirect. |
 | AI-003 | `COURANT_TAMBOUR` | Should | Option V1.1 | Capteur de courant DC à étudier plus tard | La protection matérielle surintensité/blocage reste obligatoire en V1. Aucun capteur de courant dédié n'est ajouté en V1 ; seul un contact défaut simple fourni naturellement par le module de protection peut être exploité si cela ne complexifie pas le MVP. |
+
+### Interface électrique KC868-A32 / CR18-8DN
+
+Les capteurs de niveau `EP_LAVAGE` et `EP_CRITIQUE` sont câblés directement sur les entrées digitales du KC868-A32, sans relais d'interface par défaut.
+
+Le schéma KC868-A32 montre que chaque entrée digitale `INPUT_Dx` pilote un optocoupleur `EL357`. La LED d'entrée est alimentée depuis `12VIN` au travers d'une résistance série `2 kΩ`, et l'entrée terrain est activée lorsque le signal est ramené vers `GND`. L'entrée est donc adaptée à un contact sec vers 0 V ou à une sortie collecteur ouvert NPN capable d'absorber ce courant.
+
+La documentation CR18-8DN indique une sortie `NPN` 3 fils, normalement ouverte pour le suffixe `N`, avec alimentation `12-24 VDC`, plage admissible `10-30 VDC`, consommation capteur `10 mA` max, courant de sortie `200 mA` max et tension résiduelle `1,5 V` max. Le courant d'entrée attendu côté KC868 est de l'ordre de quelques mA avec la résistance `2 kΩ`, donc largement inférieur à la capacité de sortie du capteur.
+
+| Fil CR18-8DN | Fonction | Raccordement V1 |
+| --- | --- | --- |
+| Marron | Alimentation capteur | `+12 VDC` capteurs, départ fusible 1 A |
+| Bleu | 0 V capteur | `GND / 0 V` commun avec les entrées KC868-A32 |
+| Noir | Sortie NPN | Entrée digitale KC868-A32, par exemple `INPUT_D1` pour `EP_LAVAGE` et `INPUT_D2` pour `EP_CRITIQUE` |
+
+La logique firmware doit considérer ces entrées comme actives quand la sortie NPN tire l'entrée vers 0 V. Le sens logique exact lu via les expanseurs d'E/S du KC868-A32 doit être vérifié sur banc et inversé en logiciel si nécessaire.
+
+Cette interface directe ne rend pas les capteurs de niveau intrinsèquement fail-safe : une rupture du fil noir ou une absence d'alimentation capteur peut ressembler à un capteur inactif. La V1 compense par cohérence logicielle entre `EP_LAVAGE` et `EP_CRITIQUE`, temporisations prudentes et essais périodiques de validation, mais ne prétend pas détecter toutes les ruptures de ligne sans capteur ou diagnostic supplémentaire.
 
 ## Sorties automate et puissance
 
 | ID | Nom | Priorité | État | Interface cible | Comportement attendu |
 | --- | --- | --- | --- | --- | --- |
-| DO-001 | `CMD_TAMBOUR` | Must | Retenu, validation courant à faire | Relais KC868-A32 vers relais HELLA 4RD 933 332-551, 12 V, charge inductive 15 A ; moteur Fyearfly 12 VDC 10 rpm ; fusible 7,5 A | Commande rotation tambour pendant lavage, test ou manuel autorisé. L'indexation est une extension V1.1. Inhibée en niveau critique, capot ouvert, maintenance ou défaut critique. |
+| DO-001 | `CMD_TAMBOUR` | Must | Retenu, validation comportement à faire | Relais KC868-A32 vers relais HELLA 4RD 933 332-551, 12 V, charge inductive 15 A ; moteur Fyearfly 12 VDC 10 rpm ; fusible 7,5 A ; courant de blocage annoncé 6,5 A | Commande rotation tambour pendant lavage, test ou manuel autorisé. L'indexation est une extension V1.1. Inhibée en niveau critique, capot ouvert, maintenance ou défaut critique. |
 | DO-002 | `CMD_RINCAGE` | Must | Retenu, schema à finaliser | Relais KC868-A32 vers bobine 230 VAC d'un contacteur Schneider TeSys LC1D12P7, 3P, AC-3 12 A ; pompe VEVOR / Leo EKJ-802S | Commande pompe de rinçage pendant lavage ou test. Inhibée en niveau critique, maintenance incompatible ou défaut critique. |
 | DO-003 | `CMD_POMPE_FILTRATION` | Must | Retenu, schema à finaliser | Relais KC868-A32 vers contacteur TOMZN TOCT1-25Z 25 A, bobine 12 VDC | Autorise la pompe principale. Coupé en niveau critique, défaut critique ou stratégie de sécurité retenue. Depart 230 VAC separe de l'UV, de la pompe décoration et de la mise à niveau. |
 | DO-004 | `CMD_POMPE_DECO` | Must | Retenu, schema à finaliser | Relais KC868-A32 vers contacteur TOMZN TOCT1-25Z 25 A, bobine 12 VDC | Autorise la pompe décoration. Suit exactement la même sécurité hydraulique que la pompe principale, car elle aspire au même endroit : OFF sur EP_CRITIQUE. |
@@ -95,7 +113,7 @@ Les bulleurs de la cuve bio et du bassin ne sont pas pilotes par le contrôleur.
 | --- | --- | --- | --- |
 | Groupe coupé sécurité hydraulique | Pompe filtration, pompe décoration, UV, mise à niveau automatique | Coupé ou inhibition | Ces équipements peuvent aggraver une marche à sec, une vidange ou un fonctionnement hors eau. |
 | Groupe lavage FAT | Tambour, pompe de rinçage | Inhibe | Aucun lavage ne doit être lance en situation d'eau insuffisante. |
-| Protection moteur tambour | Fusible ATO 7,5 A, relais HELLA 12 V 15 A inductif | Coupure matérielle par fusible ; retour défaut automate non prévu en V1 | Calibre à confirmer après mesures du courant réel, notamment démarrage et blocage contrôlé. |
+| Protection moteur tambour | Fusible ATO 7,5 A, relais HELLA 12 V 15 A inductif | Coupure matérielle par fusible ; retour défaut automate non prévu en V1 | Courant de blocage annoncé 6,5 A d'après screenshot fournisseur ; calibre cohérent en première intention, comportement à vérifier par démarrage et blocage contrôlé. |
 | Protection pompe rinçage | Disjoncteur 10 A courbe C et contacteur Schneider LC1D12P7 | Coupé ou défaut selon architecture retenue | Pompe classe I à raccorder à la terre ; tenir compte du courant d'appel moteur. |
 | Groupe hors contrôleur | Bulleur cuve bio, bulleur bassin | Non piloté | Alimentation directe 220 V, hors sorties contrôlées et hors circuit coupé par niveau critique. |
 | Groupe signalisation | Voyants, écran | Maintenu si possible | La signalisation doit rester disponible pour comprendre l'état de sécurité. |
@@ -104,7 +122,7 @@ Les bulleurs de la cuve bio et du bassin ne sont pas pilotes par le contrôleur.
 
 | Circuit | Protection / organe | Remarque |
 | --- | --- | --- |
-| Tete de tableau | Interrupteur differentiel 30 mA | Type et calibre a choisir en backlog. |
+| Tete de tableau | Interrupteur differentiel 2P 30 mA, 40 A, type A | La notice AquaForte DM-Vario demande une protection 30 mA sans imposer type F ou B ; calibre 40 A coherent avec les charges reelles et les prises maintenance ponctuelles. |
 | Alimentation 12 VDC | Disjoncteur 4 A courbe C | Alimente la Mean Well NDR-120-12. |
 | Pompe de rincage | Disjoncteur 10 A courbe C | Alimente le depart pompe commande par contacteur Schneider. |
 | Prises local | Disjoncteur 16 A courbe C | 1 prise bulleur bassin, 1 prise bulleur filtre bio, 2 prises maintenance ponctuelle. |
@@ -114,15 +132,18 @@ Les bulleurs de la cuve bio et du bassin ne sont pas pilotes par le contrôleur.
 | Distribution 12 VDC automate | Fusible ATO 3 A | KC868-A32. |
 | Distribution 12 VDC capteurs et boutons | Fusible ATO 1 A | Entrees terrain et commandes locales. |
 | Distribution 12 VDC IHM et accessoires | Fusible ATO 1 A | Ecran, voyants, accessoires. |
+| Fixation porte-fusibles ATO | Adaptateur rail DIN imprime en 3D si necessaire | A prevoir selon le modele exact du porte-fusibles 4 emplacements. |
 
 ## Points à arbitrer avant schéma électrique
 
-- Choisir le type et le calibre de l'interrupteur differentiel 30 mA.
+- Choisir la référence finale de l'interrupteur differentiel 2P 30 mA, 40 A, type A.
 - Verifier la compatibilite exacte entre sorties du KC868-A32, bobines de contacteurs TOMZN 12 VDC, bobine Schneider 230 VAC et relais HELLA.
 - Mesurer le courant réel du moteur Fyearfly a vide, en charge et au blocage pour confirmer le fusible 7,5 A.
 - Definir les protections, borniers, sections de cable, reperages et cheminements separes entre basse tension et puissance.
+- Valider sur banc la lecture KC868-A32 des deux CR18-8DN : repos, détection, fil noir débranché, bleu débranché, marron débranché et inversion logique firmware éventuelle.
 - Finaliser le support rail DIN imprime en 3D du relais HELLA.
-- Confirmer la technologie des sondes de température bassin et local.
+- Finaliser l'adaptateur rail DIN imprime en 3D du porte-fusibles ATO si le modele retenu n'est pas DIN natif.
+- Confirmer les références exactes des sondes de température bassin et local.
 - Vérifier que les bulleurs alimentés directement en 220 V restent électriquement séparés des circuits coupés par le contrôleur.
 - Évaluer empiriquement la consommation d'eau de rinçage à partir des essais.
 - Conserver le capteur de position tambour comme option V2 ou V1.1 tardive tant que l'indexation au temps n'a pas montre de limité.

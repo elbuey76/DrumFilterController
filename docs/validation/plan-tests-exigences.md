@@ -141,6 +141,7 @@ Chaque fiche doit contenir au minimum :
 | F-137 | Should | Test | Plages pompe décoration | La programmation pompe décoration accepte au maximum deux plages horaires par jour et applique les mêmes plages tous les jours. | À définir |
 | F-138 | Should | Test | Interrupteur pompe décoration | L'interrupteur logiciel actif/inactif inhibe la programmation pompe décoration, notamment pour une longue période d'arrêt, sans automatisme hiver. | À définir |
 | F-139 | Must | Test | Priorité pompe décoration | Les sécurités et défauts bloquants priment sur manuel local, distant et horaire ; le manuel local prime sur distant, qui prime sur programmation horaire. | À définir |
+| B-107 | Must | Test sur banc + Inspection | Interface KC868-A32 / CR18-8DN | Les capteurs CR18-8DN alimentés en 12 VDC sont lus correctement sur les entrées digitales KC868-A32 en repos et détection ; le câblage marron +12 VDC, bleu 0 V commun, noir `INPUT_Dx` est conforme ; les cas fil noir, bleu ou marron débranché sont observés et documentés avec le sens logique firmware retenu. | À définir |
 | F-055 | Should | Test | Consommation estimée | La consommation d'eau est estimée par débit mesuré aux buses x durée de rinçage cumulée. | À définir |
 | F-056 | Should | Revue IHM | Pertes et appoint indicatifs | Les pertes vers évacuation et le besoin de remplissage sont étiquetées comme estimations indicatives sans compteur d'eau dédié. | À définir |
 | S-039 | Must | Test | Alarmes bloquantes V1 | Les alarmes concernees restent actives jusqu'à disparition de la cause et acquittement valide. | À définir |
@@ -167,6 +168,7 @@ Chaque fiche doit contenir au minimum :
 | Lavage nominal reussi | F-001 a F-005, F-039 a F-041, F-087 | Vérifier le cycle normal de lavage, y compris durée minimale 10 s, rotation résiduelle, anti-redémarrage et arrêt a retour niveau normal. |
 | Filtrage EP_LAVAGE | F-080, S-043 | Vérifier que les fluctuations courtes ne lancent pas de lavage et qu'une demande stable le lance. |
 | Confirmation EP_CRITIQUE | F-081, S-044 | Vérifier l'anti-rebond court avant mise en sécurité critique. |
+| Interface électrique niveau | B-107 | Vérifier sur banc le raccordement direct CR18-8DN vers entrées optocouplées KC868-A32, le sens logique lu par le firmware et les comportements de rupture des fils marron, bleu et noir. |
 | Lavage indisponible sans EP_CRITIQUE | F-027, F-043, F-044, F-085, F-120, F-122, F-123, F-124, S-020, S-021, S-048 | Vérifier le passage en dégradé après 3 tentatives, la pause entre tentatives, l'inhibition lavage, le maintien bio via bypass, le reset refusé tant que EP_LAVAGE persiste, le diagnostic indirect A04 sans capteur rinçage dédié, l'absence de capteurs diagnostic direct V1 et l'absence de dépendance a une position moteur. |
 | Incohérence capteurs niveau | F-068, F-084, S-047 | Vérifier que EP_CRITIQUE actif avec EP_LAVAGE inactif déclenche la mise en sécurité bloquante. |
 | Capteur niveau non fiable | F-086, S-049 | Vérifier la difference de reaction entre perte de confiance EP_CRITIQUE et doute limité a EP_LAVAGE. |

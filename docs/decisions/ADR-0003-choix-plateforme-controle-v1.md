@@ -8,6 +8,8 @@ Acceptee
 
 Le contrôleur V1 doit piloter un filtre à tambour dans un environnement humide, avec capteurs NPN 12-24 VDC, commandes de relais ou contacteurs, pompe 230 VAC, moteur tambour 12 V DC et IHM locale.
 
+La commande matérielle visée n'est pas une commande d'essais séparée : elle constitue la commande définitive du MVP. La plateforme matérielle du MVP doit donc rester la base de la V2, sans remplacement de la plateforme principale.
+
 Le choix de plateforme a ete tranche après gel du noyau E/S V1. Les critères retenus etaient :
 
 - coût matériel ;
@@ -18,7 +20,7 @@ Le choix de plateforme a ete tranche après gel du noyau E/S V1. Les critères r
 - compatibilité avec capteurs CR18-8DN NPN 12-24 VDC ;
 - disponibilité des entrées/sorties nécessaires ;
 - intégration de l'écran local et des boutons ;
-- capacité d'heure fiable en V2 sans remplacement de la plateforme principale, par RTC, temps local conserve, module temps, synchronisation réseau ou equivalent, sans dépendance exclusive à Internet.
+- capacité d'heure fiable en V2 sans remplacement de la plateforme principale, par RTC, temps local conserve, module temps, synchronisation réseau ou equivalent, sans dépendance exclusive à Internet ;
 - compatibilité avec une connectivité Wi-Fi V2 sans remplacement de la plateforme principale, par Wi-Fi natif ou module Wi-Fi ajoutable proprement.
 
 Le choix doit rester compatible avec l'architecture electrique V1 documentee dans [ADR-0004 - Architecture electrique V1](ADR-0004-architecture-electrique-v1.md).
@@ -33,17 +35,18 @@ Le choix doit rester compatible avec l'architecture electrique V1 documentee dan
 
 ## Decision
 
-La plateforme V1 retenue est un KC868-A32.
+La plateforme V1 retenue est un KC868-A32. Elle est aussi la plateforme matérielle définitive du MVP et doit rester la base matérielle de la V2.
 
 La tension de commande V1 est fixee a 12 VDC. L'alimentation basse tension retenue est une Mean Well NDR-120-12, 12 VDC, 120 W, 10 A, distribuee par porte-fusibles ATO.
 
 L'horodatage fiable n'est pas une fonction obligatoire du MVP, mais le choix V1 ne doit pas empecher son ajout en V2. Une plateforme candidate doit donc documenter une voie réaliste vers une heure fiable sans remplacement matériel principal. Cette voie ne doit pas reposer uniquement sur Internet : une RTC, un temps local conserve, un module temps ou une capacité equivalente doit rester possible, avec synchronisation réseau seulement comme amelioration si elle est disponible.
 
-La connectivité active n'est pas une fonction obligatoire du MVP, mais le matériel choisi doit être prêt pour une V2 Wi-Fi. Ethernet n'est pas disponible sur site, BLE seul n'a pas la portée nécessaire et SMS n'est pas retenu par défaut pour des raisons de coût. Une plateforme sans Wi-Fi natif doit donc permettre l'ajout propre d'un module Wi-Fi sans remplacement de la plateforme principale.
+La connectivité active n'est pas une fonction obligatoire du MVP, mais le matériel commandé pour le MVP doit être prêt pour une V2 Wi-Fi. Ethernet n'est pas disponible sur site, BLE seul n'a pas la portée nécessaire et SMS n'est pas retenu par défaut pour des raisons de coût. Une plateforme sans Wi-Fi natif doit donc permettre l'ajout propre d'un module Wi-Fi sans remplacement de la plateforme principale.
 
 ## Consequences
 
 - Le schema de cablage doit partir du KC868-A32 et de ses relais de sortie.
+- Les choix matériels MVP doivent être considérés comme définitifs pour la base V1/V2 ; les validations restantes servent à figer le câblage, les protections, les réglages et l'implantation, pas à commander une plateforme d'essai différente.
 - Les sorties de puissance ne sont pas raccordees directement aux charges secteur : elles pilotent des contacteurs ou relais adaptes.
 - Les entrées capteurs, boutons, écran et voyants doivent être vérifies contre les interfaces exactes du KC868-A32 avant cablage final.
 - La question n'est plus de choisir entre automate compact, module industriel DIN et carte microcontrôleur, mais de documenter proprement les interfaces du KC868-A32.

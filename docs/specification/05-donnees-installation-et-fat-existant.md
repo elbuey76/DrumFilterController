@@ -10,7 +10,9 @@ Le FAT sera installe dans un local de filtration maconne, isole avec 5 cm de XPS
 
 Le FAT ne sera donc pas expose à la pluie directe. L'environnement reste toutefois un local de filtration humide, avec risque de condensation, projections ponctuelles et contraintes de maintenance.
 
-Le capteur de température ambiante local doit mesurer l'air du local de filtration. Son implantation exacte doit éviter une mesure trop influencée par le coffret électrique, un équipement chaud, le soleil ou le volume sous capot si celui-ci créé une stratification thermique.
+Le coffret électrique doit être adapté à ce local humide : minimum IP55, préférence IP65, presse-étoupes adaptés, séparation propre entre basse tension et 230 VAC, réserve de place et gestion de condensation si nécessaire. Il ne doit pas être installé sous une zone de ruissellement ou de projection directe.
+
+Le capteur de température ambiante local doit mesurer l'air du local de filtration. Il sera placé hors coffret, dans une zone ventilée et accessible, à distance de l'alimentation, des contacteurs, des pompes, du soleil et du volume sous capot si celui-ci crée une stratification thermique.
 
 ## Géométrie immuable du FAT
 
@@ -68,7 +70,7 @@ Le capteur de température ambiante local doit mesurer l'air du local de filtrat
 | Évacuation des dechets rinces | tuyau de 100 mm | Place en sortie de goutiere |
 | Report de niveau eau propre | tuyau de 32 mm | Support de fixation des capteurs de niveau |
 | Mise à l'air du report de niveau | trou de 1 mm dans le bouchon | Le bouchon haut reste demontable pour nettoyage |
-| Rampe d'aspersion | tuyau de 32 mm + buses | A raccorder à la pompe de rinçage |
+| Rampe d'aspersion | tuyau de 32 mm + buses | Déjà achetés et fabriqués ; à raccorder à la pompe de rinçage |
 
 ## Composants deja retenus
 
@@ -85,10 +87,16 @@ Le capteur de température ambiante local doit mesurer l'air du local de filtrat
 | Référence capteur | CR18-8DN | Capteur de niveau retenu |
 | Format mécanique | M18 | A prendre en compte pour le support sur tube de report |
 | Distance de détection ajustable | 8 mm | Valeur fournie |
-| Sortie | NPN | Interface contrôleur a adaptér en conséquence |
-| Alimentation | 12-24 VDC | Compatible avec plusieurs architectures basse tension |
-| Consommation | 10 mA | Valeur unitaire fournie |
-| Câblage | DC 3 fils | À intégrer au schéma de câblage |
+| Sortie | NPN normalement ouverte | Sortie collecteur ouvert compatible avec une entrée KC868-A32 activée par tirage vers 0 V |
+| Alimentation | 12-24 VDC, plage admissible 10-30 VDC | Alimentation V1 retenue en 12 VDC |
+| Consommation | 10 mA max | Valeur unitaire fournie |
+| Courant de sortie | 200 mA max | Très supérieur au courant d'une entrée optocouplée KC868-A32 avec résistance série 2 kΩ |
+| Câblage | DC 3 fils | Marron `+12 VDC`, bleu `0 V`, noir vers entrée digitale KC868-A32 |
+| Protection capteur | IP65 | Adapté aux projections, pas à une immersion ou un lavage haute pression |
+
+Le MVP retient deux capteurs câblés sur le tube de report eau propre : EP_LAVAGE au-dessus de EP_CRITIQUE. Les supports doivent être réglables en hauteur afin de caler les seuils après mesure du niveau normal réel. Une réserve mécanique non câblée peut être prévue pour un troisième capteur futur si les essais le justifient.
+
+L'interface électrique retenue est un raccordement direct sur les entrées digitales optocouplées du KC868-A32. Le schéma KC868-A32 montre une entrée `INPUT_Dx` alimentée par `12VIN` au travers d'une résistance série `2 kΩ`, activée par fermeture vers `GND`. Le CR18-8DN NPN est donc raccorde comme un contact électronique vers 0 V, sans relais d'interface par défaut. La validation finale se fait sur banc avec les vrais capteurs, notamment sens logique, stabilité, rupture de fil et longueurs de câble réelles.
 
 ### Motorisation tambour
 
@@ -98,7 +106,7 @@ Le capteur de température ambiante local doit mesurer l'air du local de filtrat
 | Tension moteur | 12 V DC | Alimente par le rail 12 VDC V1 |
 | Vitesse retenue | 10 rpm en sortie motorreducteur | Vitesse finale tambour a valider avec la transmission réelle |
 | Courant nominal annonce | < 1,6 A selon capture produit | Donnee a confirmer par mesure sur montage réel |
-| Courant d'arret annonce | 6,5 A selon capture produit | Sert d'ordre de grandeur pour le fusible 7,5 A, a confirmer par test |
+| Courant de blocage / d'arret annonce | 6,5 A selon screenshot fournisseur transmis | Sert d'ordre de grandeur pour le fusible 7,5 A ; comportement réel a confirmer par test |
 | Fusible retenu | ATO 7,5 A | Depart 12 VDC moteur tambour |
 | Relais retenu | HELLA 4RD 933 332-551, 12 V, charge inductive 15 A | Relais de puissance moteur, support rail DIN a imprimer en 3D |
 | Couple moteur | Inconnu | Donnée critique à valider par essais |
@@ -106,20 +114,24 @@ Le capteur de température ambiante local doit mesurer l'air du local de filtrat
 
 La transmission exacte autour du motorreducteur 10 rpm reste a finaliser. Le choix du Fyearfly rend caduque l'hypothèse initiale de moteur d'essuie-glace a 95 tr/min avec réduction 3:1, qui donnait une vitesse tambour probablement trop élevée.
 
-Le moteur doit rester hors eau et protège des projections. La vitesse finale, le courant en charge, le couple disponible, la fixation mécanique et le comportement en blocage doivent être valides avant intégration definitive. Le détail du dimensionnement est tracé dans [../calculs/NC-0002-dimensionnement-motorisation-tambour.md](../calculs/NC-0002-dimensionnement-motorisation-tambour.md).
+Le moteur doit rester hors eau et protège des projections. Le courant de blocage annoncé de 6,5 A permet de pré-dimensionner la protection moteur du MVP. La vitesse finale, le courant en charge, le couple disponible, la fixation mécanique et le comportement réel en blocage doivent être valides avant cablage final. Le détail du dimensionnement est tracé dans [../calculs/NC-0002-dimensionnement-motorisation-tambour.md](../calculs/NC-0002-dimensionnement-motorisation-tambour.md).
 
 ### Architecture electrique V1
 
 | Element | Valeur | Notes |
 | --- | --- | --- |
-| Tete de tableau | Interrupteur differentiel 30 mA | Type et calibre a choisir en backlog |
+| Protection amont cote maison | Disjoncteur dedie 20 A | Non encore achete ni cable. A choisir avec le cable, la longueur de liaison et le tableau existant ; limite le courant disponible pour le coffret bassin et protege le TeSys VCDN20 20 A |
+| Sequence d'alimentation cible | Disjoncteur 20 A maison -> TeSys VCDN20 -> interrupteur differentiel 30 mA -> disjoncteurs departs | Le sectionneur est la coupure locale cadenassable du coffret, avant le differentiel local |
+| Tete de tableau | Interrupteur differentiel 2P 30 mA, 40 A, type A | Choix coherent avec les charges reelles du MVP ; la notice AquaForte DM-Vario demande 30 mA sans imposer type F ou B |
+| Coupure locale cadenassable | Schneider Electric TeSys VCDN20, interrupteur-sectionneur 3P 690 V 20 A, poignee rouge cadenassable | Piece trouvee en atelier, candidate pour la coupure/consignation du coffret FAT, placee avant l'interrupteur differentiel local. Ne remplace pas le differentiel ni les disjoncteurs ; verifier etat, montage, coupure phase/neutre, calibre amont 20 A et maintien des bulleurs hors coupure automatique |
 | Alimentation 12 VDC | Mean Well NDR-120-12, 120 W, 10 A, rail DIN | Protegee par disjoncteur 4 A courbe C |
-| Distribution 12 VDC | Porte-fusibles ATO 4 emplacements | Depart moteur 7,5 A, automate 3 A, capteurs/boutons 1 A, ecran/voyants/accessoires 1 A |
+| Distribution 12 VDC | Porte-fusibles ATO 4 emplacements | Depart moteur 7,5 A, automate 3 A, capteurs/boutons 1 A, ecran/voyants/accessoires 1 A ; adaptateur rail DIN imprime en 3D probable selon modele retenu |
 | Plateforme controle | KC868-A32 | Base automate V1 |
 | Pompe rincage | Disjoncteur 10 A courbe C + contacteur Schneider TeSys LC1D12P7, bobine 230 VAC | La bobine est pilotee par un relais de l'automate |
 | Prises local | Disjoncteur 16 A courbe C | 1 prise bulleur bassin, 1 prise bulleur filtre bio, 2 prises maintenance ponctuelle |
 | Pompe filtration | Disjoncteur 6 A courbe C + contacteur TOMZN TOCT1-25Z 25 A, bobine 12 VDC | Depart separe car organe essentiel |
 | UV, pompe decoration, mise a niveau | Disjoncteur 6 A courbe C + contacteurs TOMZN TOCT1-25Z 25 A, bobine 12 VDC | Separés du depart filtration |
+| Eclairage exterieur | Disjoncteur a choisir | Depart supplementaire dans le coffret pour lumieres exterieures. Circuit hors fonctions bassin, sans commande ni securite FAT |
 
 ### Pompe de rinçage
 
@@ -140,7 +152,7 @@ Le moteur doit rester hors eau et protège des projections. La vitesse finale, l
 | Corps de pompe | AISI 304 | Donnée fiche technique |
 | Dimensions / poids | environ 38 x 24 x 30 cm, 9 kg | Fiche détaillée : L 369,5 mm, W 243,5 mm, H 284 mm |
 
-La courbe disponible donne environ 20 L/min à 34 m, 30 L/min à 28 m, 40 L/min à 21 m, 50 L/min à 12,5 m et 60 L/min à 3 m. La courbe sert seulement d'estimation provisoire. Le débit de rinçage de référence V1 devra être mesure aux buses après montage réel de la pompe, de la rampe et des pertes de charge. Le détail du dimensionnement est tracé dans [../calculs/NC-0003-dimensionnement-pompe-rincage.md](../calculs/NC-0003-dimensionnement-pompe-rincage.md).
+La courbe disponible donne environ 20 L/min à 34 m, 30 L/min à 28 m, 40 L/min à 21 m, 50 L/min à 12,5 m et 60 L/min à 3 m. La rampe et les buses sont déjà achetées et fabriquées ; elles font partie du matériel MVP. La courbe sert seulement d'estimation provisoire. Le débit de rinçage de référence V1 devra être mesure aux buses après montage réel de la pompe, de la rampe et des pertes de charge. Le détail du dimensionnement est tracé dans [../calculs/NC-0003-dimensionnement-pompe-rincage.md](../calculs/NC-0003-dimensionnement-pompe-rincage.md).
 
 ### Hypothèse de nommage côté eau propre
 
@@ -159,8 +171,8 @@ La courbe disponible donne environ 20 L/min à 34 m, 30 L/min à 28 m, 40 L/min 
 | Pompe de filtration principale | retour bassin en 63 mm | Fonctionnement continu vise |
 | Pompe décoration | usage ponctuel | Cascade, mur d'eau, lame d'eau, etc. |
 | UV | hors tambour, dans la filtration, après la pompe principale | Asservi a filtration autorisée plus absence EP_CRITIQUE ; ne pas couper sur défaut FAT non critique si la filtration reste autorisée |
-| Température bassin | mesure à ajouter | Valeur utile pour alertes et exploitation saisonniere |
-| Température ambiante local | mesure à ajouter | Valeur utile pour alertes environnementales et suivi du local technique |
+| Température bassin | sonde étanche type DS18B20 ou équivalent | A placer dans une eau représentative : arrivée gravitaire avant pompe/UV ou bassin en zone brassée, ombragée et accessible |
+| Température ambiante local | sonde numérique simple ou équivalent | A placer hors coffret, dans l'air du local, en support ventilé et accessible |
 
 ## Hypothèses hydrauliques de dimensionnement de la filtration
 
@@ -192,15 +204,19 @@ Le point de fonctionnement nominal recherche reste 8 à 10 m3/h, mais la pompe p
 - Le seuil physique de debordement du filtre est impose par la goutiere à 30,5 cm au-dessus du fond du filtre.
 - La logique de pilotage V1 repose sur une cote simple côté eau propre, avec deux niveaux fonctionnels : EP_LAVAGE et EP_CRITIQUE.
 - Les capteurs de niveau doivent être positionnes côté eau propre sur le tube de report en 32 mm, et non directement dans la zone sale.
+- EP_LAVAGE est placé physiquement au-dessus de EP_CRITIQUE, les deux sur supports réglables en hauteur ; une réserve mécanique pour un troisième capteur futur peut être prévue sans câblage MVP.
 - Les capteurs de niveau retenus sont des CR18-8DN en M18, sortie NPN, alimentation 12-24 VDC, câblage 3 fils.
 - Le moteur tambour retenu est un motorreducteur Fyearfly 12 VDC 10 rpm, en fonctionnement intermittent.
-- L'alimentation moteur et le fusible 7,5 A doivent être confirmés par mesure du courant réel en charge et au blocage.
+- L'alimentation moteur et le fusible 7,5 A sont pré-dimensionnés avec le courant de blocage annoncé de 6,5 A ; ils doivent être confirmés par mesure du courant réel en charge et vérification du comportement en blocage.
 - Une protection contre blocage ou surintensité du moteur tambour doit être prévue ou fortement justifiée si elle est absente.
 - La pompe de rinçage retenue est une pompe de surface VEVOR / Leo EKJ-802S en 220-240 VAC ; elle doit être commandée comme une charge moteur secteur.
 - La pompe de rinçage est commandée par un contacteur Schneider TeSys LC1D12P7, bobine 230 VAC, lui-même piloté par un relais de l'automate.
 - L'UV, la pompe décoration, la pompe filtration et la mise à niveau sont commandés via contacteurs TOMZN 25 A a bobine 12 VDC.
 - La pompe de filtration dispose d'un départ séparé de l'UV, de la pompe décoration et de la mise à niveau afin de limiter les coupures communes entre organes essentiels et secondaires.
-- Le débit de rinçage de référence ne doit pas être confondu avec le débit maximal de 60 L/min, car le point de fonctionnement dépendra des buses et des pertes de charge.
+- Le depart cote maison vers le coffret bassin devra etre protege par un disjoncteur dedie 20 A, non encore achete ni cable.
+- Le TeSys VCDN20 trouve en atelier est un candidat de coupure locale cadenassable du coffret FAT, place avant l'interrupteur differentiel local, a valider au schema electrique final.
+- Un depart eclairage exterieur supplementaire doit etre reserve dans le coffret ; il reste hors fonctions bassin et son disjoncteur est a choisir.
+- Le débit de rinçage de référence ne doit pas être confondu avec le débit maximal de 60 L/min, car le point de fonctionnement dépendra des buses déjà fabriquées et des pertes de charge.
 - Le support du FAT devra fixer la cote altimetrique du trop-plein par rapport au niveau hydraulique du bassin. Cette cote doit être mesurée sur site avant fabrication du support ; elle ne doit pas être inventee en spécification.
 - La pompe décoration aspirant au même endroit que la pompe principale, elle doit suivre les mêmes règles de sécurité hydraulique.
 - Les diametres d'interconnexion existants 110 mm, 100 mm, 63 mm et 32 mm doivent être preserves dans les choix d'implantation et de pilotage.
@@ -250,7 +266,7 @@ Le point de fonctionnement nominal recherche reste 8 à 10 m3/h, mais la pompe p
 
 - Réaliser les ouvertures dans le tuyau qui sert de tambour.
 - Poser la maille inox autour du tambour.
-- Raccorder la rampe d'aspersion à la pompe de rinçage.
+- Raccorder la rampe d'aspersion déjà fabriquée à la pompe de rinçage.
 - Percer une paroi du filtre pour la prise d'eau de la pompe de rinçage.
 - Mesurer le débit réel de rinçage et vérifier la pression ou qualité de jet aux buses.
 - Percer le trou de vidange du filtre.
@@ -259,14 +275,18 @@ Le point de fonctionnement nominal recherche reste 8 à 10 m3/h, mais la pompe p
 
 ### Instrumentation et automatisme
 
-- Fixer les capteurs de niveau sur le tube de report en 32 mm.
+- Fixer EP_LAVAGE et EP_CRITIQUE sur le tube de report en 32 mm, sur supports réglables en hauteur.
 - Valider le sens de rotation, le courant réel et la fixation du motorreducteur Fyearfly 12 VDC 10 rpm.
 - Installer l'alimentation Mean Well NDR-120-12 et le porte-fusibles ATO 4 departs.
+- Choisir, acheter et cabler le disjoncteur 20 A dedie cote maison pour alimenter le coffret bassin.
+- Integrer le TeSys VCDN20 comme sectionneur local cadenassable avant l'interrupteur differentiel du coffret, si son etat est valide.
+- Prevoir le depart eclairage exterieur dans le coffret et choisir son disjoncteur.
 - Concevoir le support imprime 3D du relais HELLA pour montage rail DIN.
+- Concevoir l'adaptateur imprime 3D du porte-fusibles ATO pour montage rail DIN si le composant retenu n'est pas DIN natif.
 - Concevoir et integrer toute la partie intelligence et pilotage du FAT.
 - Ajouter un capot transparent de fermeture avec capteur de détection d'ouverture.
-- Ajouter une sonde de température d'eau avec implantation maintenable et représentative.
-- Ajouter une sonde de température ambiante du local avec implantation représentative.
+- Ajouter une sonde de température d'eau maintenable dans une eau représentative : arrivée gravitaire avant pompe/UV ou bassin en zone brassée.
+- Ajouter une sonde de température ambiante hors coffret, sur support ventilé et représentatif de l'air du local.
 - Définir une IHM locale permettant de remonter clairement le statut du système.
 - Prévoir une extension Wi-Fi V2 de remontée à distance de l'état et des alarmes sans remplacement de la plateforme principale.
 - Prévoir pour une V2 les notifications immédiates actionnables et leur politique anti-repetition : apparition, rappel rare et retour à la normale.
@@ -280,34 +300,26 @@ Le point de fonctionnement nominal recherche reste 8 à 10 m3/h, mais la pompe p
 - Définir pour une V1.1 ou V2 une estimation empirique de la consommation d'eau du rinçage et du besoin d'appoint associé.
 - Définir pour une V1.1 les temps de fonctionnement cumulés des organes principaux.
 
-## Questions techniques encore ouvertes
+## Points techniques restant à valider
+
+Les choix de principe sont maintenant tranchés pour le MVP, sauf les cotes de niveau qui dépendent directement des mesures terrain. Les points ci-dessous sont donc des validations, réglages ou références finales, pas des remises en cause de l'architecture matérielle.
+
+### Question encore ouverte
 
 - Cotes exactes du niveau normal côté sale, du niveau normal côté propre, du seuil de lavage et du niveau bas de sécurité.
-- Nombre exact de capteurs CR18-8DN à installer et implantation précise de chacun.
-- Couple réel, vitesse finale tambour, courant en charge et seuil de protection du moteur de tambour Fyearfly.
-- Type et calibre de l'interrupteur differentiel 30 mA en tete de tableau.
+- Cotes exactes de réglage EP_LAVAGE et EP_CRITIQUE sur le tube de report après mesure du niveau réel.
+
+### Validations terrain et réglages
+
+- Couple réel, vitesse finale tambour, courant en charge et comportement de protection du moteur de tambour Fyearfly.
 - Débit réel, pression utile aux buses, amorçage et courant réel de la pompe de rinçage.
 - Forme, nombre et surface totale des ouvertures du tambour a calculer avant découpe pour atteindre environ 0,20 à 0,23 m2 de surface filtrante utile.
-- Architecture de puissance pour separer clairement les sorties à couper des équipements hors contrôleur.
-- Stratégie de sécurité a appliquer si le capot est ouvert pendant un cycle.
-- Position finale du capteur de température bassin et technologie retenue.
-- Seuils d'alerte température eau V1 : basse < 4 deg C, haute > 28 deg C, configurables.
-- Position finale du capteur de température ambiante local et technologie retenue, avec mesure représentative de l'air du local de filtration.
-- Seuils d'alerte température ambiante local V1 : basse < 2 deg C, haute > 40 deg C, configurables.
-- Niveau d'IHM locale à retenir et informations a afficher localement.
-- Nombre, couleur et signification des voyants si une signalisation lumineuse est retenue.
-- Liste exacte des informations visibles en permanence sur l'IHM locale et de celles accessibles en détail.
-- Canal de notification à distance V2 retenu : Wi-Fi, avec matériel MVP compatible.
-- Liste des événements a notifier et comportement en cas de perte réseau pour une V2, sur la base des événements actionnables deja retenus.
-- Activation par défaut, horaire et contenu exact de la synthèse quotidienne pour une V2.
-- Ne pas créer d'information distante "bassin niveau bas" sans capteur bassin distinct ; avec l'instrumentation retenue, EP_CRITIQUE doit être présente comme `NIVEAU FAT CRITIQUE`.
-- Programmation pompe décoration retenue pour V1.1/V2 : deux plages maximum par jour, identiques tous les jours, et interrupteur logiciel actif/inactif sans automatisme hiver au départ.
-- Priorité pompe décoration retenue : sécurités hydrauliques et défauts bloquants, commande manuelle locale, commande distante, puis programmation horaire.
-- Validation physique de l'ordre et de la logique des capteurs EP_LAVAGE et EP_CRITIQUE.
-- Choix de rester en diagnostic indirect V1 confirmé ; pressostat, débitmètre, retour courant rinçage, rotation, fuite ou niveau eau sale sont reportés V1.1/V2 si les essais montrent un besoin.
-- Règles de lancement, de verdict et de report du test journalier automatique en V1.1.
-- Stratégie retenue en V1.1 pour ne pas laisser toujours la même zone du tambour immergée.
-- Règles de calcul et de restitution des statistiques de lavage en V1.1.
-- Formule retenue pour l'indice d'encrassement et usage associé en V1.1 ou V2.
-- Methode empirique d'estimation de la consommation d'eau et des pertes vers évacuation en V1.1 ou V2.
-- Règles de cumul et d'affichage des temps de fonctionnement en V1.1 ; remises à zéro maintenance et seuils de rappel reportés V2.
+- Référence finale du coffret IP55 minimum, préférence IP65, avec presse-étoupes et gestion de condensation si nécessaire.
+- Référence finale du disjoncteur 20 A dedie cote maison et validation de la liaison jusqu'au coffret bassin.
+- Référence finale de l'interrupteur différentiel 2P 30 mA 40 A, type A.
+- Cablage final de l'interrupteur-sectionneur cadenassable TeSys VCDN20 avant le differentiel local si reutilise.
+- Référence finale du disjoncteur pour l'eclairage exterieur et separation claire avec les fonctions bassin.
+- Références finales des sondes de température eau et local.
+- Référence finale de l'écran ou petit afficheur local.
+- Validation physique de l'ordre EP_LAVAGE au-dessus de EP_CRITIQUE, et des règles d'incohérence associées.
+- Mesure empirique de la consommation d'eau de rinçage après mesure du débit réel et des durées de cycle.

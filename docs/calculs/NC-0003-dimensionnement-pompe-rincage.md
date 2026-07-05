@@ -2,13 +2,13 @@
 
 ## Objet
 
-Documenter les caractéristiques connues de la pompe de rinçage du FAT, les limites d'interprétation de sa courbe hydraulique et les validations nécessaires avant dimensionnement définitif des buses, protections et consommations d'eau.
+Documenter les caractéristiques connues de la pompe de rinçage du FAT, les limites d'interprétation de sa courbe hydraulique et les validations nécessaires pour le point de fonctionnement réel sur la rampe et les buses déjà achetées et fabriquées.
 
 ## Données d'identification
 
 | Donnée | Valeur | Source / commentaire |
 | --- | --- | --- |
-| Marque commerciale | VEVOR | Pompe deja retenue pour les buses du FAT |
+| Marque commerciale | VEVOR | Pompe deja retenue pour la rampe et les buses du FAT |
 | Fabricant OEM | Leo Group Pump (Zhejiang) Co., Ltd. | Information fournisseur |
 | Modèle | EKJ-802S | Garden Jet Pump |
 | Type | Pompe centrifuge de surface auto-amorcante | Pompe de jardin, non immergée |
@@ -41,7 +41,7 @@ Pour le dimensionnement des relais ou contacteurs, la pompe doit être traitée 
 | Diamètre refoulement | 1 pouce | Donnée fiche technique |
 | Corps de pompe | AISI 304 | Donnée fiche technique |
 
-Le débit maximal et la hauteur maximale ne sont pas atteignables simultanément. Le point de fonctionnement réel dépendra des buses, de la rampe 32 mm, des pertes de charge, de l'aspiration et de la hauteur géométrique.
+Le débit maximal et la hauteur maximale ne sont pas atteignables simultanément. Le point de fonctionnement réel dépendra des buses déjà fabriquées, de la rampe 32 mm, des pertes de charge, de l'aspiration et de la hauteur géométrique.
 
 ## Courbe débit / hauteur disponible
 
@@ -73,11 +73,11 @@ Cette courbe indique qu'une estimation de consommation basée sur 60 L/min serai
 - La pompe doit être reliee à la terre et protégée par les protections secteur adéquates du coffret.
 - La commande de rinçage doit rester inhibée en niveau critique, maintenance incompatible, capot ouvert si la stratégie retenue l'exige, et défaut critique.
 - La pompe ne doit pas être considérée comme auto-diagnostiquee sans pressostat, débitmètre, mesure courant ou retour de marche.
-- La consommation d'eau de rinçage doit rester étiquetée comme estimation empirique tant que le débit réel aux buses n'est pas mesure.
+- La consommation d'eau de rinçage doit rester étiquetée comme estimation empirique tant que le débit réel sur la rampe et les buses n'est pas mesure.
 
 ## Conclusion de dimensionnement
 
-La pompe VEVOR / Leo EKJ-802S est suffisamment caractérisée pour dimensionner l'architecture de commande secteur et lancer les essais de rinçage. Elle ne permet pas encore de figer le débit réel aux buses sans essai hydraulique, car le point de fonctionnement dépendra fortement de la rampe, des buses et des pertes de charge.
+La pompe VEVOR / Leo EKJ-802S est suffisamment caractérisée pour dimensionner l'architecture de commande secteur définitive du MVP. Elle ne permet pas encore de figer le débit réel sur la rampe et les buses sans mesure hydraulique, car le point de fonctionnement dépendra fortement de la rampe déjà fabriquée, des buses et des pertes de charge.
 
 ## Points à vérifier sur installation réelle
 
