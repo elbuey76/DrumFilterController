@@ -65,7 +65,7 @@ Le contrôleur doit separer la basse tension de commande de la puissance moteur/
 | S-054 | La fermeture capot doit être stable avant reprise automatique ou réautorisation des commandes dangereuses. | Must | Cible V1 : fermeture stable 1 à 2 s avant autorisation. |
 | S-055 | Un capot ouvert hors action dangereuse doit rester un état informatif de maintenance sans acquittement. | Must | L'IHM affiche `MAINTENANCE - CAPOT OUVERT`; les sorties dangereuses restent inhibées. |
 | S-056 | Après fermeture stable du capot, la reprise automatique vers le mode demande doit être autorisée uniquement s'il n'existe pas d'alarme capot dangereux bloquante. | Must | Si le capot s'est ouvert pendant une action dangereuse, la fermeture ne suffit pas : un acquittement valide reste requis. |
-| S-057 | Le coffret FAT devrait disposer d'une coupure locale visible et cadenassable pour maintenance. | Should | Candidat disponible : Schneider Electric TeSys VCDN20, interrupteur-sectionneur 3P 690 V 20 A a poignee rouge cadenassable. A utiliser uniquement comme organe de coupure/consignation avant l'interrupteur differentiel du coffret, pas comme protection differentielle ou surintensite. Validation obligatoire du schema phase/neutre, du calibre amont 20 A, de l'etat du composant et de son montage en coffret. |
+| S-057 | Le coffret FAT devrait disposer d'une coupure locale visible et cadenassable pour maintenance. | Should | Candidat disponible : Schneider Electric TeSys VCDN20, interrupteur-sectionneur 3P 690 V 20 A a poignee rouge cadenassable. A utiliser uniquement comme organe de coupure/consignation avant l'interrupteur differentiel du coffret, pas comme protection differentielle ou surintensite. Validation obligatoire du schema phase/neutre, du calibre amont 16 A, de l'etat du composant et de son montage en coffret. |
 | S-058 | Le circuit d'eclairage exterieur ajoute dans le coffret doit rester distinct des fonctions bassin. | Should | Les lumieres exterieures n'ont pas de role dans la securite ni dans l'automatisme FAT. Elles sont protegees par un depart dedie avec disjoncteur 6 A courbe C. Hypothese retenue : 6 spots LED de 3 W, soit 18 W et environ 0,08 A sous 230 VAC, avec detecteurs et environ 10 a 15 m de cable. |
 
 ## Politique de repli en niveau bas
@@ -112,8 +112,8 @@ Le mode dégradé doit être conçu pour maintenir le bassin en vie tout en sign
 ## Contraintes de tableau electrique V1
 
 - un interrupteur differentiel 2P 30 mA, 40 A, type A est retenu en tete de tableau ; la notice AquaForte DM-Vario demande une protection differentielle 30 mA sans imposer type F ou B ;
-- le depart cote maison vers le coffret FAT n'est pas encore achete ni cable ; il devra etre protege par un disjoncteur dedie 20 A ;
-- un interrupteur-sectionneur cadenassable TeSys VCDN20, 3P, 690 V, 20 A, est candidat pour la coupure locale du coffret FAT, place avant l'interrupteur differentiel du coffret, sous reserve de validation du schema final et du calibre amont 20 A ;
+- le depart cote maison vers le coffret FAT devra etre protege par un disjoncteur dedie 16 A, calibre retenu pour la liaison existante d'environ 20 m tant que sa section n'est pas confirmee en 2,5 mm2 ;
+- un interrupteur-sectionneur cadenassable TeSys VCDN20, 3P, 690 V, 20 A, est candidat pour la coupure locale du coffret FAT, place avant l'interrupteur differentiel du coffret, sous reserve de validation du schema final et du calibre amont 16 A ;
 - l'alimentation 12 VDC est protegee par un disjoncteur 4 A courbe C ;
 - la pompe de rincage est protegee par un disjoncteur 10 A courbe C ;
 - les prises classiques du local sont protegees par un disjoncteur 16 A courbe C ;
