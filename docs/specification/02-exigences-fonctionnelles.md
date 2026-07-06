@@ -6,7 +6,7 @@
 | --- | --- | --- | --- |
 | F-001 | Le système doit détecter un besoin de lavage à partir du niveau d'eau côté propre du filtre à tambour. | Must | La logique de pilotage V1 repose sur deux niveaux côté eau propre : EP_LAVAGE et EP_CRITIQUE, mesures sur le report de niveau. |
 | F-002 | Le système doit démarrér une pompe de rinçage pendant le cycle de lavage. | Must | Pompe 230 VAC commandee via contacteur Schneider TeSys LC1D12P7, bobine 230 VAC, pilote par un relais du KC868-A32. |
-| F-003 | Le système doit commander la rotation du tambour pendant le cycle de lavage. | Must | Moteur Fyearfly 12 VDC 10 rpm commande via relais HELLA 12 V, fusible ATO 7,5 A. |
+| F-003 | Le système doit commander la rotation du tambour pendant le cycle de lavage. | Must | Moteur Fyearfly 12 VDC 10 rpm commande via relais HELLA 12 V, fusible ATO 5 A. |
 | F-004 | Le système doit arrêter automatiquement le cycle après une durée configurable. | Must | Valeur initiale V1 : durée maximale 45 s, ajustable après essais. |
 | F-005 | Le système doit imposer un délai minimal entre deux cycles automatiques. | Must | Protection contre un capteur instable ou un filtre saturé. |
 | F-006 | Le système doit proposer un mode manuel. | Must | Le détail des commandes manuelles et des protections associées est précise par F-022 et F-023. |

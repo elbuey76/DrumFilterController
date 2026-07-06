@@ -63,8 +63,8 @@ Cette interface directe ne rend pas les capteurs de niveau intrinsèquement fail
 
 | ID | Nom | Priorité | État | Interface cible | Comportement attendu |
 | --- | --- | --- | --- | --- | --- |
-| DO-001 | `CMD_TAMBOUR` | Must | Retenu, validation comportement à faire | Relais KC868-A32 vers relais HELLA 4RD 933 332-551, 12 V, charge inductive 15 A ; moteur Fyearfly 12 VDC 10 rpm ; fusible 7,5 A ; courant de blocage annoncé 6,5 A | Commande rotation tambour pendant lavage, test ou manuel autorisé. L'indexation est une extension V1.1. Inhibée en niveau critique, capot ouvert, maintenance ou défaut critique. |
-| DO-002 | `CMD_RINCAGE` | Must | Retenu, schema à finaliser | Relais KC868-A32 vers bobine 230 VAC d'un contacteur Schneider TeSys LC1D12P7, 3P, AC-3 12 A ; pompe VEVOR / Leo EKJ-802S | Commande pompe de rinçage pendant lavage ou test. Inhibée en niveau critique, maintenance incompatible ou défaut critique. |
+| DO-001 | `CMD_TAMBOUR` | Must | Retenu, validation comportement à faire | Relais KC868-A32 vers relais HELLA 4RD 933 332-551, 12 V, charge inductive 15 A ; moteur Fyearfly 12 VDC 10 rpm ; fusible 5 A ; courant de blocage annoncé 6,5 A | Commande rotation tambour pendant lavage, test ou manuel autorisé. L'indexation est une extension V1.1. Inhibée en niveau critique, capot ouvert, maintenance ou défaut critique. |
+| DO-002 | `CMD_RINCAGE` | Must | Retenu, schema à finaliser | Relais KC868-A32 vers bobine 230 VAC d'un contacteur Schneider TeSys LC1D12P7, 3P, AC-3 12 A ; pompe VEVOR / Leo EKJ-802S | Commande pompe de rinçage pendant lavage ou test. Le relais intermediaire 12 V -> 230 V n'est pas retenu ; le schema final doit assurer separation BT/secteur et reperage du 230 VAC de commande. Inhibée en niveau critique, maintenance incompatible ou défaut critique. |
 | DO-003 | `CMD_POMPE_FILTRATION` | Must | Retenu, schema à finaliser | Relais KC868-A32 vers contacteur TOMZN TOCT1-25Z 25 A, bobine 12 VDC | Autorise la pompe principale. Coupé en niveau critique, défaut critique ou stratégie de sécurité retenue. Depart 230 VAC separe de l'UV, de la pompe décoration et de la mise à niveau. |
 | DO-004 | `CMD_POMPE_DECO` | Must | Retenu, schema à finaliser | Relais KC868-A32 vers contacteur TOMZN TOCT1-25Z 25 A, bobine 12 VDC | Autorise la pompe décoration. Suit exactement la même sécurité hydraulique que la pompe principale, car elle aspire au même endroit : OFF sur EP_CRITIQUE. |
 | DO-005 | `CMD_UV` | Must | Retenu, schema à finaliser | Relais KC868-A32 vers contacteur TOMZN TOCT1-25Z 25 A, bobine 12 VDC | Autorise l'UV seulement si la filtration est autorisée et qu'aucun niveau critique n'est actif. L'ouverture du capot FAT ne coupe pas l'UV par elle-meme, car l'UV est hors tambour. Après EP_CRITIQUE acquitté, réautorisation après redémarrage filtration et courte stabilisation. |
@@ -115,7 +115,7 @@ Les bulleurs de la cuve bio et du bassin ne sont pas pilotes par le contrôleur.
 | --- | --- | --- | --- |
 | Groupe coupé sécurité hydraulique | Pompe filtration, pompe décoration, UV, mise à niveau automatique | Coupé ou inhibition | Ces équipements peuvent aggraver une marche à sec, une vidange ou un fonctionnement hors eau. |
 | Groupe lavage FAT | Tambour, pompe de rinçage | Inhibe | Aucun lavage ne doit être lance en situation d'eau insuffisante. |
-| Protection moteur tambour | Fusible ATO 7,5 A, relais HELLA 12 V 15 A inductif | Coupure matérielle par fusible ; retour défaut automate non prévu en V1 | Courant de blocage annoncé 6,5 A d'après screenshot fournisseur ; calibre cohérent en première intention, comportement à vérifier par démarrage et blocage contrôlé. |
+| Protection moteur tambour | Fusible ATO 5 A, relais HELLA 12 V 15 A inductif | Coupure matérielle par fusible ; retour défaut automate non prévu en V1 | Courant de blocage annoncé 6,5 A d'après screenshot fournisseur ; calibre plus restrictif retenu pour essai, comportement à vérifier par démarrage, charge nominale et blocage contrôlé. |
 | Protection pompe rinçage | Disjoncteur 10 A courbe C et contacteur Schneider LC1D12P7 | Coupé ou défaut selon architecture retenue | Pompe classe I à raccorder à la terre ; tenir compte du courant d'appel moteur. |
 | Groupe hors contrôleur | Bulleur cuve bio, bulleur bassin | Non piloté | Alimentation directe 220 V, hors sorties contrôlées et hors circuit coupé par niveau critique. |
 | Groupe signalisation | Voyants, écran | Maintenu si possible | La signalisation doit rester disponible pour comprendre l'état de sécurité. |
@@ -124,6 +124,7 @@ Les bulleurs de la cuve bio et du bassin ne sont pas pilotes par le contrôleur.
 
 | Circuit | Protection / organe | Remarque |
 | --- | --- | --- |
+| Protection amont cote maison | Disjoncteur dedie 16 A | Calibre retenu pour la liaison existante d'environ 20 m entre tableau maison et coffret filtration, tant que sa section n'est pas confirmee en 2,5 mm2. |
 | Tete de tableau | Interrupteur differentiel 2P 30 mA, 40 A, type A | La notice AquaForte DM-Vario demande une protection 30 mA sans imposer type F ou B ; calibre 40 A coherent avec les charges reelles et les prises maintenance ponctuelles. |
 | Alimentation 12 VDC | Disjoncteur 4 A courbe C | Alimente la Mean Well NDR-120-12. |
 | Pompe de rincage | Disjoncteur 10 A courbe C | Alimente le depart pompe commande par contacteur Schneider. |
@@ -131,7 +132,7 @@ Les bulleurs de la cuve bio et du bassin ne sont pas pilotes par le contrôleur.
 | Pompe filtration | Disjoncteur 6 A courbe C | Depart dedie organe essentiel. |
 | UV, pompe decoration, mise a niveau | Disjoncteur 6 A courbe C | Depart separe de la filtration. |
 | Eclairage exterieur | Disjoncteur 6 A courbe C | Depart dedie hors automatisme FAT, pour 6 spots LED exterieurs de 3 W avec detecteurs ; charge nominale 18 W, environ 0,08 A sous 230 VAC, cable environ 10 a 15 m. |
-| Distribution 12 VDC moteur tambour | Fusible ATO 7,5 A | Moteur Fyearfly via relais HELLA. |
+| Distribution 12 VDC moteur tambour | Fusible ATO 5 A | Moteur Fyearfly via relais HELLA. |
 | Distribution 12 VDC automate | Fusible ATO 3 A | KC868-A32. |
 | Distribution 12 VDC capteurs et boutons | Fusible ATO 1 A | Entrees terrain et commandes locales. |
 | Distribution 12 VDC IHM et accessoires | Fusible ATO 1 A | Ecran, voyants, accessoires. |
@@ -145,8 +146,8 @@ Les bulleurs de la cuve bio et du bassin ne sont pas pilotes par le contrôleur.
 - Valider sur banc la RTC DS3231 I2C 3,3 V : adresse `0x68`, batterie rechargeable livree, conservation de l'heure apres coupure, absence de pull-up vers 5 V et cohabitation avec le LCD 2004 sur le bus I2C logiciel.
 - Valider sur banc les deux DS18B20 etanches inox : brochage reel des couleurs, lecture 3,3 V, pull-up 4,7 kΩ, detection perte de sonde, identification stable eau/local et choix bus 1-Wire separes ou commun.
 - Valider le contact capot OMRCH ME-8104 : bornes `NO`/`NC` a utiliser pour obtenir capot ferme = boucle fermee, capot ouvert/fil coupe/connecteur debranche = boucle ouverte, et fonctionnement repetable avec la came du capot.
-- Mesurer le courant réel du moteur Fyearfly a vide, en charge et au blocage pour confirmer le fusible 7,5 A.
-- Definir les protections, borniers, sections de cable, reperages et cheminements separes entre basse tension et puissance.
+- Mesurer le courant réel du moteur Fyearfly a vide, en charge et au blocage pour confirmer le fusible 5 A.
+- Finaliser les protections, borniers, reperages et cheminements separes entre basse tension et puissance, avec sections retenues en premiere intention : 2 x 2,5 mm2 moteur tambour 12 VDC, 0,5 mm2 voyants et boutons, 1,5 mm2 circuits 230 VAC cote filtration y compris cablage interne d'armoire.
 - Valider sur banc la lecture KC868-A32 des deux CR18-8DN : repos, détection, fil noir débranché, bleu débranché, marron débranché et inversion logique firmware éventuelle.
 - Finaliser le support rail DIN imprime en 3D du relais HELLA.
 - Finaliser l'adaptateur rail DIN imprime en 3D du porte-fusibles ATO si le modele retenu n'est pas DIN natif.

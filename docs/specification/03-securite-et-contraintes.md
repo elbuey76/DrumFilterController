@@ -41,7 +41,7 @@ Le contrôleur doit separer la basse tension de commande de la puissance moteur/
 | S-030 | Les notifications immédiates devraient distinguer une apparition d'événement, un retour à la normale et un état deja signale afin de rester exploitables. | Should | Évite les ambiguities et les messages répétitifs peu utiles. |
 | S-031 | Toute programmation horaire de la pompe décoration doit être inhibée par le niveau bas, un défaut critique ou toute autre sécurité supérieure applicable. | Must | La pompe décoration aspirant au même endroit que la filtration, une plage horaire ne doit jamais forcer une marche non sûre. |
 | S-032 | Le système doit éviter les libellés de défaut affirmant une panne d'organe non prouvee par capteur dédié, mesure électrique ou retour de marche réel. | Must | En V1, on privilegie les effets observés comme lavage inefficace, niveau eau propre anormal ou commande incohérente. |
-| S-033 | Le moteur tambour doit disposer d'une protection adaptée contre surintensité ou blocage mécanique. | Must | Moteur Fyearfly 12 VDC 10 rpm, fusible ATO 7,5 A retenu en première approche ; confirmer par mesures a vide, en charge, au démarrage et au blocage. |
+| S-033 | Le moteur tambour doit disposer d'une protection adaptée contre surintensité ou blocage mécanique. | Must | Moteur Fyearfly 12 VDC 10 rpm, fusible ATO 5 A retenu en première approche ; confirmer par mesures a vide, en charge, au démarrage et au blocage. |
 | S-034 | Le système ne doit pas supposer une protection thermique interne du moteur tambour sans preuve. | Must | La protection externe doit rester dimensionnante tant que la référence moteur n'est pas documentée complètement. |
 | S-035 | Le moteur tambour doit rester hors immersion et protège des projections directes. | Must | Le moteur automobile est acceptable en ambiance humide protégée, mais pas en immersion. |
 | S-036 | La pompe de rinçage 230 VAC doit être commandée par un organe adapté aux charges moteur et protégée cote secteur. | Must | Pompe VEVOR / Leo EKJ-802S, classe I, 0,6 à 0,8 kW ; depart disjoncteur 10 A courbe C et contacteur Schneider TeSys LC1D12P7 bobine 230 VAC retenus, a valider au schema final. |
@@ -65,7 +65,7 @@ Le contrôleur doit separer la basse tension de commande de la puissance moteur/
 | S-054 | La fermeture capot doit être stable avant reprise automatique ou réautorisation des commandes dangereuses. | Must | Cible V1 : fermeture stable 1 à 2 s avant autorisation. |
 | S-055 | Un capot ouvert hors action dangereuse doit rester un état informatif de maintenance sans acquittement. | Must | L'IHM affiche `MAINTENANCE - CAPOT OUVERT`; les sorties dangereuses restent inhibées. |
 | S-056 | Après fermeture stable du capot, la reprise automatique vers le mode demande doit être autorisée uniquement s'il n'existe pas d'alarme capot dangereux bloquante. | Must | Si le capot s'est ouvert pendant une action dangereuse, la fermeture ne suffit pas : un acquittement valide reste requis. |
-| S-057 | Le coffret FAT devrait disposer d'une coupure locale visible et cadenassable pour maintenance. | Should | Candidat disponible : Schneider Electric TeSys VCDN20, interrupteur-sectionneur 3P 690 V 20 A a poignee rouge cadenassable. A utiliser uniquement comme organe de coupure/consignation avant l'interrupteur differentiel du coffret, pas comme protection differentielle ou surintensite. Validation obligatoire du schema phase/neutre, du calibre amont 20 A, de l'etat du composant et de son montage en coffret. |
+| S-057 | Le coffret FAT devrait disposer d'une coupure locale visible et cadenassable pour maintenance. | Should | Candidat disponible : Schneider Electric TeSys VCDN20, interrupteur-sectionneur 3P 690 V 20 A a poignee rouge cadenassable. A utiliser uniquement comme organe de coupure/consignation avant l'interrupteur differentiel du coffret, pas comme protection differentielle ou surintensite. Validation obligatoire du schema phase/neutre, du calibre amont 16 A, de l'etat du composant et de son montage en coffret. |
 | S-058 | Le circuit d'eclairage exterieur ajoute dans le coffret doit rester distinct des fonctions bassin. | Should | Les lumieres exterieures n'ont pas de role dans la securite ni dans l'automatisme FAT. Elles sont protegees par un depart dedie avec disjoncteur 6 A courbe C. Hypothese retenue : 6 spots LED de 3 W, soit 18 W et environ 0,08 A sous 230 VAC, avec detecteurs et environ 10 a 15 m de cable. |
 
 ## Politique de repli en niveau bas
@@ -112,15 +112,15 @@ Le mode dégradé doit être conçu pour maintenir le bassin en vie tout en sign
 ## Contraintes de tableau electrique V1
 
 - un interrupteur differentiel 2P 30 mA, 40 A, type A est retenu en tete de tableau ; la notice AquaForte DM-Vario demande une protection differentielle 30 mA sans imposer type F ou B ;
-- le depart cote maison vers le coffret FAT n'est pas encore achete ni cable ; il devra etre protege par un disjoncteur dedie 20 A ;
-- un interrupteur-sectionneur cadenassable TeSys VCDN20, 3P, 690 V, 20 A, est candidat pour la coupure locale du coffret FAT, place avant l'interrupteur differentiel du coffret, sous reserve de validation du schema final et du calibre amont 20 A ;
+- le depart cote maison vers le coffret FAT devra etre protege par un disjoncteur dedie 16 A, calibre retenu pour la liaison existante d'environ 20 m tant que sa section n'est pas confirmee en 2,5 mm2 ;
+- un interrupteur-sectionneur cadenassable TeSys VCDN20, 3P, 690 V, 20 A, est candidat pour la coupure locale du coffret FAT, place avant l'interrupteur differentiel du coffret, sous reserve de validation du schema final et du calibre amont 16 A ;
 - l'alimentation 12 VDC est protegee par un disjoncteur 4 A courbe C ;
 - la pompe de rincage est protegee par un disjoncteur 10 A courbe C ;
 - les prises classiques du local sont protegees par un disjoncteur 16 A courbe C ;
 - la pompe de filtration est protegee par un depart dedie 6 A courbe C ;
 - l'UV, la pompe decoration et la mise a niveau sont sur un depart 6 A courbe C separe de la filtration ;
 - un depart supplementaire pour lumieres exterieures est a prevoir dans le coffret, protege par disjoncteur 6 A courbe C et sans interaction avec la logique bassin ;
-- les departs 12 VDC sont proteges par fusibles ATO : moteur tambour 7,5 A, automate 3 A, capteurs/boutons 1 A, ecran/voyants/accessoires 1 A.
+- les departs 12 VDC sont proteges par fusibles ATO : moteur tambour 5 A, automate 3 A, capteurs/boutons 1 A, ecran/voyants/accessoires 1 A.
 
 Le capteur de température ambiante doit mesurer l'air du local de filtration. Il ne doit donc pas être considere comme une simple mesure interne du coffret, sauf si l'implantation retenue permet de représenter correctement l'ambiance du local.
 
