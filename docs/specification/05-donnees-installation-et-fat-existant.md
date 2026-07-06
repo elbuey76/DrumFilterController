@@ -120,10 +120,10 @@ Le moteur doit rester hors eau et protège des projections. Le courant de blocag
 
 | Element | Valeur | Notes |
 | --- | --- | --- |
-| Protection amont cote maison | Disjoncteur dedie 20 A | Non encore achete ni cable. A choisir avec le cable, la longueur de liaison et le tableau existant ; limite le courant disponible pour le coffret bassin et protege le TeSys VCDN20 20 A |
-| Sequence d'alimentation cible | Disjoncteur 20 A maison -> TeSys VCDN20 -> interrupteur differentiel 30 mA -> disjoncteurs departs | Le sectionneur est la coupure locale cadenassable du coffret, avant le differentiel local |
+| Protection amont cote maison | Disjoncteur dedie 16 A | Calibre retenu cote maison pour la liaison existante d'environ 20 m, car la section tiree n'est pas confirmee a 2,5 mm2. Limite le courant disponible pour le coffret bassin ; le TeSys VCDN20 20 A reste utilise comme sectionneur local, pas comme protection. |
+| Sequence d'alimentation cible | Disjoncteur 16 A maison -> TeSys VCDN20 -> interrupteur differentiel 30 mA -> disjoncteurs departs | Le sectionneur est la coupure locale cadenassable du coffret, avant le differentiel local |
 | Tete de tableau | Interrupteur differentiel 2P 30 mA, 40 A, type A | Choix coherent avec les charges reelles du MVP ; la notice AquaForte DM-Vario demande 30 mA sans imposer type F ou B |
-| Coupure locale cadenassable | Schneider Electric TeSys VCDN20, interrupteur-sectionneur 3P 690 V 20 A, poignee rouge cadenassable | Piece trouvee en atelier, candidate pour la coupure/consignation du coffret FAT, placee avant l'interrupteur differentiel local. Ne remplace pas le differentiel ni les disjoncteurs ; verifier etat, montage, coupure phase/neutre, calibre amont 20 A et maintien des bulleurs hors coupure automatique |
+| Coupure locale cadenassable | Schneider Electric TeSys VCDN20, interrupteur-sectionneur 3P 690 V 20 A, poignee rouge cadenassable | Piece trouvee en atelier, candidate pour la coupure/consignation du coffret FAT, placee avant l'interrupteur differentiel local. Ne remplace pas le differentiel ni les disjoncteurs ; verifier etat, montage, coupure phase/neutre, calibre amont 16 A et maintien des bulleurs hors coupure automatique |
 | Alimentation 12 VDC | Mean Well NDR-120-12, 120 W, 10 A, rail DIN | Protegee par disjoncteur 4 A courbe C |
 | Distribution 12 VDC | Porte-fusibles ATO 4 emplacements | Depart moteur 7,5 A, automate 3 A, capteurs/boutons 1 A, ecran/voyants/accessoires 1 A ; adaptateur rail DIN imprime en 3D probable selon modele retenu |
 | Plateforme controle | KC868-A32 | Base automate V1 |
@@ -134,6 +134,15 @@ Le moteur doit rester hors eau et protège des projections. Le courant de blocag
 | Pompe filtration | Disjoncteur 6 A courbe C + contacteur TOMZN TOCT1-25Z 25 A, bobine 12 VDC | Depart separe car organe essentiel |
 | UV, pompe decoration, mise a niveau | Disjoncteur 6 A courbe C + contacteurs TOMZN TOCT1-25Z 25 A, bobine 12 VDC | Separés du depart filtration |
 | Eclairage exterieur | Disjoncteur 6 A courbe C | Depart supplementaire dans le coffret pour 6 spots LED exterieurs de 3 W avec detecteurs, environ 10 a 15 m de cable. Circuit hors fonctions bassin, sans commande ni securite FAT |
+
+
+### Sections de cable retenues pour le cablage MVP
+
+| Liaison | Section retenue | Notes |
+| --- | --- | --- |
+| Moteur tambour 12 VDC | 2 x 2,5 mm2 | Section retenue pour limiter la chute de tension sur le depart moteur protege par fusible ATO 7,5 A. |
+| Voyants et boutons IHM locale | 0,5 mm2 | Section retenue pour les commandes et signalisations basse tension en facade. |
+| Circuits 230 VAC cote filtration | 1,5 mm2 | Section retenue pour les departs 230 VAC locaux proteges par les disjoncteurs du coffret filtration, sous reserve de verification du schema final et des conditions de pose. |
 
 ### Pompe de rinçage
 
@@ -215,7 +224,7 @@ Le point de fonctionnement nominal recherche reste 8 à 10 m3/h, mais la pompe p
 - La pompe de rinçage est commandée par un contacteur Schneider TeSys LC1D12P7, bobine 230 VAC, lui-même piloté par un relais de l'automate.
 - L'UV, la pompe décoration, la pompe filtration et la mise à niveau sont commandés via contacteurs TOMZN 25 A a bobine 12 VDC.
 - La pompe de filtration dispose d'un départ séparé de l'UV, de la pompe décoration et de la mise à niveau afin de limiter les coupures communes entre organes essentiels et secondaires.
-- Le depart cote maison vers le coffret bassin devra etre protege par un disjoncteur dedie 20 A, non encore achete ni cable.
+- Le depart cote maison vers le coffret bassin devra etre protege par un disjoncteur dedie 16 A, calibre retenu pour la liaison existante d'environ 20 m tant que sa section n'est pas confirmee en 2,5 mm2.
 - Le TeSys VCDN20 trouve en atelier est un candidat de coupure locale cadenassable du coffret FAT, place avant l'interrupteur differentiel local, a valider au schema electrique final.
 - Un depart eclairage exterieur supplementaire doit etre reserve dans le coffret ; il reste hors fonctions bassin et il est protege par disjoncteur 6 A courbe C.
 - Le débit de rinçage de référence ne doit pas être confondu avec le débit maximal de 60 L/min, car le point de fonctionnement dépendra des buses déjà fabriquées et des pertes de charge.
@@ -280,7 +289,7 @@ Le point de fonctionnement nominal recherche reste 8 à 10 m3/h, mais la pompe p
 - Fixer EP_LAVAGE et EP_CRITIQUE sur le tube de report en 32 mm, sur supports réglables en hauteur.
 - Valider le sens de rotation, le courant réel et la fixation du motorreducteur Fyearfly 12 VDC 10 rpm.
 - Installer l'alimentation Mean Well NDR-120-12 et le porte-fusibles ATO 4 departs.
-- Choisir, acheter et cabler le disjoncteur 20 A dedie cote maison pour alimenter le coffret bassin.
+- Choisir, acheter et cabler le disjoncteur 16 A dedie cote maison pour alimenter le coffret bassin.
 - Integrer le TeSys VCDN20 comme sectionneur local cadenassable avant l'interrupteur differentiel du coffret, si son etat est valide.
 - Prevoir le depart eclairage exterieur dans le coffret avec disjoncteur 6 A courbe C.
 - Concevoir le support imprime 3D du relais HELLA pour montage rail DIN.
@@ -317,7 +326,7 @@ Les choix de principe sont maintenant tranchés pour le MVP, sauf les cotes de n
 - Débit réel, pression utile aux buses, amorçage et courant réel de la pompe de rinçage.
 - Forme, nombre et surface totale des ouvertures du tambour a calculer avant découpe pour atteindre environ 0,20 à 0,23 m2 de surface filtrante utile.
 - Référence finale du coffret IP55 minimum, préférence IP65, avec presse-étoupes et gestion de condensation si nécessaire.
-- Référence finale du disjoncteur 20 A dedie cote maison et validation de la liaison jusqu'au coffret bassin.
+- Référence finale du disjoncteur 16 A dedie cote maison et validation de la liaison existante d'environ 20 m jusqu'au coffret bassin.
 - Référence finale de l'interrupteur différentiel 2P 30 mA 40 A, type A.
 - Cablage final de l'interrupteur-sectionneur cadenassable TeSys VCDN20 avant le differentiel local si reutilise.
 - Référence finale materielle du disjoncteur 6 A courbe C pour l'eclairage exterieur, section du cable et separation claire avec les fonctions bassin.

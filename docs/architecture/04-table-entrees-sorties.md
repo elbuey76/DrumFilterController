@@ -124,6 +124,7 @@ Les bulleurs de la cuve bio et du bassin ne sont pas pilotes par le contrôleur.
 
 | Circuit | Protection / organe | Remarque |
 | --- | --- | --- |
+| Protection amont cote maison | Disjoncteur dedie 16 A | Calibre retenu pour la liaison existante d'environ 20 m entre tableau maison et coffret filtration, tant que sa section n'est pas confirmee en 2,5 mm2. |
 | Tete de tableau | Interrupteur differentiel 2P 30 mA, 40 A, type A | La notice AquaForte DM-Vario demande une protection 30 mA sans imposer type F ou B ; calibre 40 A coherent avec les charges reelles et les prises maintenance ponctuelles. |
 | Alimentation 12 VDC | Disjoncteur 4 A courbe C | Alimente la Mean Well NDR-120-12. |
 | Pompe de rincage | Disjoncteur 10 A courbe C | Alimente le depart pompe commande par contacteur Schneider. |
@@ -146,7 +147,7 @@ Les bulleurs de la cuve bio et du bassin ne sont pas pilotes par le contrôleur.
 - Valider sur banc les deux DS18B20 etanches inox : brochage reel des couleurs, lecture 3,3 V, pull-up 4,7 kΩ, detection perte de sonde, identification stable eau/local et choix bus 1-Wire separes ou commun.
 - Valider le contact capot OMRCH ME-8104 : bornes `NO`/`NC` a utiliser pour obtenir capot ferme = boucle fermee, capot ouvert/fil coupe/connecteur debranche = boucle ouverte, et fonctionnement repetable avec la came du capot.
 - Mesurer le courant réel du moteur Fyearfly a vide, en charge et au blocage pour confirmer le fusible 7,5 A.
-- Definir les protections, borniers, sections de cable, reperages et cheminements separes entre basse tension et puissance.
+- Finaliser les protections, borniers, reperages et cheminements separes entre basse tension et puissance, avec sections retenues en premiere intention : 2 x 2,5 mm2 moteur tambour 12 VDC, 0,5 mm2 voyants et boutons, 1,5 mm2 circuits 230 VAC cote filtration.
 - Valider sur banc la lecture KC868-A32 des deux CR18-8DN : repos, détection, fil noir débranché, bleu débranché, marron débranché et inversion logique firmware éventuelle.
 - Finaliser le support rail DIN imprime en 3D du relais HELLA.
 - Finaliser l'adaptateur rail DIN imprime en 3D du porte-fusibles ATO si le modele retenu n'est pas DIN natif.

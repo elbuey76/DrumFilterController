@@ -12,9 +12,9 @@ Les choix ci-dessous documentent l'architecture retenue pour la commande definit
 
 ## Decision
 
-L'alimentation du coffret FAT doit venir d'un depart dedie cote maison, protege par un disjoncteur 20 A. Ce disjoncteur cote maison n'est pas encore achete ni cable ; il reste a choisir avec le cable, la longueur de liaison et le tableau existant.
+L'alimentation du coffret FAT doit venir d'un depart dedie cote maison, protege par un disjoncteur 16 A. Ce calibre remplace l'hypothese initiale de 20 A, car la liaison existante vers le local filtration fait environ 20 m et la section reellement tiree cote maison n'est pas confirmee a 2,5 mm2.
 
-La sequence cible est : disjoncteur 20 A cote maison, interrupteur-sectionneur local TeSys VCDN20 20 A dans le coffret bassin, interrupteur differentiel 30 mA type A 40 A, puis disjoncteurs des departs.
+La sequence cible est : disjoncteur 16 A cote maison, interrupteur-sectionneur local TeSys VCDN20 20 A dans le coffret bassin, interrupteur differentiel 30 mA type A 40 A, puis disjoncteurs des departs.
 
 Le tableau 230 VAC local retient l'organisation suivante :
 
@@ -29,7 +29,7 @@ Le tableau 230 VAC local retient l'organisation suivante :
 | UV, pompe decoration, mise a niveau | Disjoncteur 6 A courbe C | UV, pompe decoration, mise a niveau automatique | Depart separe de la filtration pour qu'un defaut sur un organe non essentiel ne coupe pas la pompe de filtration. |
 | Eclairage exterieur | Disjoncteur 6 A courbe C | 6 spots LED exterieurs de 3 W, avec detecteurs, environ 10 a 15 m de cable | Depart supplementaire distinct, hors automatisme FAT et sans role de securite bassin. La charge nominale est de 18 W, soit environ 0,08 A sous 230 VAC ; le calibre 6 A est retenu comme depart dedie confortable, a confirmer avec la section et les conditions de pose du cable. |
 
-Le TeSys VCDN20 trouve en atelier est donc retenu comme candidat de coupure locale cadenassable du coffret FAT. Il ne remplace ni l'interrupteur differentiel 30 mA ni les disjoncteurs aval. Son integration finale doit verifier l'etat du composant, le schema monophase phase/neutre, le calibre amont 20 A, le pouvoir de coupure adapte aux charges moteur et le maintien des bulleurs hors coupure automatique du controleur.
+Le TeSys VCDN20 trouve en atelier est donc retenu comme candidat de coupure locale cadenassable du coffret FAT. Il ne remplace ni l'interrupteur differentiel 30 mA ni les disjoncteurs aval. Son integration finale doit verifier l'etat du composant, le schema monophase phase/neutre, le calibre amont 16 A, le pouvoir de coupure adapte aux charges moteur et le maintien des bulleurs hors coupure automatique du controleur.
 
 La basse tension V1 retient une alimentation Mean Well NDR-120-12, 12 VDC, 120 W, 10 A, montee sur rail DIN. Le 12 V est distribue par un porte-fusibles ATO 4 emplacements. Si le modele retenu n'est pas directement compatible rail DIN, un adaptateur imprime en 3D sera prevu pour le fixer proprement dans le coffret :
 
@@ -58,10 +58,11 @@ L'UV, la pompe de decoration et la pompe de filtration sont commandes par les re
 - Le moteur d'essuie-glace SWF 403.835 n'est plus la reference principale de motorisation tambour ; il est remplace par le motorreducteur Fyearfly 12 VDC 10 rpm.
 - La separation des departs 230 VAC evite qu'un defaut sur l'UV, la pompe decoration ou la mise a niveau coupe directement le depart de pompe filtration.
 - Les bulleurs sont alimentes par les prises classiques du local, mais restent hors sorties controlees afin de maintenir l'aeration independante.
-- Le depart cote maison doit etre cree avec un disjoncteur 20 A dedie, non encore achete ni cable.
+- Le depart cote maison doit etre protege par un disjoncteur 16 A dedie, cote maison, afin de rester coherent avec la liaison existante d'environ 20 m tant que sa section n'est pas confirmee en 2,5 mm2.
 - L'interrupteur differentiel de tete est retenu en 2P 30 mA, 40 A, type A. La notice AquaForte DM-Vario impose une protection differentielle 30 mA mais ne demande pas de type F ou B ; le type A est donc retenu comme choix rationnel pour les charges electroniques du MVP.
 - Le TeSys VCDN20 trouve en atelier peut etre reutilise comme sectionneur de consignation local avant l'interrupteur differentiel du coffret si son etat mecanique/electrique est sain et si le schema final confirme son cablage.
 - Un depart supplementaire d'eclairage exterieur est reserve dans le coffret, protege par disjoncteur 6 A courbe C ; ce circuit n'a pas de role fonctionnel dans le controleur du bassin.
+- Les sections de cablage retenues pour le MVP sont : 2 x 2,5 mm2 pour le moteur tambour 12 VDC, 0,5 mm2 pour les voyants et boutons, et 1,5 mm2 pour les circuits 230 VAC cote filtration, sous reserve de verification du schema final, des longueurs, des conditions de pose et des protections associees.
 - Les valeurs de fusibles et disjoncteurs restent a confirmer par revue de schema, fiches constructeur, sections de cable, conditions de pose et essais.
 - Les adaptations imprimees en 3D pour le relais HELLA et le porte-fusibles ATO deviennent des pieces du coffret a concevoir et valider mecaniquement.
 

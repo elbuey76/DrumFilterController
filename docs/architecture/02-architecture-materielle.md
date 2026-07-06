@@ -110,6 +110,7 @@ La commande matérielle visée correspond au MVP définitif, pas à une commande
 
 | Depart | Protection retenue | Equipements | Commentaire |
 | --- | --- | --- | --- |
+| Protection amont cote maison | Disjoncteur dedie 16 A | Liaison maison vers coffret filtration | Calibre retenu pour la liaison existante d'environ 20 m, tant que sa section n'est pas confirmee en 2,5 mm2. |
 | Tete de tableau | Interrupteur differentiel 2P 30 mA, 40 A, type A | Tableau local complet | Choix coherent avec les charges reelles du MVP ; la notice AquaForte DM-Vario demande 30 mA sans imposer type F ou B. |
 | Alimentation 12 VDC | Disjoncteur 4 A courbe C | Mean Well NDR-120-12 | Depart dedie au controle basse tension. |
 | Pompe de rincage | Disjoncteur 10 A courbe C | Pompe VEVOR / Leo EKJ-802S | Commande par contacteur Schneider LC1D12P7, bobine 230 VAC. |
@@ -239,7 +240,7 @@ flowchart TB
 - validation banc de l'interface directe KC868-A32 / CR18-8DN, notamment sens logique, stabilité, rupture de fil et comportement avec longueurs de câble réelles ;
 - validation mecanique et electrique du contact capot OMRCH ME-8104 : bornes a utiliser, capot ferme boucle fermee, capot ouvert ou fil coupe boucle ouverte, alignement de la came et repetabilite ;
 - choix des GPIO 1-Wire pour `TEMP_BASSIN` et `TEMP_LOCAL`, bus separes preferes si disponibles ;
-- sections de cables, borniers, repérage et implantation physique des protections ;
+- sections de cables retenues en premiere intention : 2 x 2,5 mm2 pour le moteur tambour 12 VDC, 0,5 mm2 pour voyants et boutons, 1,5 mm2 pour les circuits 230 VAC cote filtration ; borniers, repérage et implantation physique des protections ;
 - reference finale materielle du disjoncteur 6 A courbe C pour l'eclairage exterieur, avec validation de la section et du cheminement du cable ;
 - adaptateur rail DIN imprime en 3D du porte-fusibles ATO si le composant retenu n'est pas DIN natif ;
 - référence finale du coffret, minimum IP55, préférence IP65, avec presse-etoupes et gestion de condensation si necessaire ;
