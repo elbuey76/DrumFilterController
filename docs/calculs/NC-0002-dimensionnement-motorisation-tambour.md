@@ -8,7 +8,7 @@ Documenter les hypotheses de dimensionnement retenues pour le moteur de rotation
 
 La motorisation tambour V1 retenue est un motorreducteur Fyearfly 12 VDC 10 rpm. Ce choix remplace le candidat initial de moteur d'essuie-glace SWF 403.835.
 
-Le moteur est alimente par le rail 12 VDC issu d'une alimentation Mean Well NDR-120-12, 120 W, 10 A. Son depart est protege par un fusible ATO 7,5 A et commande par un relais HELLA 4RD 933 332-551, 12 V, donne pour 15 A en charge inductive. Un support sera imprime en 3D pour permettre le montage propre du relais sur rail DIN.
+Le moteur est alimente par le rail 12 VDC issu d'une alimentation Mean Well NDR-120-12, 120 W, 10 A. Son depart est protege par un fusible ATO 5 A et commande par un relais HELLA 4RD 933 332-551, 12 V, donne pour 15 A en charge inductive. Un support sera imprime en 3D pour permettre le montage propre du relais sur rail DIN.
 
 ## Donnees d'entree
 
@@ -31,11 +31,11 @@ Le moteur est alimente par le rail 12 VDC issu d'une alimentation Mean Well NDR-
 | --- | --- | --- |
 | Tension moteur | 12 V DC | Alimentation commune basse tension V1 |
 | Alimentation disponible | Mean Well NDR-120-12, 12 V, 10 A, 120 W | Alimente aussi automate, capteurs, IHM et accessoires via fusibles dedies |
-| Fusible moteur | ATO 7,5 A | Coherent avec un courant de blocage annonce de 6,5 A ; le comportement reel de protection reste a verifier sur montage MVP |
+| Fusible moteur | ATO 5 A | Retenu comme calibre plus restrictif que l'hypothese 7,5 A afin de mieux couvrir le blocage annonce a 6,5 A ; a verifier imperativement au demarrage et en charge |
 | Relais moteur | HELLA 4RD 933 332-551, 12 V, 15 A inductif | Marge par rapport au fusible et a l'appel moteur attendu |
-| Distribution 12 V | Porte-fusibles ATO 4 departs | Moteur 7,5 A, automate 3 A, capteurs/boutons 1 A, ecran/voyants/accessoires 1 A |
+| Distribution 12 V | Porte-fusibles ATO 4 departs | Moteur 5 A, automate 3 A, capteurs/boutons 1 A, ecran/voyants/accessoires 1 A |
 
-Le courant nominal annonce ne suffit pas a lui seul pour valider le dimensionnement. Le screenshot fournisseur donne un courant de blocage de 6,5 A, ce qui rend coherent le fusible ATO 7,5 A en premiere intention. Les cas dimensionnants restant a observer sur le montage MVP sont le demarrage, l'effort en charge avec tambour mouille, les frottements, l'encrassement et le comportement effectif en blocage mecanique.
+Le courant nominal annonce ne suffit pas a lui seul pour valider le dimensionnement. Le screenshot fournisseur donne un courant de blocage de 6,5 A, ce qui rend l'hypothese 7,5 A trop peu protectrice contre un blocage. Le calibre 5 A est donc retenu pour essai, sous reserve de ne pas declencher au demarrage ni en charge normale. Les cas dimensionnants restant a observer sur le montage MVP sont le demarrage, l'effort en charge avec tambour mouille, les frottements, l'encrassement et le comportement effectif en blocage mecanique.
 
 ## Transmission mecanique
 
@@ -51,7 +51,7 @@ La vitesse finale du tambour doit etre validee en essai reel. Si l'entrainement 
 
 ## Contraintes de cablage
 
-Le depart moteur est cable en 12 VDC via fusible ATO 7,5 A et relais HELLA 12 V. Le support du relais doit etre concu pour une fixation propre en coffret, sur rail DIN, sans contrainte mecanique sur les cosses.
+Le depart moteur est cable en 12 VDC via fusible ATO 5 A et relais HELLA 12 V. Le support du relais doit etre concu pour une fixation propre en coffret, sur rail DIN, sans contrainte mecanique sur les cosses.
 
 Le cablage final doit verifier :
 
@@ -67,7 +67,7 @@ Le moteur d'essuie-glace avant SWF 403.835 de Peugeot 106 phase 2 avait ete etud
 
 ## Conclusion de dimensionnement
 
-Le motorreducteur Fyearfly 12 VDC 10 rpm est retenu pour simplifier la vitesse de rotation et le cablage V1. Le pre-dimensionnement electrique retient une alimentation 12 VDC 10 A commune, un fusible moteur 7,5 A et un relais HELLA 15 A inductif.
+Le motorreducteur Fyearfly 12 VDC 10 rpm est retenu pour simplifier la vitesse de rotation et le cablage V1. Le pre-dimensionnement electrique retient une alimentation 12 VDC 10 A commune, un fusible moteur 5 A a valider par essais et un relais HELLA 15 A inductif.
 
 Le courant de blocage annonce de 6,5 A repond au besoin de pre-dimensionnement pour la commande definitive du MVP. La conception ne doit toutefois pas dependre uniquement des donnees de la capture produit : le comportement final reste a verifier sur le tambour reel avant de considerer le cablage et la protection comme pleinement valides.
 
@@ -78,7 +78,7 @@ Le courant de blocage annonce de 6,5 A repond au besoin de pre-dimensionnement p
 - mesurer le courant avec tambour a sec ;
 - mesurer le courant avec tambour en eau ;
 - mesurer le courant au demarrage ;
-- realiser un test de blocage controle pour verifier le comportement reel du fusible 7,5 A et de la protection, en reference au courant de blocage annonce de 6,5 A ;
+- realiser un test de blocage controle pour verifier le comportement reel du fusible 5 A et de la protection, en reference au courant de blocage annonce de 6,5 A ;
 - mesurer la vitesse finale du tambour avec la transmission retenue ;
 - valider un cycle de lavage complet sans blocage ni echauffement excessif ;
 - verifier la tenue mecanique du support relais HELLA imprime en 3D.

@@ -24,7 +24,7 @@
 | Moteur tambour | Motorreducteur Fyearfly 12 VDC 10 rpm | Simplifie la vitesse de tambour par rapport au moteur d'essuie-glace candidat |
 | Relais moteur tambour | HELLA 4RD 933 332-551, 12 V, charge inductive 15 A | Commande le moteur tambour ; support rail DIN a imprimer en 3D |
 | Pompe de rinçage | VEVOR / Leo EKJ-802S, 220-240 VAC, 800 W indique projet | Impose une commande secteur adaptée à une charge moteur et une mesure du débit réel sur la rampe et les buses déjà achetées et fabriquées |
-| Contacteur pompe de rinçage | Schneider Electric TeSys LC1D12P7, 3P, AC-3 12 A, bobine 230 VAC | Piloté par un relais du KC868-A32 pour commander la pompe de rinçage |
+| Contacteur pompe de rinçage | Schneider Electric TeSys LC1D12P7, 3P, AC-3 12 A, bobine 230 VAC | Piloté directement par un relais du KC868-A32 pour commander la pompe de rinçage ; relais intermediaire 12 V -> 230 V non retenu, separation BT/secteur a traiter au schema final |
 | Contacteurs filtration, UV, décoration, mise à niveau | TOMZN TOCT1-25Z, 25 A, bobine 12 VDC | Pilotés en 12 VDC par les relais de l'automate selon les sécurités |
 | Ecran local | LCD 2004 / 20x4 I2C 3,3 V, fond bleu retenu | Afficheur texte principal de l'IHM locale ; raccordement cible sur le port d'extension KC868-A32 en I2C logiciel via `GPIO32` / `GPIO33`, sans charger les bus I2C internes des entrées/sorties |
 | Horloge temps reel | Module RTC DS3231 I2C 3,3 V avec batterie rechargeable | Source locale d'heure fiable pour V2, et horodatage MVP seulement si simple ; adresse I2C attendue `0x68`, raccordement cible sur le bus I2C logiciel du port d'extension si la cohabitation avec le LCD est validee |
@@ -88,7 +88,7 @@ flowchart LR
 | Joint a levre tambour | a poser | Indispensable pour separer correctement eau sale et eau propre |
 | Moteur tambour | Fyearfly 12 VDC 10 rpm | Courant réel, couple disponible, sens de rotation et fixation mécanique à valider avant schéma définitif |
 | Transmission tambour | A définir autour du motorreducteur 10 rpm | La vitesse finale tambour doit être validée en essai réel ; la réduction 3:1 du candidat SWF n'est plus l'hypothèse de base |
-| Protection moteur tambour | Fusible ATO 7,5 A sur le départ moteur et relais HELLA 12 V 15 A inductif | Courant de blocage annoncé 6,5 A d'après screenshot fournisseur ; comportement réel de protection à vérifier sur montage MVP |
+| Protection moteur tambour | Fusible ATO 5 A sur le départ moteur et relais HELLA 12 V 15 A inductif | Courant de blocage annoncé 6,5 A d'après screenshot fournisseur ; calibre 5 A retenu pour essai ; comportement réel de protection à vérifier sur montage MVP |
 | Pompe de rinçage | VEVOR / Leo EKJ-802S, raccords 1 pouce, IPX4, classe I | Pompe 230 VAC de surface, a protéger electriquement et a maintenir hors immersion |
 | Rampe de rinçage | Tuyau 32 mm + buses déjà achetés et fabriqués | Le point débit/pression réel de la pompe devra être mesuré sur cet ensemble |
 | Sonde température bassin | DS18B20 étanche inox 3 fils, longueur cible 3 m | A implanter dans une eau représentative : arrivée gravitaire avant pompe/UV ou bassin en zone brassée, ombragée et accessible ; montage protégé et démontable ; alimentation 3,3 V, pull-up 4,7 kΩ sur `DATA` ; alerte informative en V1 avec seuils initiaux < 4 deg C et > 28 deg C |
@@ -123,7 +123,7 @@ La commande matérielle visée correspond au MVP définitif, pas à une commande
 
 | Depart 12 VDC | Fusible | Usage |
 | --- | --- | --- |
-| Moteur tambour | 7,5 A | Motorreducteur Fyearfly 12 VDC 10 rpm via relais HELLA |
+| Moteur tambour | 5 A | Motorreducteur Fyearfly 12 VDC 10 rpm via relais HELLA |
 | Automate | 3 A | KC868-A32 |
 | Capteurs et boutons | 1 A | Capteurs de niveau, capot et commandes locales |
 | Ecran, voyants, accessoires | 1 A | IHM locale, signalisation et accessoires |
@@ -175,7 +175,7 @@ Les couleurs de fils annoncees par les vendeurs ne doivent pas etre prises comme
 | Organe | Commande automate | Organe de puissance retenu | Remarque |
 | --- | --- | --- | --- |
 | Moteur tambour | Relais KC868-A32 vers commande 12 VDC | Relais HELLA 4RD 933 332-551, 12 V, 15 A inductif | Support rail DIN a imprimer en 3D. |
-| Pompe de rincage | Relais KC868-A32 vers bobine 230 VAC | Contacteur moteur Schneider TeSys LC1D12P7, AC-3 12 A | Charge moteur secteur a raccorder a la terre. |
+| Pompe de rincage | Relais KC868-A32 vers bobine 230 VAC | Contacteur moteur Schneider TeSys LC1D12P7, AC-3 12 A | Charge moteur secteur a raccorder a la terre ; commande directe retenue sans relais intermediaire. |
 | Pompe filtration | Relais KC868-A32 vers bobine 12 VDC | Contacteur modulaire TOMZN TOCT1-25Z 25 A | Depart separe des organes non essentiels. |
 | UV | Relais KC868-A32 vers bobine 12 VDC | Contacteur modulaire TOMZN TOCT1-25Z 25 A | Asservi a la filtration autorisee et a EP_CRITIQUE absent. |
 | Pompe decoration | Relais KC868-A32 vers bobine 12 VDC | Contacteur modulaire TOMZN TOCT1-25Z 25 A | Suit les memes securites hydrauliques que la filtration. |
@@ -223,7 +223,7 @@ flowchart TB
 - reference finale de l'interrupteur differentiel 2P 30 mA, 40 A, type A ;
 - cotes exactes EP_LAVAGE et EP_CRITIQUE sur le tube de report après mesure du niveau normal réel ;
 - courant réel, fixation et sens de rotation du motorreducteur Fyearfly 12 VDC 10 rpm ;
-- validation du fusible 7,5 A moteur tambour en référence au courant de blocage annoncé 6,5 A, avec mesure du courant en charge et vérification du comportement en blocage ;
+- validation du fusible 5 A moteur tambour en référence au courant de blocage annoncé 6,5 A, avec mesure du courant en charge et vérification du comportement en blocage ;
 - commande secteur de la pompe de rinçage, raccordement à la terre et validation du contacteur Schneider LC1D12P7 dans le schema final ;
 - débit ou pression de rinçage de référence après mesure sur la rampe et les buses déjà fabriquées ;
 - mesure terrain de la cote support FAT avant fabrication, afin d'aligner trop-plein physique et niveau hydraulique cible du bassin ;
@@ -240,7 +240,7 @@ flowchart TB
 - validation banc de l'interface directe KC868-A32 / CR18-8DN, notamment sens logique, stabilité, rupture de fil et comportement avec longueurs de câble réelles ;
 - validation mecanique et electrique du contact capot OMRCH ME-8104 : bornes a utiliser, capot ferme boucle fermee, capot ouvert ou fil coupe boucle ouverte, alignement de la came et repetabilite ;
 - choix des GPIO 1-Wire pour `TEMP_BASSIN` et `TEMP_LOCAL`, bus separes preferes si disponibles ;
-- sections de cables retenues en premiere intention : 2 x 2,5 mm2 pour le moteur tambour 12 VDC, 0,5 mm2 pour voyants et boutons, 1,5 mm2 pour les circuits 230 VAC cote filtration ; borniers, repérage et implantation physique des protections ;
+- sections de cables retenues en premiere intention : 2 x 2,5 mm2 pour le moteur tambour 12 VDC, 0,5 mm2 pour voyants et boutons, 1,5 mm2 pour les circuits 230 VAC cote filtration y compris cablage interne d'armoire ; borniers, repérage et implantation physique des protections ;
 - reference finale materielle du disjoncteur 6 A courbe C pour l'eclairage exterieur, avec validation de la section et du cheminement du cable ;
 - adaptateur rail DIN imprime en 3D du porte-fusibles ATO si le composant retenu n'est pas DIN natif ;
 - référence finale du coffret, minimum IP55, préférence IP65, avec presse-etoupes et gestion de condensation si necessaire ;

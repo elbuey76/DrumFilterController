@@ -106,8 +106,8 @@ L'interface électrique retenue est un raccordement direct sur les entrées digi
 | Tension moteur | 12 V DC | Alimente par le rail 12 VDC V1 |
 | Vitesse retenue | 10 rpm en sortie motorreducteur | Vitesse finale tambour a valider avec la transmission réelle |
 | Courant nominal annonce | < 1,6 A selon capture produit | Donnee a confirmer par mesure sur montage réel |
-| Courant de blocage / d'arret annonce | 6,5 A selon screenshot fournisseur transmis | Sert d'ordre de grandeur pour le fusible 7,5 A ; comportement réel a confirmer par test |
-| Fusible retenu | ATO 7,5 A | Depart 12 VDC moteur tambour |
+| Courant de blocage / d'arret annonce | 6,5 A selon screenshot fournisseur transmis | Sert d'ordre de grandeur pour choisir une protection plus restrictive ; comportement reel du fusible 5 A a confirmer par test |
+| Fusible retenu | ATO 5 A | Depart 12 VDC moteur tambour |
 | Relais retenu | HELLA 4RD 933 332-551, 12 V, charge inductive 15 A | Relais de puissance moteur, support rail DIN a imprimer en 3D |
 | Couple moteur | Inconnu | Donnée critique à valider par essais |
 | Usage retenu | Intermittent pendant les cycles de lavage | Usage continu 24/24 non recommandé |
@@ -125,12 +125,12 @@ Le moteur doit rester hors eau et protège des projections. Le courant de blocag
 | Tete de tableau | Interrupteur differentiel 2P 30 mA, 40 A, type A | Choix coherent avec les charges reelles du MVP ; la notice AquaForte DM-Vario demande 30 mA sans imposer type F ou B |
 | Coupure locale cadenassable | Schneider Electric TeSys VCDN20, interrupteur-sectionneur 3P 690 V 20 A, poignee rouge cadenassable | Piece trouvee en atelier, candidate pour la coupure/consignation du coffret FAT, placee avant l'interrupteur differentiel local. Ne remplace pas le differentiel ni les disjoncteurs ; verifier etat, montage, coupure phase/neutre, calibre amont 16 A et maintien des bulleurs hors coupure automatique |
 | Alimentation 12 VDC | Mean Well NDR-120-12, 120 W, 10 A, rail DIN | Protegee par disjoncteur 4 A courbe C |
-| Distribution 12 VDC | Porte-fusibles ATO 4 emplacements | Depart moteur 7,5 A, automate 3 A, capteurs/boutons 1 A, ecran/voyants/accessoires 1 A ; adaptateur rail DIN imprime en 3D probable selon modele retenu |
+| Distribution 12 VDC | Porte-fusibles ATO 4 emplacements | Depart moteur 5 A, automate 3 A, capteurs/boutons 1 A, ecran/voyants/accessoires 1 A ; adaptateur rail DIN imprime en 3D probable selon modele retenu |
 | Plateforme controle | KC868-A32 | Base automate V1 |
 | Ecran local | LCD 2004 / 20x4 I2C 3,3 V, fond bleu | Raccordement cible sur port d'extension KC868-A32 via `GPIO32` / `GPIO33` en I2C logiciel ; validation banc requise avant cablage final |
 | Horloge temps reel | Module RTC DS3231 I2C 3,3 V avec batterie rechargeable | Source locale d'heure fiable V2 ; adresse attendue `0x68`, raccordement cible sur le bus I2C logiciel du port d'extension KC868-A32 si cohabitation validee avec le LCD 2004 |
-| Pompe rincage | Disjoncteur 10 A courbe C + contacteur Schneider TeSys LC1D12P7, bobine 230 VAC | La bobine est pilotee par un relais de l'automate |
-| Prises local | Disjoncteur 16 A courbe C | 1 prise bulleur bassin, 1 prise bulleur filtre bio, 2 prises maintenance ponctuelle |
+| Pompe rincage | Disjoncteur 10 A courbe C + contacteur Schneider TeSys LC1D12P7, bobine 230 VAC | La bobine est pilotee directement par un relais de l'automate. Solution retenue pour eviter un relais intermediaire 12 V -> 230 V, avec separation BT/secteur et reperage a traiter au schema final. |
+| Prises local | Disjoncteur 16 A courbe C | 1 prise bulleur bassin, 1 prise bulleur filtre bio, 2 prises maintenance ponctuelle ; le courant total du coffret reste limite par le disjoncteur amont 16 A cote maison |
 | Pompe filtration | Disjoncteur 6 A courbe C + contacteur TOMZN TOCT1-25Z 25 A, bobine 12 VDC | Depart separe car organe essentiel |
 | UV, pompe decoration, mise a niveau | Disjoncteur 6 A courbe C + contacteurs TOMZN TOCT1-25Z 25 A, bobine 12 VDC | Separés du depart filtration |
 | Eclairage exterieur | Disjoncteur 6 A courbe C | Depart supplementaire dans le coffret pour 6 spots LED exterieurs de 3 W avec detecteurs, environ 10 a 15 m de cable. Circuit hors fonctions bassin, sans commande ni securite FAT |
@@ -140,9 +140,9 @@ Le moteur doit rester hors eau et protège des projections. Le courant de blocag
 
 | Liaison | Section retenue | Notes |
 | --- | --- | --- |
-| Moteur tambour 12 VDC | 2 x 2,5 mm2 | Section retenue pour limiter la chute de tension sur le depart moteur protege par fusible ATO 7,5 A. |
+| Moteur tambour 12 VDC | 2 x 2,5 mm2 | Section retenue pour limiter la chute de tension sur le depart moteur protege par fusible ATO 5 A. |
 | Voyants et boutons IHM locale | 0,5 mm2 | Section retenue pour les commandes et signalisations basse tension en facade. |
-| Circuits 230 VAC cote filtration | 1,5 mm2 | Section retenue pour les departs 230 VAC locaux proteges par les disjoncteurs du coffret filtration, sous reserve de verification du schema final et des conditions de pose. |
+| Circuits 230 VAC cote filtration | 1,5 mm2 | Section retenue pour les departs 230 VAC locaux et le cablage interne de l'armoire, afin de rester coherent avec l'hypothese prudente d'une liaison amont non confirmee en 2,5 mm2 ; sous reserve de verification du schema final et des conditions de pose. |
 
 ### Pompe de rinçage
 
@@ -218,10 +218,10 @@ Le point de fonctionnement nominal recherche reste 8 à 10 m3/h, mais la pompe p
 - EP_LAVAGE est placé physiquement au-dessus de EP_CRITIQUE, les deux sur supports réglables en hauteur ; une réserve mécanique pour un troisième capteur futur peut être prévue sans câblage MVP.
 - Les capteurs de niveau retenus sont des CR18-8DN en M18, sortie NPN, alimentation 12-24 VDC, câblage 3 fils.
 - Le moteur tambour retenu est un motorreducteur Fyearfly 12 VDC 10 rpm, en fonctionnement intermittent.
-- L'alimentation moteur et le fusible 7,5 A sont pré-dimensionnés avec le courant de blocage annoncé de 6,5 A ; ils doivent être confirmés par mesure du courant réel en charge et vérification du comportement en blocage.
+- L'alimentation moteur et le fusible 5 A sont pré-dimensionnés en tenant compte du courant de blocage annoncé de 6,5 A ; le calibre 5 A est retenu pour essai afin d'etre plus protecteur que l'hypothese 7,5 A, mais il doit etre confirme par mesure du courant réel au démarrage, en charge et en blocage.
 - Une protection contre blocage ou surintensité du moteur tambour doit être prévue ou fortement justifiée si elle est absente.
 - La pompe de rinçage retenue est une pompe de surface VEVOR / Leo EKJ-802S en 220-240 VAC ; elle doit être commandée comme une charge moteur secteur.
-- La pompe de rinçage est commandée par un contacteur Schneider TeSys LC1D12P7, bobine 230 VAC, lui-même piloté par un relais de l'automate.
+- La pompe de rinçage est commandée par un contacteur Schneider TeSys LC1D12P7, bobine 230 VAC, lui-même piloté directement par un relais de l'automate ; le relais intermediaire 12 V -> 230 V n'est pas retenu afin d'eviter une architecture trop complexe, et le contacteur equivalent en bobine 12 VDC / AC-3 est considere difficile a sourcer.
 - L'UV, la pompe décoration, la pompe filtration et la mise à niveau sont commandés via contacteurs TOMZN 25 A a bobine 12 VDC.
 - La pompe de filtration dispose d'un départ séparé de l'UV, de la pompe décoration et de la mise à niveau afin de limiter les coupures communes entre organes essentiels et secondaires.
 - Le depart cote maison vers le coffret bassin devra etre protege par un disjoncteur dedie 16 A, calibre retenu pour la liaison existante d'environ 20 m tant que sa section n'est pas confirmee en 2,5 mm2.
