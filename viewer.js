@@ -56,7 +56,8 @@ const DOC_SECTIONS = [
       { path: "docs/decisions/README.md", label: "README", blurb: "Convention du journal de décisions." },
       { path: "docs/decisions/ADR-0001-structure-documentation.md", label: "ADR-0001 Documentation", blurb: "Choix du format Markdown." },
       { path: "docs/decisions/ADR-0002-dimensionnement-pompe-filtration-principale.md", label: "ADR-0002 Pompe principale", blurb: "Direction prise pour le dimensionnement." },
-      { path: "docs/decisions/ADR-0003-choix-plateforme-controle-v1.md", label: "ADR-0003 Plateforme V1", blurb: "Comparaison attendue de la plateforme de contrôle." }
+      { path: "docs/decisions/ADR-0003-choix-plateforme-controle-v1.md", label: "ADR-0003 Plateforme V1", blurb: "Comparaison attendue de la plateforme de contrôle." },
+      { path: "docs/decisions/ADR-0011-strategie-validation-materielle-v1.md", label: "ADR-0011 Validation materielle", blurb: "Strategie de validation banc, terrain et go/no-go." }
     ]
   },
   {
@@ -76,7 +77,8 @@ const DOC_SECTIONS = [
     accent: "Tests",
     files: [
       { path: "docs/validation/README.md", label: "README", blurb: "Principe de validation tracée." },
-      { path: "docs/validation/plan-tests-exigences.md", label: "Plan de tests", blurb: "Matrice exigences, modes de preuve et statuts." }
+      { path: "docs/validation/plan-tests-exigences.md", label: "Plan de tests", blurb: "Matrice exigences, modes de preuve et statuts." },
+      { path: "docs/validation/checklist-go-no-go-materiel-v1.md", label: "Checklist materiel", blurb: "Verrou go/no-go avant cablage final et exploitation." }
     ]
   }
 ];

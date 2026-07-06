@@ -32,3 +32,4 @@ Copier le fichier `_template.md` pour créer une nouvelle decision.
 8. [ADR-0008 - Choix des voyants de l'IHM locale](ADR-0008-choix-voyants-ihm-locale.md)
 9. [ADR-0009 - Choix du sélecteur de mode AUTO / MAINTENANCE](ADR-0009-choix-selecteur-mode-auto-maintenance.md)
 10. [ADR-0010 - Choix des boutons poussoirs de l'IHM locale](ADR-0010-choix-boutons-poussoirs-ihm-locale.md)
+11. [ADR-0011 - Strategie de validation materielle V1](ADR-0011-strategie-validation-materielle-v1.md)

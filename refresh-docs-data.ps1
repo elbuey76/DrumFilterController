@@ -30,10 +30,12 @@ $paths = @(
   "docs/decisions/ADR-0008-choix-voyants-ihm-locale.md",
   "docs/decisions/ADR-0009-choix-selecteur-mode-auto-maintenance.md",
   "docs/decisions/ADR-0010-choix-boutons-poussoirs-ihm-locale.md",
+  "docs/decisions/ADR-0011-strategie-validation-materielle-v1.md",
   "docs/backlog/README.md",
   "docs/backlog/backlog.md",
   "docs/validation/README.md",
-  "docs/validation/plan-tests-exigences.md"
+  "docs/validation/plan-tests-exigences.md",
+  "docs/validation/checklist-go-no-go-materiel-v1.md"
 )
 
 $map = [ordered]@{}

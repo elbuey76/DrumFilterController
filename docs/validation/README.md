@@ -7,5 +7,6 @@ Le principe retenu est une validation tracée exigence par exigence : chaque exi
 Fichier principal :
 
 - [Plan de tests par exigences](plan-tests-exigences.md)
+- [Checklist go/no-go materiel V1](checklist-go-no-go-materiel-v1.md)
 
 Les procédures longues ou risquées peuvent être détaillées dans des fiches de test séparées, tout en restant référencées par la matrice de traçabilité.
