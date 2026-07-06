@@ -95,7 +95,7 @@
 | F-089 | En cas de reset refusé, l'IHM locale doit afficher une cause courte et explicite. | Must | Exemples attendus : RESET REFUSÉ - EP_CRITIQUE ACTIF, RESET REFUSÉ - EP_LAVAGE ACTIF, RESET REFUSÉ - CAPTEURS INCOHÉRENTS. |
 | F-090 | L'IHM ne doit pas presenter le bypass passif comme un état mesure en V1. | Must | En défaut lavage sans EP_CRITIQUE, afficher une formulation prudente du type MODE DÉGRADÉ - BYPASS SUPPOSÉ, car le bypass n'est pas instrumente. |
 | F-091 | Les alarmes et défauts V1 affichés localement doivent utiliser un format code court plus message texte. | Must | Format cible : `Axx - MESSAGE COURT`, par exemple `A01 - NIVEAU CRITIQUE`. Le code aide au diagnostic et le texte aide l'utilisateur. |
-| F-092 | L'IHM locale V1 doit prévoir au minimum deux voyants physiques complémentaires : marche et alarme. | Must | L'écran porte le détail, mais un voyant marche vert et un voyant alarme rouge donnent un diagnostic immédiat. Un voyant lavage jaune ou ambre reste optionnel Should. |
+| F-092 | L'IHM locale V1 doit prévoir au minimum deux voyants physiques complémentaires : marche et alarme. | Must | L'écran porte le détail, mais un voyant marche vert et un voyant alarme rouge donnent un diagnostic immédiat. Pour le montage MVP, le voyant lavage jaune 16 mm 12 VDC est aussi retenu. |
 | F-093 | Le bouton TEST_LAVAGE doit lancer un seul cycle complet borné, même si EP_LAVAGE est actif au début du test. | Must | Le test ne doit pas appliquer les relances multiples du lavage automatique et ne doit pas servir de mode de décolmatage agressif. |
 | F-094 | Si TEST_LAVAGE est lance alors que EP_LAVAGE est inactif, le verdict doit confirmer l'exécution de la séquence sans prétendre prouver l'efficacité hydraulique. | Must | Verdict cible : `TEST OK - CYCLE EXÉCUTÉ` si aucune sécurité critique n'apparaît. |
 | F-095 | Si TEST_LAVAGE est lance alors que EP_LAVAGE est actif, le verdict doit dependre du retour de EP_LAVAGE après le cycle borné. | Must | Verdict cible : `TEST OK - NIVEAU OK` si EP_LAVAGE redevient normal ; `TEST ÉCHEC - EP_LAVAGE ACTIF` ou `TEST ÉCHEC - LAVAGE INEFFICACE` sinon. Le test seul ne déclare pas un défaut lavage maintenu, sauf sécurité critique déclenchée. |
@@ -286,6 +286,8 @@ L'IHM locale doit au minimum couvrir :
 - distinction des modes principaux et des états d'alarme ;
 - identification locale d'un cycle de lavage en cours ;
 - affichage simple du mode actuel, de l'état niveau, de l'état lavage, de l'alarme active et de la température eau ;
+- sélecteur physique `AUTO / MAINTENANCE` 22 mm, 2 positions maintenues, contact `1NO + 1NC`, lu en contacts secs par l'automate ;
+- boutons poussoirs physiques 22 mm, momentanés, contact `1NO1NC`, lus en contacts secs par l'automate : `RESET_ALARME` bleu, `TEST_LAVAGE` jaune, `MANU_TAMBOUR` noir et `MANU_RINCAGE` noir ;
 - bouton physique dédié au reset alarme, accepte seulement si les conditions de retour au service sont satisfaites ;
 - possibilité de définir un code couleur et un nombre de voyants cohérents ;
 - LCD 2004 / 20x4 I2C 3,3 V retenu en V1 pour éviter une interprétation uniquement par codes lumineux.
@@ -294,11 +296,11 @@ L'ecran local retenu est un LCD 2004 / 20x4 I2C 3,3 V, fond bleu. Il doit être 
 
 Les voyants physiques V1 complémentaires à l'écran sont :
 
-- `MARCHE`, obligatoire, vert : contrôleur alimente / système opérationnel ou auto OK selon câblage retenu ;
-- `ALARME`, obligatoire, rouge : alarme active ou défaut ;
-- `LAVAGE`, optionnel, jaune ou ambre : cycle lavage, dégradé ou maintenance si le câblage reste simple.
+- `MARCHE`, obligatoire, vert, voyant LED étanche 16 mm 12 VDC : contrôleur alimente / système opérationnel ou auto OK selon câblage retenu ;
+- `ALARME`, obligatoire, rouge, voyant LED étanche 16 mm 12 VDC : alarme active ou défaut ;
+- `LAVAGE`, retenu pour le montage MVP, jaune, voyant LED étanche 16 mm 12 VDC : cycle lavage, test, dégradé ou maintenance si le câblage reste simple.
 
-Le code couleur recommandé est vert pour marche / auto OK, rouge pour alarme ou défaut, jaune ou ambre pour lavage, dégradé ou maintenance si un voyant additionnel est retenu. `A15 - CAPOT OUVERT LONG` allumé le voyant rouge `VOYANT_ALARME` fixe, sans clignotement en V1. À la fermeture stable du capot, `A15` disparaît et le voyant rouge suit immédiatement l'état des alarmes actives restantes.
+Le code couleur retenu est vert pour marche / auto OK, rouge pour alarme ou défaut, jaune pour lavage, dégradé ou maintenance selon l'affectation finale. `A15 - CAPOT OUVERT LONG` allume le voyant rouge `VOYANT_ALARME` fixe, sans clignotement en V1. À la fermeture stable du capot, `A15` disparaît et le voyant rouge suit immédiatement l'état des alarmes actives restantes.
 
 Si plusieurs alarmes ou informations se concurrencent sur l'écran, la priorité d'affichage V1 est :
 

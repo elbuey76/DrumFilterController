@@ -29,3 +29,6 @@ Copier le fichier `_template.md` pour créer une nouvelle decision.
 5. [ADR-0005 - Choix de la RTC pour l'heure fiable](ADR-0005-choix-rtc-heure-fiable.md)
 6. [ADR-0006 - Choix des sondes de temperature](ADR-0006-choix-sondes-temperature.md)
 7. [ADR-0007 - Choix du contact de capot](ADR-0007-choix-contact-capot.md)
+8. [ADR-0008 - Choix des voyants de l'IHM locale](ADR-0008-choix-voyants-ihm-locale.md)
+9. [ADR-0009 - Choix du sélecteur de mode AUTO / MAINTENANCE](ADR-0009-choix-selecteur-mode-auto-maintenance.md)
+10. [ADR-0010 - Choix des boutons poussoirs de l'IHM locale](ADR-0010-choix-boutons-poussoirs-ihm-locale.md)

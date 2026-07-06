@@ -93,7 +93,9 @@ Chaque fiche doit contenir au minimum :
 | F-089 | Must | Test | Message reset refusé | Chaque reset refusé affiche une cause courte et explicite. | À définir |
 | F-090 | Must | Test | Bypass supposé | En dégradé sans instrumentation bypass, l'IHM affiche bypass supposé et ne prétend pas mesurer bypass actif. | À définir |
 | F-091 | Must | Test | Codes messages V1 | Les alarmes A01 à A15 sont affichées au format code court plus message texte. | À définir |
-| F-092 | Must | Test | Voyants V1 | Le voyant MARCHE vert et le voyant ALARME rouge signalent correctement marche et alarme ; le voyant LAVAGE est teste s'il est câblé. | À définir |
+| F-092 | Must | Test | Voyants V1 | Les voyants LED étanches 16 mm 12 VDC MARCHE vert, ALARME rouge et LAVAGE jaune signalent correctement marche, alarme et cycle/test selon l'affectation retenue. | À définir |
+| IHM-SEL | Must | Test | Sélecteur AUTO / MAINTENANCE | Le sélecteur 22 mm 2 positions maintenues `1NO + 1NC` active exclusivement `MODE_AUTO` ou `MODE_MAINTENANCE`, avec sens logique validé sur banc. | À définir |
+| IHM-BP | Must | Test | Boutons poussoirs V1 | Les boutons 22 mm momentanés `1NO1NC` RESET_ALARME bleu, TEST_LAVAGE jaune, MANU_TAMBOUR noir et MANU_RINCAGE noir activent uniquement leur entrée pendant l'appui, avec étiquettes façade distinctes pour les deux boutons noirs. | À définir |
 | F-093 | Must | Test | TEST_LAVAGE borné | TEST_LAVAGE exécute un seul cycle complet borné et ne lance pas de relances multiples. | À définir |
 | F-094 | Must | Test | TEST_LAVAGE niveau normal | Si EP_LAVAGE est inactif au départ, le verdict est TEST OK - CYCLE EXÉCUTÉ sans prétendre lavage efficace. | À définir |
 | F-095 | Must | Test | TEST_LAVAGE EP_LAVAGE actif | Si EP_LAVAGE est actif au départ, le verdict dépend du retour niveau après le cycle borné et ne déclare pas de défaut lavage maintenu par le test seul. | À définir |

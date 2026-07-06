@@ -203,7 +203,7 @@ Les alarmes V1 doivent utiliser le format `Axx - MESSAGE COURT`. Liste minimale 
 | A14 | TEST REFUSÉ SÉCURITÉ |
 | A15 | CAPOT OUVERT LONG |
 
-Les voyants physiques restent des complements de lecture rapide : `VOYANT_MARCHE` vert et `VOYANT_ALARME` rouge sont retenus en V1. `VOYANT_ALARME` s'allumé fixe pour les alarmes actives et pour `A15 - CAPOT OUVERT LONG`. Aucun clignotement n'est retenu en V1. `VOYANT_LAVAGE` jaune ou ambre reste optionnel si le câblage est simple ; l'écran reste la source du détail.
+Les voyants physiques restent des complements de lecture rapide. Le montage MVP retient trois voyants LED étanches 16 mm 12 VDC : `VOYANT_MARCHE` vert, `VOYANT_ALARME` rouge et `VOYANT_LAVAGE` jaune. `VOYANT_ALARME` s'allume fixe pour les alarmes actives et pour `A15 - CAPOT OUVERT LONG`. Aucun clignotement n'est retenu en V1. L'écran reste la source du détail.
 
 ## Données utiles a presenter localement
 
