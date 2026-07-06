@@ -28,6 +28,7 @@
 | Contacteurs filtration, UV, décoration, mise à niveau | TOMZN TOCT1-25Z, 25 A, bobine 12 VDC | Pilotés en 12 VDC par les relais de l'automate selon les sécurités |
 | Ecran local | LCD 2004 / 20x4 I2C 3,3 V, fond bleu retenu | Afficheur texte principal de l'IHM locale ; raccordement cible sur le port d'extension KC868-A32 en I2C logiciel via `GPIO32` / `GPIO33`, sans charger les bus I2C internes des entrées/sorties |
 | Horloge temps reel | Module RTC DS3231 I2C 3,3 V avec batterie rechargeable | Source locale d'heure fiable pour V2, et horodatage MVP seulement si simple ; adresse I2C attendue `0x68`, raccordement cible sur le bus I2C logiciel du port d'extension si la cohabitation avec le LCD est validee |
+| Sondes de temperature | 2 x DS18B20 étanches inox 3 fils, longueur cible 3 m | Meme modele pour `TEMP_BASSIN` et `TEMP_LOCAL` afin de simplifier achat, câblage et firmware ; alimentation 3,3 V, pull-up 4,7 kΩ sur `DATA`, brochage des couleurs a verifier sur banc |
 
 ## Données hydrauliques d'entrée
 
@@ -83,15 +84,15 @@ flowchart LR
 | Capteurs de niveau | 2 x CR18-8DN câblés en MVP, M18, distance ajustable 8 mm, sortie NPN normalement ouverte, alimentation 12-24 VDC, 10 mA max, DC 3 fils | EP_LAVAGE au-dessus de EP_CRITIQUE sur supports réglables en hauteur ; réserve mécanique non câblée possible pour un troisième capteur futur ; interface directe sur entrées digitales KC868-A32 retenue par défaut, avec validation banc obligatoire avant câblage final |
 | Goutiere de trop-plein | seuil fixe à 30,5 cm | Fixe la cote maximale exploitable pour les seuils de pilotage |
 | Support du FAT | a fabriquer | Conditionne tout le régime gravitaire par rapport au bassin |
-| Capot | à créer avec capteur d'ouverture | Ajoute une entrée de sécurité supplémentaire |
+| Capot | à créer avec fin de course OMRCH ME-8104, contact `1NO1NC` | Ajoute l'entrée de sécurité `CAPOT_OUVERT`. Le montage doit donner capot fermé = boucle fermée, capot ouvert ou fil coupé = boucle ouverte ; choix `NO` ou `NC` à valider au multimètre selon la mécanique réelle. |
 | Joint a levre tambour | a poser | Indispensable pour separer correctement eau sale et eau propre |
 | Moteur tambour | Fyearfly 12 VDC 10 rpm | Courant réel, couple disponible, sens de rotation et fixation mécanique à valider avant schéma définitif |
 | Transmission tambour | A définir autour du motorreducteur 10 rpm | La vitesse finale tambour doit être validée en essai réel ; la réduction 3:1 du candidat SWF n'est plus l'hypothèse de base |
 | Protection moteur tambour | Fusible ATO 7,5 A sur le départ moteur et relais HELLA 12 V 15 A inductif | Courant de blocage annoncé 6,5 A d'après screenshot fournisseur ; comportement réel de protection à vérifier sur montage MVP |
 | Pompe de rinçage | VEVOR / Leo EKJ-802S, raccords 1 pouce, IPX4, classe I | Pompe 230 VAC de surface, a protéger electriquement et a maintenir hors immersion |
 | Rampe de rinçage | Tuyau 32 mm + buses déjà achetés et fabriqués | Le point débit/pression réel de la pompe devra être mesuré sur cet ensemble |
-| Sonde température bassin | sonde numérique étanche type DS18B20 ou equivalent | A implanter dans une eau représentative : arrivée gravitaire avant pompe/UV ou bassin en zone brassée, ombragée et accessible ; montage protégé et démontable ; alerte informative en V1 avec seuils initiaux < 4 deg C et > 28 deg C |
-| Sonde température ambiante local | sonde numérique simple ou equivalent | Hors coffret, dans l'air du local, loin de l'alimentation, des contacteurs, des pompes, du soleil et du volume chaud sous capot ; support ventilé et accessible ; alerte informative en V1 avec seuils initiaux < 2 deg C et > 40 deg C |
+| Sonde température bassin | DS18B20 étanche inox 3 fils, longueur cible 3 m | A implanter dans une eau représentative : arrivée gravitaire avant pompe/UV ou bassin en zone brassée, ombragée et accessible ; montage protégé et démontable ; alimentation 3,3 V, pull-up 4,7 kΩ sur `DATA` ; alerte informative en V1 avec seuils initiaux < 4 deg C et > 28 deg C |
+| Sonde température ambiante local | DS18B20 étanche inox 3 fils, longueur cible 3 m, même modèle que la sonde bassin | Hors coffret, dans l'air du local, loin de l'alimentation, des contacteurs, des pompes, du soleil et du volume chaud sous capot ; support ventilé et accessible pour conserver une mesure d'air représentative ; alerte informative en V1 avec seuils initiaux < 2 deg C et > 40 deg C |
 | IHM locale | LCD 2004 / 20x4 I2C 3,3 V, commandes physiques, voyants MARCHE et ALARME | L'écran porte le détail ; raccordement cible sur `GPIO32` / `GPIO33` du port d'extension KC868-A32 en I2C logiciel ; voyant MARCHE vert et voyant ALARME rouge sont retenus en V1, voyant LAVAGE jaune ou ambre optionnel |
 | Liaison distante | option V2 Wi-Fi | Le matériel MVP est la base définitive de la V2 et doit être prêt pour une V2 Wi-Fi sans remplacement de plateforme principale ; la notification ne doit pas compromettre le fonctionnement local |
 | Horloge fiable | RTC DS3231 retenue, implementation MVP optionnelle | Module RTC DS3231 I2C 3,3 V avec batterie rechargeable, adresse attendue `0x68`. Raccordement cible sur `GPIO32` / `GPIO33` du port d'extension KC868-A32 en I2C logiciel, partage possible avec le LCD 2004 si les essais confirment pull-up 3,3 V, adresses distinctes et stabilite. Sert au temps civil, aux logs et aux statistiques ; les temporisations de securite restent sur timers internes. |
@@ -134,6 +135,14 @@ Les entrées digitales du KC868-A32 sont optocouplées par `EL357`. D'après le 
 
 Le câblage direct est donc retenu pour `EP_LAVAGE` et `EP_CRITIQUE`, sans relais d'interface ni conditionneur supplémentaire par défaut. Cette décision reste soumise à un test banc avec les vrais capteurs et le KC868-A32, afin de confirmer le sens logique, la stabilité de lecture, le comportement en fil coupé et l'absence de déclenchements parasites avec les longueurs de câble réelles.
 
+### Interface du contact de capot
+
+Le contact de capot V1 retenu est un fin de course industriel OMRCH `ME-8104`, momentane, avec contact `1NO1NC`. Il est raccorde comme un contact sec vers `GND` sur une entree digitale du KC868-A32.
+
+Le comportement fonctionnel attendu est : capot ferme = boucle fermee vers l'entree automate ; capot ouvert, fil coupe ou connecteur debranche = boucle ouverte. Le choix pratique entre les bornes `NO` et `NC` du `ME-8104` doit etre valide au multimetre apres montage mecanique, car le nom des bornes decrit l'etat du switch au repos, pas forcement l'etat capot ferme.
+
+Le fin de course doit etre fixe sur la partie fixe du bâti ou du petit batiment, et actionne par une patte ou came reglable solidaire du capot transparent. Le reglage doit eviter qu'un capot entrouvert soit interprete comme ferme.
+
 ### Interface de l'ecran local
 
 L'ecran local V1 retenu est un LCD 2004 / 20x4 I2C 3,3 V, fond bleu, avec module I2C de type PCF8574 ou equivalent. Il est alimente par le depart 12 VDC `Ecran, voyants, accessoires` seulement si le module integre une regulation adaptee ; par defaut, son alimentation logique et ses lignes I2C doivent rester compatibles 3,3 V.
@@ -149,6 +158,16 @@ L'heure fiable V2 retenue est un module RTC DS3231 I2C 3,3 V avec batterie recha
 Le raccordement cible reutilise le bus I2C logiciel du port d'extension `GPIO32` / `GPIO33`, partage avec le LCD 2004 I2C si la validation banc confirme la stabilite du bus et l'absence de conflit d'adresse. Si la cohabitation LCD + RTC est instable, la RTC devra etre deplacee sur un bus I2C separe si des GPIO libres le permettent.
 
 La batterie rechargeable livree avec le module sert a conserver l'heure pendant les coupures d'alimentation principale. Le banc doit confirmer que la cellule livree est bien rechargeable, que l'heure est conservee apres coupure et que le module ne presente pas de pull-up I2C vers 5 V.
+
+### Interface des sondes de temperature
+
+Les deux sondes de temperature V1 retenues sont des DS18B20 etanches inox 3 fils, longueur cible 3 m. Le meme modele est utilise pour le bassin et pour le local afin de simplifier l'achat, le stock de rechange, le cablage et le firmware.
+
+Le raccordement cible est un bus 1-Wire alimente en 3,3 V, sans mode parasite : `VCC` sur `3.3 V`, `GND` sur `0 V` commun, `DATA` sur un GPIO libre du KC868-A32 / ESP32, avec une resistance de pull-up `4,7 kΩ` entre `DATA` et `3.3 V`.
+
+Si des GPIO libres sont disponibles, la preference est de separer `TEMP_BASSIN` et `TEMP_LOCAL` sur deux bus 1-Wire distincts. Si les GPIO sont limites, un bus commun reste acceptable en V1 puisque ces alertes sont informatives et non bloquantes.
+
+Les couleurs de fils annoncees par les vendeurs ne doivent pas etre prises comme reference unique. Le banc doit verifier le brochage reel de chaque lot avant cablage definitif, ainsi que l'identification stable des sondes pour ne pas inverser eau et local dans le firmware.
 
 ### Commandes de puissance
 
@@ -208,7 +227,7 @@ flowchart TB
 - débit ou pression de rinçage de référence après mesure sur la rampe et les buses déjà fabriquées ;
 - mesure terrain de la cote support FAT avant fabrication, afin d'aligner trop-plein physique et niveau hydraulique cible du bassin ;
 - calcul final de la geometrie des ouvertures du tambour avant découpe ou perçage, avec objectif 0,20 à 0,23 m2 de surface filtrante utile ;
-- référence finale des sondes de température bassin et local ;
+- validation banc des deux sondes DS18B20 étanches inox : brochage réel des fils, alimentation 3,3 V, pull-up 4,7 kΩ, lecture stable, perte de sonde et identification eau/local ;
 - validation banc du LCD 2004 I2C 3,3 V : adresse, contraste, lisibilite, pull-up I2C et affectation `GPIO32` / `GPIO33` ;
 - validation banc de la RTC DS3231 I2C 3,3 V : adresse `0x68`, batterie rechargeable livree, conservation de l'heure apres coupure, pull-up I2C 3,3 V et cohabitation avec le LCD 2004 sur `GPIO32` / `GPIO33` ;
 - nombre de voyants, couleurs et signification ;
@@ -218,8 +237,8 @@ flowchart TB
 - stratégie matérielle d'indexation du tambour hors lavage pour V1.1 ;
 - methode empirique d'estimation de la consommation d'eau de rinçage pour V1.1 ou V2 ;
 - validation banc de l'interface directe KC868-A32 / CR18-8DN, notamment sens logique, stabilité, rupture de fil et comportement avec longueurs de câble réelles ;
-- interface d'entrée nécessaire pour la sonde de température ;
-- interface d'entrée nécessaire pour la sonde de température ambiante ;
+- validation mecanique et electrique du contact capot OMRCH ME-8104 : bornes a utiliser, capot ferme boucle fermee, capot ouvert ou fil coupe boucle ouverte, alignement de la came et repetabilite ;
+- choix des GPIO 1-Wire pour `TEMP_BASSIN` et `TEMP_LOCAL`, bus separes preferes si disponibles ;
 - sections de cables, borniers, repérage et implantation physique des protections ;
 - reference finale materielle du disjoncteur 6 A courbe C pour l'eclairage exterieur, avec validation de la section et du cheminement du cable ;
 - adaptateur rail DIN imprime en 3D du porte-fusibles ATO si le composant retenu n'est pas DIN natif ;

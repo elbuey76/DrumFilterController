@@ -19,8 +19,8 @@
 | B-013 | Définir la politique de reprise après coupure de courant pour chaque mode et chaque sortie, avec reprise normale, reprise EP_LAVAGE seule et blocage EP_CRITIQUE. | Must | Tranchée |
 | B-014 | Retenir la liste minimale d'auto-diagnostics indirects V1 : EP_CRITIQUE, incohérence niveau, lavage inefficace après 3 tentatives, capot dangereux, A15, commande UV incohérente, perte sondes température ; reporter absence anormale de lavage, lavage trop fréquent, moteur bloque, pompe rinçage HS et pression absente. | Must | Tranchée |
 | B-015 | Garder le mode hiver automatique hors V1 ; conserver seulement les alertes température eau/local en V1 et reetudier les adaptations hiver en V1.1/V2 après observation réelle. | Should | Tranchée |
-| B-016 | Définir la fonction de mesure de température bassin : sonde numérique étanche candidate, implantation représentative de l'eau du bassin, plage utile et seuils d'alerte informative V1 < 4 deg C et > 28 deg C. | Must | Tranchée |
-| B-017 | Définir la fonction de mesure de température ambiante local : sonde numérique candidate, implantation représentative de l'air du local, plage utile et seuils d'alerte informative V1 < 2 deg C et > 40 deg C. | Must | Tranchée |
+| B-016 | Définir la fonction de mesure de température bassin : sonde DS18B20 étanche inox 3 fils, longueur cible 3 m, implantation représentative de l'eau du bassin, plage utile et seuils d'alerte informative V1 < 4 deg C et > 28 deg C. | Must | Tranchée |
+| B-017 | Définir la fonction de mesure de température ambiante local : même sonde DS18B20 étanche inox 3 fils que pour le bassin, montée en support ventilé dans l'air du local, plage utile et seuils d'alerte informative V1 < 2 deg C et > 40 deg C. | Must | Tranchée |
 | B-022 | Figer les paramètres de lavage auto mini 10 s, maxi 45 s, rotation résiduelle 2 à 5 s, anti-redémarrage 30 à 120 s, 3 tentatives, pause 30 à 120 s, seuils horaire et journalier, avec retard EP_LAVAGE initial 5 à 15 s et confirmation EP_CRITIQUE initiale 0,5 à 2 s. | Must | En cours |
 | B-018 | Retenir une IHM locale V1 avec LCD 2004 / 20x4 I2C 3,3 V, fond bleu, et commandes physiques essentielles. | Must | Tranchée |
 | B-019 | Retenir les voyants complémentaires V1 : MARCHE vert et ALARME rouge obligatoires, LAVAGE jaune ou ambre optionnel, en gardant l'écran comme support principal de lecture des états. | Should | Tranchée |
@@ -62,7 +62,7 @@
 | B-055 | Poser le joint a levre de séparation eau propre / eau sale autour du tambour. | Must | À faire |
 | B-056 | Fabriquer le support du FAT pour respecter la cote de trop-plein mesurée sur site. | Must | À faire |
 | B-057 | Fixer les capteurs sur le report de niveau en 32 mm. | Must | À faire |
-| B-058 | Réaliser le capot transparent de fermeture avec détection d'ouverture, permettant de voir le tambour tourner sans ouvrir le FAT. | Must | À faire |
+| B-058 | Réaliser le capot transparent de fermeture avec détection d'ouverture par fin de course OMRCH ME-8104, permettant de voir le tambour tourner sans ouvrir le FAT. | Must | À faire |
 
 ## Prototype matériel
 
@@ -77,8 +77,10 @@
 | B-106 | Définir l'architecture de contacteurs ou relais permettant la coupure de sécurité des équipements controles : HELLA moteur tambour, Schneider pompe rincage, TOMZN filtration/UV/deco/mise a niveau. | Must | Tranchée |
 | B-107 | Définir l'interface électrique des entrées pour lecture fiable des capteurs CR18-8DN 3 fils : sortie NPN directe vers entrée optocouplée KC868-A32, marron +12 VDC, bleu 0 V commun, noir vers `INPUT_Dx`, avec validation banc avant câblage final. | Must | Tranchée |
 | B-108 | Prévoir un sélecteur physique simple AUTO / MAINTENANCE et des boutons physiques momentanés pour TEST_LAVAGE, RESET_ALARME, MANU_TAMBOUR et MANU_RINCAGE. | Must | Tranchée |
-| B-109 | Prévoir l'entrée matérielle nécessaire pour la sonde de température bassin et son câblage. | Must | À faire |
-| B-110 | Prévoir l'entrée matérielle nécessaire pour la sonde de température ambiante local et son câblage. | Must | À faire |
+| B-109 | Prévoir l'entrée matérielle nécessaire pour la sonde `TEMP_BASSIN` DS18B20 3 fils : GPIO 1-Wire, alimentation 3,3 V, GND commun, pull-up 4,7 kΩ, cheminement câble et support démontable côté eau représentative. | Must | À faire |
+| B-110 | Prévoir l'entrée matérielle nécessaire pour la sonde `TEMP_LOCAL` DS18B20 3 fils : GPIO 1-Wire, alimentation 3,3 V, GND commun, pull-up 4,7 kΩ, support ventilé hors coffret ; bus séparé préféré si GPIO disponible. | Must | À faire |
+| B-110A | Valider sur banc les deux sondes DS18B20 étanches inox identiques : brochage réel des couleurs, lecture en 3,3 V, perte de sonde, identification eau/local, choix bus 1-Wire séparés ou commun et stabilité avec câble 3 m. | Must | À faire |
+| B-110B | Prévoir et valider le contact capot OMRCH ME-8104 : entrée digitale KC868-A32, contact sec vers GND, bornes NO/NC choisies au multimètre, capot fermé boucle fermée, capot ouvert ou rupture boucle ouverte, came réglable et répétabilité mécanique. | Must | À faire |
 | B-111 | Prévoir les composants nécessaires pour l'IHM locale V1 : LCD 2004 / 20x4 I2C 3,3 V fond bleu, bouton reset alarme dédié, commandes physiques essentielles, voyant MARCHE vert, voyant ALARME rouge et voyant LAVAGE optionnel. | Must | À faire |
 | B-111A | Valider sur banc le LCD 2004 I2C retenu : adresse I2C, contraste, retroeclairage, lisibilite, affectation `GPIO32` / `GPIO33`, compatibilite 3,3 V des lignes `SDA` / `SCL` et absence de perturbation des bus I2C internes du KC868-A32. | Must | À faire |
 | B-111B | Prévoir et valider sur banc la RTC DS3231 I2C 3,3 V avec batterie rechargeable : adresse `0x68`, conservation de l'heure après coupure, absence de pull-up 5 V, cohabitation avec le LCD 2004 sur `GPIO32` / `GPIO33` ou bus I2C separé si nécessaire. | Must | À faire |
@@ -146,7 +148,7 @@
 | B-303 | Documenter le câblage final. | Should | À faire |
 | B-304 | Valider par test que EP_CRITIQUE coupé bien filtration, pompe décoration, UV et mise à niveau auto, puis que l'UV ne repart qu'après filtration et stabilisation, sans impact sur les deux bulleurs branchés hors contrôleur. | Must | À faire |
 | B-305 | Valider par test le comportement de reprise après coupure de courant : démarrage nominal, EP_LAVAGE seule, lavage de reprise inefficace, EP_CRITIQUE actif, capot ouvert, log A15 conserve et réaffichage A15 si la condition reste présente. | Must | À faire |
-| B-306 | Valider par test l'entrée en maintenance à l'ouverture du capot transparent, avec contact normalement fermé, rupture vue ouverte, anti-rebond ouverture/fermeture, affichage `MAINTENANCE - CAPOT OUVERT`, retour automatique après fermeture stable sans alarme bloquante, arrêt tambour/rinçage, interdiction lavage auto, refus des commandes manuelles tambour/rinçage capot ouvert et maintien UV si filtration autorisée. | Must | À faire |
+| B-306 | Valider par test l'entrée en maintenance à l'ouverture du capot transparent, avec contact ME-8104 câblé fail-safe, rupture vue ouverte, anti-rebond ouverture/fermeture, affichage `MAINTENANCE - CAPOT OUVERT`, retour automatique après fermeture stable sans alarme bloquante, arrêt tambour/rinçage, interdiction lavage auto, refus des commandes manuelles tambour/rinçage capot ouvert et maintien UV si filtration autorisée. | Must | À faire |
 | B-307 | Valider par test les scénarios de mode dégradé retenus. | Must | À faire |
 | B-308 | Valider par test le mode TEST_LAVAGE : autorisation AUTO/MAINTENANCE sous préconditions, refus capot ouvert ou sécurité critique, un seul cycle borné, verdict `TEST OK - CYCLE EXÉCUTÉ` si EP_LAVAGE inactif au départ, verdict niveau OK ou échec si EP_LAVAGE actif, et aucune relance multiple. | Must | À faire |
 | B-309 | Valider par test la mesure de température bassin, les alertes sur seuil < 4 deg C et > 28 deg C, le caractère informatif et la détection de perte de sonde A11. | Must | À faire |

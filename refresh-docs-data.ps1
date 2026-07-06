@@ -25,6 +25,8 @@ $paths = @(
   "docs/decisions/ADR-0003-choix-plateforme-controle-v1.md",
   "docs/decisions/ADR-0004-architecture-electrique-v1.md",
   "docs/decisions/ADR-0005-choix-rtc-heure-fiable.md",
+  "docs/decisions/ADR-0006-choix-sondes-temperature.md",
+  "docs/decisions/ADR-0007-choix-contact-capot.md",
   "docs/backlog/README.md",
   "docs/backlog/backlog.md",
   "docs/validation/README.md",

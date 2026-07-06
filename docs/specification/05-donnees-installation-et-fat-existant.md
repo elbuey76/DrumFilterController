@@ -173,8 +173,8 @@ La courbe disponible donne environ 20 L/min à 34 m, 30 L/min à 28 m, 40 L/min 
 | Pompe de filtration principale | retour bassin en 63 mm | Fonctionnement continu vise |
 | Pompe décoration | usage ponctuel | Cascade, mur d'eau, lame d'eau, etc. |
 | UV | hors tambour, dans la filtration, après la pompe principale | Asservi a filtration autorisée plus absence EP_CRITIQUE ; ne pas couper sur défaut FAT non critique si la filtration reste autorisée |
-| Température bassin | sonde étanche type DS18B20 ou équivalent | A placer dans une eau représentative : arrivée gravitaire avant pompe/UV ou bassin en zone brassée, ombragée et accessible |
-| Température ambiante local | sonde numérique simple ou équivalent | A placer hors coffret, dans l'air du local, en support ventilé et accessible |
+| Température bassin | DS18B20 étanche inox 3 fils, longueur cible 3 m | A placer dans une eau représentative : arrivée gravitaire avant pompe/UV ou bassin en zone brassée, ombragée et accessible ; alimentation 3,3 V, pull-up 4,7 kΩ sur DATA, brochage des couleurs à vérifier |
+| Température ambiante local | Même DS18B20 étanche inox 3 fils que pour le bassin, longueur cible 3 m | A placer hors coffret, dans l'air du local, en support ventilé et accessible ; choix identique pour simplifier achat, câblage, stock et firmware |
 
 ## Hypothèses hydrauliques de dimensionnement de la filtration
 
@@ -286,7 +286,7 @@ Le point de fonctionnement nominal recherche reste 8 à 10 m3/h, mais la pompe p
 - Concevoir le support imprime 3D du relais HELLA pour montage rail DIN.
 - Concevoir l'adaptateur imprime 3D du porte-fusibles ATO pour montage rail DIN si le composant retenu n'est pas DIN natif.
 - Concevoir et integrer toute la partie intelligence et pilotage du FAT.
-- Ajouter un capot transparent de fermeture avec capteur de détection d'ouverture.
+- Ajouter un capot transparent de fermeture avec fin de course OMRCH ME-8104 pour la détection d'ouverture, monte en boucle fail-safe capot fermé = contact fermé.
 - Ajouter une sonde de température d'eau maintenable dans une eau représentative : arrivée gravitaire avant pompe/UV ou bassin en zone brassée.
 - Ajouter une sonde de température ambiante hors coffret, sur support ventilé et représentatif de l'air du local.
 - Integrer l'IHM locale retenue : LCD 2004 / 20x4 I2C 3,3 V, commandes physiques et voyants complémentaires.
@@ -321,7 +321,7 @@ Les choix de principe sont maintenant tranchés pour le MVP, sauf les cotes de n
 - Référence finale de l'interrupteur différentiel 2P 30 mA 40 A, type A.
 - Cablage final de l'interrupteur-sectionneur cadenassable TeSys VCDN20 avant le differentiel local si reutilise.
 - Référence finale materielle du disjoncteur 6 A courbe C pour l'eclairage exterieur, section du cable et separation claire avec les fonctions bassin.
-- Références finales des sondes de température eau et local.
+- Validation banc des deux sondes DS18B20 étanches inox identiques : brochage réel, lecture 3,3 V, pull-up 4,7 kΩ, perte de sonde et identification eau/local.
 - Validation banc du LCD 2004 / 20x4 I2C 3,3 V : adresse, contraste, retroeclairage, lisibilite et niveaux logiques `SDA` / `SCL`.
 - Validation physique de l'ordre EP_LAVAGE au-dessus de EP_CRITIQUE, et des règles d'incohérence associées.
 - Mesure empirique de la consommation d'eau de rinçage après mesure du débit réel et des durées de cycle.

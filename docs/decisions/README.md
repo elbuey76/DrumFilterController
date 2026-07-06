@@ -27,3 +27,5 @@ Copier le fichier `_template.md` pour créer une nouvelle decision.
 3. [ADR-0003 - Choix de la plateforme de contrôle V1](ADR-0003-choix-plateforme-controle-v1.md)
 4. [ADR-0004 - Architecture electrique V1](ADR-0004-architecture-electrique-v1.md)
 5. [ADR-0005 - Choix de la RTC pour l'heure fiable](ADR-0005-choix-rtc-heure-fiable.md)
+6. [ADR-0006 - Choix des sondes de temperature](ADR-0006-choix-sondes-temperature.md)
+7. [ADR-0007 - Choix du contact de capot](ADR-0007-choix-contact-capot.md)
