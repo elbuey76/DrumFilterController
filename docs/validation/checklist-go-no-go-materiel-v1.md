@@ -17,7 +17,7 @@ Un point non valide peut etre accepte uniquement s'il est marque comme non appli
 | Moteur tambour | Fyearfly 12 VDC 10 rpm disponible, fixation definie | A faire | |
 | Relais tambour | HELLA 4RD 933 332-551 disponible, support rail DIN defini | A faire | |
 | Contacteurs auxiliaires | TOMZN TOCT1-25Z 12 VDC valides ou alternative definie | A faire | |
-| Contacteur rincage | Schneider TeSys LC1D12P7 avec bobine 230 VAC valide au schema | A faire | |
+| Contacteur rincage | Schneider TeSys LC1D18P7 avec bobine 230 VAC valide au schema | A faire | Remplace le LC1D12P7 ; confirmer encombrement, bornes et reperage avant cablage. |
 | Capot | OMRCH ME-8104 disponible, came/support definis | A faire | |
 | IHM | LCD 2004, boutons, voyants et etiquettes facade definis | A faire | |
 | RTC / temperature | DS3231 et 2 x DS18B20 disponibles, adresses/brochages verifies | A faire | |

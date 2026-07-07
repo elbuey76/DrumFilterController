@@ -88,7 +88,7 @@
 | B-113 | Garder le capteur de position tambour comme option V2 ou V1.1 tardive, seulement si l'indexation au temps pose problème ou si une position reproductible devient nécessaire. | Should | Tranchée |
 | B-114 | Valider la commande 12 V DC du moteur tambour avec fusible ATO 5 A, relais HELLA 12 V 15 A inductif, alimentation Mean Well NDR-120-12 et courant de blocage annoncé 6,5 A. | Must | En cours |
 | B-115 | Valider le sens de rotation, la connectique et la fixation mécanique du motorreducteur Fyearfly 12 VDC 10 rpm avant câblage définitif. | Must | À faire |
-| B-116 | Valider la commande secteur de la pompe de rinçage EKJ-802S avec disjoncteur 10 A courbe C, contacteur Schneider LC1D12P7 bobine 230 VAC, terre et protection. | Must | En cours |
+| B-116 | Valider la commande secteur de la pompe de rinçage EKJ-802S avec disjoncteur 10 A courbe C, contacteur Schneider LC1D18P7 bobine 230 VAC, terre et protection. | Must | En cours |
 | B-117 | Concevoir et imprimer un support rail DIN pour le relais HELLA automobile, avec maintien mécanique, accès aux cosses et repérage clair. | Should | À faire |
 | B-118 | Verifier la compatibilite des relais KC868-A32 avec les bobines des contacteurs TOMZN 12 VDC, la bobine Schneider 230 VAC et la commande du relais HELLA. | Must | À faire |
 | B-119 | Concevoir et imprimer si necessaire un adaptateur rail DIN pour le porte-fusibles ATO 4 emplacements, avec maintien mécanique, accès aux fusibles et repérage des departs. | Should | À faire |

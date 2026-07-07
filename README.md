@@ -10,6 +10,7 @@ Ce dépôt accueillera la documentation, les schémas, les décisions de concept
 | `docs/calculs/` | Notes de calcul de dimensionnement hydraulique, mécanique et électrique. |
 | `docs/architecture/` | Architecture système, matérielle et logicielle, avec diagrammes et emplacements pour visuels. |
 | `docs/decisions/` | Journal de décisions de type ADR pour garder l'historique des choix importants. |
+| `docs/achats/` | Listes de course, nomenclatures et points de commande matériel. |
 | `docs/backlog/` | Backlog de cadrage, prototype, firmware, documentation et validation. |
 | `docs/validation/` | Plan de tests, traçabilité exigences/preuves et résultats de validation. |
 
@@ -35,6 +36,7 @@ Les objectifs principaux sont :
 - [Notes de calcul](docs/calculs/README.md)
 - [Architecture](docs/architecture/README.md)
 - [Journal de décisions](docs/decisions/README.md)
+- [Achats](docs/achats/README.md)
 - [Backlog](docs/backlog/backlog.md)
 - [Validation](docs/validation/README.md)
 
