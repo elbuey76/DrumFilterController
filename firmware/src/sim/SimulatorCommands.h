@@ -6,6 +6,7 @@ enum class SimulatorCommandAction {
   NONE,
   HELP,
   STATUS,
+  JOURNAL,
   SET_EP_LAVAGE,
   SET_EP_CRITIQUE,
   SET_CAPOT_OUVERT,

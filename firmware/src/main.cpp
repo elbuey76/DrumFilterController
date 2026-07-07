@@ -6,11 +6,13 @@
 #include "hal/DisplayService.h"
 #include "hal/InputService.h"
 #include "hal/OutputService.h"
+#include "hal/PreferencesPersistentStore.h"
 #include "sim/SerialSimulator.h"
 
 namespace {
 Config config;
-Controller controller(config);
+PreferencesPersistentStore persistentStore;
+Controller controller(config, &persistentStore);
 InputsSnapshot inputs;
 OutputsCommand outputs;
 DisplayService display;
@@ -25,9 +27,9 @@ void setup() {
     delay(10);
   }
 
-  controller.begin(millis());
-  inputService.begin();
   outputService.begin();
+  inputService.begin();
+  controller.begin(millis());
   display.begin(Serial);
   simulator.begin(Serial);
   Serial.println("FAT Controller V0.1");

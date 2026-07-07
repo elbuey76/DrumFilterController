@@ -88,6 +88,10 @@ SimulatorCommandResult applySimulatorCommand(const char* command, InputsSnapshot
     return result(SimulatorCommandAction::STATUS);
   }
 
+  if (equals(normalized, "journal")) {
+    return result(SimulatorCommandAction::JOURNAL);
+  }
+
   if (equals(normalized, "lavage on")) {
     inputs.epLavage = true;
     return result(SimulatorCommandAction::SET_EP_LAVAGE, inputs.epLavage);

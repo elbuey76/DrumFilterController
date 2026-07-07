@@ -56,6 +56,9 @@ void SerialSimulator::handleCommand(const String& command, InputsSnapshot& input
     case SimulatorCommandAction::STATUS:
       printStatus(inputs, controller, outputs);
       break;
+    case SimulatorCommandAction::JOURNAL:
+      printJournal(controller);
+      break;
     case SimulatorCommandAction::SET_EP_LAVAGE:
       setBool("EP_LAVAGE", result.boolValue);
       break;
@@ -114,7 +117,7 @@ void SerialSimulator::printHelp() const {
   }
 
   stream_->println(F("Commandes simulateur:"));
-  stream_->println(F("  help | status"));
+  stream_->println(F("  help | status | journal"));
   stream_->println(F("  lavage on|off"));
   stream_->println(F("  critique on|off"));
   stream_->println(F("  capot open|close"));
@@ -141,6 +144,28 @@ void SerialSimulator::printStatus(const InputsSnapshot& inputs, const Controller
   stream_->println(status.alarmCode == nullptr ? "none" : status.alarmCode);
   printInputs(inputs);
   printOutputs(outputs);
+}
+
+void SerialSimulator::printJournal(const Controller& controller) const {
+  if (stream_ == nullptr) {
+    return;
+  }
+
+  const PersistentJournalSnapshot journal = controller.journalSnapshot();
+  stream_->println(F("--- JOURNAL ---"));
+  stream_->print(F("Total: "));
+  stream_->println(journal.totalEvents);
+  stream_->print(F("Dernier: "));
+  stream_->println(persistentEventCodeText(journal.lastEvent));
+  stream_->print(F("A15 actif: "));
+  stream_->println(boolText(journal.a15Active));
+
+  for (size_t index = 1; index < kPersistentEventCount; ++index) {
+    const PersistentEventCode eventCode = static_cast<PersistentEventCode>(index);
+    stream_->print(persistentEventCodeText(eventCode));
+    stream_->print(F(": "));
+    stream_->println(journal.eventCounts[index]);
+  }
 }
 
 void SerialSimulator::printInputs(const InputsSnapshot& inputs) const {

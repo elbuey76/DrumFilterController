@@ -22,7 +22,7 @@ Un banc de tests automatise couvre les scenarios FT-0001 au niveau logique metie
 
 Limites de couverture : ces tests valident les transitions d'etat, alarmes, messages metier et sorties commandees par le `Controller`. Le parsing des commandes du simulateur est couvert separement par `test_simulator_commands`. L'affichage serie, le transport `Stream` Arduino, les entrees/sorties physiques de la carte KC868-A32, le banc electrique et l'installation reelle restent hors couverture host-side.
 
-Verdict automatise au 2026-07-07 : `python -m platformio test -e native` passe avec 27 tests reussis sur 27, dont SIM-001 a SIM-016.
+Verdict automatise au 2026-07-07 : `python -m platformio test -e native` passe avec 35 tests reussis sur 35, dont SIM-001 a SIM-016 et les scenarios de persistance minimale.
 
 ## Preconditions
 
@@ -81,7 +81,7 @@ temp local 18
 
 | Champ | Valeur |
 | --- | --- |
-| Resultat observe | Automatisation host-side : SIM-001 a SIM-016 passes via `python -m platformio test -e native` ; build ESP32 `python -m platformio run` reussi. |
+| Resultat observe | Automatisation host-side : SIM-001 a SIM-016 et scenarios de persistance minimale passes via `python -m platformio test -e native` ; build ESP32 `python -m platformio run` reussi. |
 | Verdict | Passe pour la couverture simulateur host-side ; validation materiel KC868-A32, transport serie reel et banc physique a faire separement. |
 | Date | 2026-07-07 |
 | Operateur | Codex |

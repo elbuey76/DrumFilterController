@@ -1,16 +1,24 @@
 #include "Controller.h"
 
-Controller::Controller(const Config& config) : safety_(config), washCycle_(config) {}
+Controller::Controller(const Config& config, PersistentStore* persistentStore)
+    : safety_(config), washCycle_(config), persistentStore_(persistentStore == nullptr ? &nullPersistentStore_ : persistentStore) {}
 
 void Controller::begin(unsigned long /*nowMs*/) {
+  persistentStore_->begin();
+  journal_ = persistentStore_->load();
+  recordPersistentEvent(PersistentEventCode::BOOT);
   setStatus(SystemState::BOOT, "BOOT");
 }
 
 OutputsCommand Controller::update(const InputsSnapshot& inputs, unsigned long nowMs) {
   const SafetyStatus safety = safety_.update(inputs, nowMs);
 
+  if (!capotOpen(inputs, safety) && journal_.a15Active) {
+    setPersistentA15Active(false);
+  }
+
   if (capotOpen(inputs, safety) && dangerousOutputWasActive_) {
-    blockingAlarmLatched_ = AlarmCode::A03;
+    latchBlockingAlarm(AlarmCode::A03);
   }
 
   if (inputs.btnReset) {
@@ -19,8 +27,13 @@ OutputsCommand Controller::update(const InputsSnapshot& inputs, unsigned long no
       return finishUpdate(safeOutputs());
     }
 
+    const bool hadBlockingAlarm = blockingAlarmLatched_ != AlarmCode::NONE || washCycle_.hasBlockingAlarm();
     blockingAlarmLatched_ = AlarmCode::NONE;
+    washAlarmPersisted_ = false;
     washCycle_.resetAlarm();
+    if (hadBlockingAlarm) {
+      recordPersistentEvent(PersistentEventCode::RESET_OK);
+    }
   }
 
   if (inputs.btnTestLavage) {
@@ -41,11 +54,11 @@ OutputsCommand Controller::update(const InputsSnapshot& inputs, unsigned long no
   }
 
   if (safety.levelIncoherent) {
-    blockingAlarmLatched_ = AlarmCode::A02;
+    latchBlockingAlarm(AlarmCode::A02);
   }
 
   if (!safety.levelIncoherent && safety.levelCritical) {
-    blockingAlarmLatched_ = AlarmCode::A01;
+    latchBlockingAlarm(AlarmCode::A01);
   }
 
   if (blockingAlarmLatched_ != AlarmCode::NONE) {
@@ -55,6 +68,11 @@ OutputsCommand Controller::update(const InputsSnapshot& inputs, unsigned long no
   }
 
   if (washCycle_.hasBlockingAlarm()) {
+    if (!washAlarmPersisted_) {
+      recordPersistentEvent(PersistentEventCode::A04);
+      washAlarmPersisted_ = true;
+    }
+
     WashCycleResult degraded;
     degraded.state = SystemState::DEGRADED;
     degraded.message = alarmManager_.message(AlarmCode::A04);
@@ -67,7 +85,11 @@ OutputsCommand Controller::update(const InputsSnapshot& inputs, unsigned long no
   if (capotOpen(inputs, safety)) {
     washCycle_.abort();
     OutputsCommand outputs = maintenanceOutputs();
-    if (safety.capotOpenLong) {
+    if (safety.capotOpenLong || journal_.a15Active) {
+      if (!journal_.a15Active) {
+        recordPersistentEvent(PersistentEventCode::A15);
+        setPersistentA15Active(true);
+      }
       outputs.voyantAlarme = true;
       setAlarmStatus(SystemState::MAINTENANCE, AlarmCode::A15);
     } else if (inputs.btnManuTambour || inputs.btnManuRincage) {
@@ -110,6 +132,10 @@ OutputsCommand Controller::update(const InputsSnapshot& inputs, unsigned long no
 
 ControllerStatus Controller::status() const {
   return status_;
+}
+
+PersistentJournalSnapshot Controller::journalSnapshot() const {
+  return journal_;
 }
 
 OutputsCommand Controller::safeOutputs() const {
@@ -205,6 +231,59 @@ OutputsCommand Controller::testRefusedOutputs(bool blocking) const {
 
 bool Controller::capotOpen(const InputsSnapshot& inputs, const SafetyStatus& safety) const {
   return inputs.capotOuvert || safety.capotOpen;
+}
+
+void Controller::recordPersistentEvent(PersistentEventCode eventCode) {
+  if (eventCode == PersistentEventCode::NONE || eventCode == PersistentEventCode::COUNT) {
+    return;
+  }
+
+  const size_t index = persistentEventIndex(eventCode);
+  if (index == 0) {
+    return;
+  }
+
+  ++journal_.eventCounts[index];
+  ++journal_.totalEvents;
+  journal_.lastEvent = eventCode;
+  persistentStore_->save(journal_);
+}
+
+void Controller::setPersistentA15Active(bool active) {
+  if (journal_.a15Active == active) {
+    return;
+  }
+
+  journal_.a15Active = active;
+  persistentStore_->save(journal_);
+}
+
+void Controller::latchBlockingAlarm(AlarmCode alarmCode) {
+  if (blockingAlarmLatched_ == alarmCode) {
+    return;
+  }
+
+  blockingAlarmLatched_ = alarmCode;
+  recordPersistentEvent(persistentEventForAlarm(alarmCode));
+}
+
+PersistentEventCode Controller::persistentEventForAlarm(AlarmCode alarmCode) const {
+  switch (alarmCode) {
+    case AlarmCode::A01: return PersistentEventCode::A01;
+    case AlarmCode::A02: return PersistentEventCode::A02;
+    case AlarmCode::A03: return PersistentEventCode::A03;
+    case AlarmCode::A04: return PersistentEventCode::A04;
+    case AlarmCode::A15: return PersistentEventCode::A15;
+    case AlarmCode::NONE:
+    case AlarmCode::A05:
+    case AlarmCode::A11:
+    case AlarmCode::A12:
+    case AlarmCode::A13:
+    case AlarmCode::A14:
+      return PersistentEventCode::NONE;
+  }
+
+  return PersistentEventCode::NONE;
 }
 
 void Controller::setStatus(SystemState state, const char* message, const char* alarmCode) {

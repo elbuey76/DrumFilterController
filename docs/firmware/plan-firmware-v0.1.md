@@ -968,13 +968,16 @@ Modules implémentés :
 - `Safety` pour les temporisations et états capot / EP_CRITIQUE / incohérence niveau ;
 - `WashCycle` pour lavage automatique, durée mini/maxi, rotation résiduelle, anti-redémarrage, retry, test lavage et A04 ;
 - `AlarmManager` pour les alarmes principales A01, A02, A03, A04, A05, A11, A12, A13, A14 et A15 ;
+- `PersistentStore` pour le mini-journal V1 avec compteurs, dernier événement global et flag A15 actif ;
+- `PreferencesPersistentStore` pour la persistance ESP32 NVS/Preferences ;
 - simulateur série avec commandes de niveau, capot, modes, boutons et températures ;
+- commande simulateur `journal` pour afficher le mini-journal ;
 - affichage série synthétique via `DisplayService` ;
 - abstraction `InputService` / `OutputService`, sans broches KC868-A32 activées.
 
 Preuves locales :
 
-- `python -m platformio test -e native` : 27 tests passés sur 27 ;
+- `python -m platformio test -e native` : 35 tests passés sur 35 ;
 - `python -m platformio run` : build ESP32 `kc868_a32` réussi.
 
 Écarts restants avant de considérer la V0.1 complète :
@@ -982,9 +985,8 @@ Preuves locales :
 - validation matérielle KC868-A32, entrées réelles, relais réels et sens logiques ;
 - LCD 2004 I2C réel, RTC DS3231 réelle et sondes DS18B20 réelles ;
 - seuils température bas/haut, au-delà de la perte de mesure simulée A11/A12 ;
-- reprise après coupure complète, notamment A15 et mini-journal persistant ;
-- persistance des événements V1 ;
 - temporisation dédiée de reprise UV après EP_CRITIQUE ;
+- validation réelle de la persistance NVS sur carte ;
 - validation banc/installation des sécurités.
 
 ## 16. Ensuite, quand la KC868-A32 arrive

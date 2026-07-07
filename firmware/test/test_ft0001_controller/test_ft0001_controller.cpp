@@ -4,13 +4,41 @@
 
 namespace {
 
+class FakePersistentStore : public PersistentStore {
+public:
+  void begin() override {
+    ++beginCount;
+  }
+
+  PersistentJournalSnapshot load() override {
+    return snapshot;
+  }
+
+  void save(const PersistentJournalSnapshot& nextSnapshot) override {
+    snapshot = nextSnapshot;
+    ++saveCount;
+  }
+
+  bool available() const override {
+    return true;
+  }
+
+  uint32_t count(PersistentEventCode eventCode) const {
+    return snapshot.eventCounts[persistentEventIndex(eventCode)];
+  }
+
+  PersistentJournalSnapshot snapshot;
+  uint8_t beginCount = 0;
+  uint8_t saveCount = 0;
+};
+
 class ControllerHarness {
 public:
   Config config;
   InputsSnapshot inputs;
   OutputsCommand outputs;
 
-  ControllerHarness() : config(makeFastConfig()), controller_(config) {
+  explicit ControllerHarness(PersistentStore* persistentStore = nullptr) : config(makeFastConfig()), controller_(config, persistentStore) {
     controller_.begin(nowMs_);
   }
 
@@ -48,6 +76,10 @@ public:
     return controller_.status();
   }
 
+  PersistentJournalSnapshot journalSnapshot() const {
+    return controller_.journalSnapshot();
+  }
+
 private:
   static Config makeFastConfig() {
     Config cfg;
@@ -83,6 +115,10 @@ void expectDangerousOutputsOff(const OutputsCommand& outputs) {
 void expectNominalFiltrationOn(const OutputsCommand& outputs) {
   TEST_ASSERT_TRUE(outputs.cmdPompeFiltration);
   TEST_ASSERT_TRUE(outputs.cmdUv);
+}
+
+void expectJournalCount(const FakePersistentStore& store, PersistentEventCode eventCode, uint32_t expectedCount) {
+  TEST_ASSERT_EQUAL_UINT32(expectedCount, store.count(eventCode));
 }
 
 }  // namespace
@@ -394,6 +430,152 @@ void test_sim_016_failed_test_wash_does_not_latch_a04() {
   expectDangerousOutputsOff(h.outputs);
 }
 
+void test_persist_001_boot_is_counted_on_each_begin() {
+  FakePersistentStore store;
+
+  {
+    ControllerHarness h(&store);
+    h.tick();
+  }
+
+  {
+    ControllerHarness h(&store);
+    h.tick();
+  }
+
+  expectJournalCount(store, PersistentEventCode::BOOT, 2);
+  TEST_ASSERT_EQUAL_UINT32(2, store.snapshot.totalEvents);
+  TEST_ASSERT_EQUAL(PersistentEventCode::BOOT, store.snapshot.lastEvent);
+}
+
+void test_persist_002_a15_active_reappears_after_reboot_without_double_counting() {
+  FakePersistentStore store;
+  store.snapshot.a15Active = true;
+  store.snapshot.eventCounts[persistentEventIndex(PersistentEventCode::A15)] = 1;
+  store.snapshot.totalEvents = 1;
+  store.snapshot.lastEvent = PersistentEventCode::A15;
+
+  ControllerHarness h(&store);
+  h.inputs.capotOuvert = true;
+  h.tick();
+
+  TEST_ASSERT_EQUAL(SystemState::MAINTENANCE, h.status().state);
+  expectAlarm(h.status(), "A15");
+  TEST_ASSERT_TRUE(h.outputs.voyantAlarme);
+  TEST_ASSERT_TRUE(store.snapshot.a15Active);
+  expectJournalCount(store, PersistentEventCode::A15, 1);
+}
+
+void test_persist_003_a15_active_is_cleared_after_reboot_with_closed_capot() {
+  FakePersistentStore store;
+  store.snapshot.a15Active = true;
+  store.snapshot.eventCounts[persistentEventIndex(PersistentEventCode::A15)] = 1;
+  store.snapshot.totalEvents = 1;
+  store.snapshot.lastEvent = PersistentEventCode::A15;
+
+  ControllerHarness h(&store);
+  h.tick();
+
+  TEST_ASSERT_EQUAL(SystemState::AUTO_WAIT, h.status().state);
+  expectNoAlarm(h.status());
+  TEST_ASSERT_FALSE(store.snapshot.a15Active);
+  expectJournalCount(store, PersistentEventCode::A15, 1);
+}
+
+void test_persist_004_open_capot_without_persisted_a15_restarts_long_open_timer() {
+  FakePersistentStore store;
+  ControllerHarness h(&store);
+
+  h.inputs.capotOuvert = true;
+  h.tick();
+
+  TEST_ASSERT_EQUAL(SystemState::MAINTENANCE, h.status().state);
+  expectNoAlarm(h.status());
+  TEST_ASSERT_FALSE(store.snapshot.a15Active);
+
+  h.advance(h.config.capotLongOpenMs);
+
+  TEST_ASSERT_EQUAL(SystemState::MAINTENANCE, h.status().state);
+  expectAlarm(h.status(), "A15");
+  TEST_ASSERT_TRUE(store.snapshot.a15Active);
+  expectJournalCount(store, PersistentEventCode::A15, 1);
+}
+
+void test_persist_005_critical_level_and_reset_ok_are_persisted() {
+  FakePersistentStore store;
+  ControllerHarness h(&store);
+  h.tick();
+
+  h.inputs.epLavage = true;
+  h.inputs.epCritique = true;
+  h.tick();
+  h.advance(h.config.epCritiqueDebounceMs);
+
+  TEST_ASSERT_EQUAL(SystemState::FAULT, h.status().state);
+  expectAlarm(h.status(), "A01");
+  expectJournalCount(store, PersistentEventCode::A01, 1);
+
+  h.inputs.epCritique = false;
+  h.tick();
+  h.advance(h.config.epCritiqueDebounceMs);
+  h.pressReset();
+
+  TEST_ASSERT_EQUAL(SystemState::AUTO_WAIT, h.status().state);
+  expectNoAlarm(h.status());
+  expectJournalCount(store, PersistentEventCode::RESET_OK, 1);
+  TEST_ASSERT_EQUAL(PersistentEventCode::RESET_OK, store.snapshot.lastEvent);
+}
+
+void test_persist_006_incoherent_level_is_persisted_once_until_reset() {
+  FakePersistentStore store;
+  ControllerHarness h(&store);
+  h.tick();
+
+  h.inputs.epCritique = true;
+  h.tick();
+  h.advance(h.config.epCritiqueDebounceMs);
+  h.tick();
+  h.tick();
+
+  TEST_ASSERT_EQUAL(SystemState::FAULT, h.status().state);
+  expectAlarm(h.status(), "A02");
+  expectJournalCount(store, PersistentEventCode::A02, 1);
+}
+
+void test_persist_007_a03_is_persisted_once_per_capot_danger_occurrence() {
+  FakePersistentStore store;
+  ControllerHarness h(&store);
+  h.tick();
+  h.startAutoWash();
+
+  h.inputs.capotOuvert = true;
+  h.tick();
+  h.tick();
+
+  TEST_ASSERT_EQUAL(SystemState::FAULT, h.status().state);
+  expectAlarm(h.status(), "A03");
+  expectJournalCount(store, PersistentEventCode::A03, 1);
+}
+
+void test_persist_008_a04_is_persisted_once_per_wash_failure_occurrence() {
+  FakePersistentStore store;
+  ControllerHarness h(&store);
+  h.tick();
+  h.startAutoWash();
+
+  h.advance(h.config.washMaxMs);
+  h.advance(h.config.retryPauseMs);
+  h.advance(h.config.washMaxMs);
+  h.advance(h.config.retryPauseMs);
+  h.advance(h.config.washMaxMs);
+  h.tick();
+  h.tick();
+
+  TEST_ASSERT_EQUAL(SystemState::DEGRADED, h.status().state);
+  expectAlarm(h.status(), "A04");
+  expectJournalCount(store, PersistentEventCode::A04, 1);
+}
+
 int main(int argc, char** argv) {
   (void)argc;
   (void)argv;
@@ -414,5 +596,13 @@ int main(int argc, char** argv) {
   RUN_TEST(test_sim_014_missing_water_temperature_warns_without_stopping_nominal_outputs);
   RUN_TEST(test_sim_015_missing_local_temperature_warns_without_stopping_nominal_outputs);
   RUN_TEST(test_sim_016_failed_test_wash_does_not_latch_a04);
+  RUN_TEST(test_persist_001_boot_is_counted_on_each_begin);
+  RUN_TEST(test_persist_002_a15_active_reappears_after_reboot_without_double_counting);
+  RUN_TEST(test_persist_003_a15_active_is_cleared_after_reboot_with_closed_capot);
+  RUN_TEST(test_persist_004_open_capot_without_persisted_a15_restarts_long_open_timer);
+  RUN_TEST(test_persist_005_critical_level_and_reset_ok_are_persisted);
+  RUN_TEST(test_persist_006_incoherent_level_is_persisted_once_until_reset);
+  RUN_TEST(test_persist_007_a03_is_persisted_once_per_capot_danger_occurrence);
+  RUN_TEST(test_persist_008_a04_is_persisted_once_per_wash_failure_occurrence);
   return UNITY_END();
 }

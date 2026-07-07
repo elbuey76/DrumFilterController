@@ -18,6 +18,7 @@ private:
   void handleCommand(const String& command, InputsSnapshot& inputs, const Controller& controller, const OutputsCommand& outputs);
   void printHelp() const;
   void printStatus(const InputsSnapshot& inputs, const Controller& controller, const OutputsCommand& outputs) const;
+  void printJournal(const Controller& controller) const;
   void printInputs(const InputsSnapshot& inputs) const;
   void printOutputs(const OutputsCommand& outputs) const;
   void printState(SystemState state) const;

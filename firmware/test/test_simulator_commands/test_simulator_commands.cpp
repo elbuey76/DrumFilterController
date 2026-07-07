@@ -139,6 +139,9 @@ void test_help_status_empty_and_unknown_commands_are_reported_without_mutating_i
   result = applySimulatorCommand("status", inputs);
   TEST_ASSERT_EQUAL(SimulatorCommandAction::STATUS, result.action);
 
+  result = applySimulatorCommand("  JoUrNaL  ", inputs);
+  TEST_ASSERT_EQUAL(SimulatorCommandAction::JOURNAL, result.action);
+
   result = applySimulatorCommand("temp eau nope", inputs);
   TEST_ASSERT_EQUAL(SimulatorCommandAction::UNKNOWN, result.action);
 
