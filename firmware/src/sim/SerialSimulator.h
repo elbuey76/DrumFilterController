@@ -4,6 +4,7 @@
 
 #include "app/Controller.h"
 #include "app/Types.h"
+#include "sim/SimulatorCommands.h"
 
 class SerialSimulator {
 public:
@@ -20,7 +21,6 @@ private:
   void printOutputs(const OutputsCommand& outputs) const;
   void printState(SystemState state) const;
   void setBool(const char* label, bool value) const;
-  bool parseTemperature(const String& command, const char* prefix, float& target) const;
 
   Stream* stream_ = nullptr;
   char buffer_[kBufferSize]{};

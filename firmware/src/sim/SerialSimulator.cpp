@@ -1,8 +1,5 @@
 #include "SerialSimulator.h"
 
-#include <stdlib.h>
-#include <string.h>
-
 namespace {
 String normalizedCommand(String command) {
   command.trim();
@@ -44,7 +41,7 @@ void SerialSimulator::poll(InputsSnapshot& inputs, const Controller& controller,
       buffer_[bufferLength_++] = received;
     } else {
       bufferLength_ = 0;
-      stream_->println(F("Commande trop longue, tampon réinitialisé."));
+      stream_->println(F("Commande trop longue, tampon reinitialise."));
     }
   }
 }
@@ -54,76 +51,66 @@ void SerialSimulator::handleCommand(const String& command, InputsSnapshot& input
     return;
   }
 
-  if (command == F("help")) {
-    printHelp();
-  } else if (command == F("status")) {
-    printStatus(inputs, controller, outputs);
-  } else if (command == F("lavage on")) {
-    inputs.epLavage = true;
-    setBool("EP_LAVAGE", inputs.epLavage);
-  } else if (command == F("lavage off")) {
-    inputs.epLavage = false;
-    setBool("EP_LAVAGE", inputs.epLavage);
-  } else if (command == F("critique on")) {
-    inputs.epCritique = true;
-    setBool("EP_CRITIQUE", inputs.epCritique);
-  } else if (command == F("critique off")) {
-    inputs.epCritique = false;
-    setBool("EP_CRITIQUE", inputs.epCritique);
-  } else if (command == F("capot open")) {
-    inputs.capotOuvert = true;
-    setBool("CAPOT_OUVERT", inputs.capotOuvert);
-  } else if (command == F("capot close")) {
-    inputs.capotOuvert = false;
-    setBool("CAPOT_OUVERT", inputs.capotOuvert);
-  } else if (command == F("auto")) {
-    inputs.modeAuto = true;
-    inputs.modeMaintenance = false;
-    stream_->println(F("Mode demandé: AUTO"));
-  } else if (command == F("maintenance")) {
-    inputs.modeAuto = false;
-    inputs.modeMaintenance = true;
-    stream_->println(F("Mode demandé: MAINTENANCE"));
-  } else if (command == F("manual")) {
-    inputs.modeAuto = false;
-    inputs.modeMaintenance = false;
-    stream_->println(F("Mode demande: MANUEL"));
-  } else if (command == F("reset")) {
-    inputs.btnReset = true;
-    stream_->println(F("RESET impulsion simulée"));
-  } else if (command == F("test")) {
-    inputs.btnTestLavage = true;
-    stream_->println(F("TEST_LAVAGE impulsion simulée"));
-  } else if (command == F("tambour on")) {
-    inputs.btnManuTambour = true;
-    setBool("MANU_TAMBOUR", inputs.btnManuTambour);
-  } else if (command == F("tambour off")) {
-    inputs.btnManuTambour = false;
-    setBool("MANU_TAMBOUR", inputs.btnManuTambour);
-  } else if (command == F("rincage on")) {
-    inputs.btnManuRincage = true;
-    setBool("MANU_RINCAGE", inputs.btnManuRincage);
-  } else if (command == F("rincage off")) {
-    inputs.btnManuRincage = false;
-    setBool("MANU_RINCAGE", inputs.btnManuRincage);
-  } else if (command == F("temp eau lost")) {
-    inputs.tempBassinValid = false;
-    stream_->println(F("TEMP_BASSIN = LOST"));
-  } else if (command == F("temp local lost")) {
-    inputs.tempLocalValid = false;
-    stream_->println(F("TEMP_LOCAL = LOST"));
-  } else if (parseTemperature(command, "temp eau ", inputs.tempBassinC)) {
-    inputs.tempBassinValid = true;
-    stream_->print(F("TEMP_BASSIN = "));
-    stream_->println(inputs.tempBassinC, 1);
-  } else if (parseTemperature(command, "temp local ", inputs.tempLocalC)) {
-    inputs.tempLocalValid = true;
-    stream_->print(F("TEMP_LOCAL = "));
-    stream_->println(inputs.tempLocalC, 1);
-  } else {
-    stream_->print(F("Commande inconnue: "));
-    stream_->println(command);
-    stream_->println(F("Tapez 'help' pour la liste des commandes."));
+  const SimulatorCommandResult result = applySimulatorCommand(command.c_str(), inputs);
+
+  switch (result.action) {
+    case SimulatorCommandAction::NONE:
+      break;
+    case SimulatorCommandAction::HELP:
+      printHelp();
+      break;
+    case SimulatorCommandAction::STATUS:
+      printStatus(inputs, controller, outputs);
+      break;
+    case SimulatorCommandAction::SET_EP_LAVAGE:
+      setBool("EP_LAVAGE", result.boolValue);
+      break;
+    case SimulatorCommandAction::SET_EP_CRITIQUE:
+      setBool("EP_CRITIQUE", result.boolValue);
+      break;
+    case SimulatorCommandAction::SET_CAPOT_OUVERT:
+      setBool("CAPOT_OUVERT", result.boolValue);
+      break;
+    case SimulatorCommandAction::MODE_AUTO:
+      stream_->println(F("Mode demande: AUTO"));
+      break;
+    case SimulatorCommandAction::MODE_MAINTENANCE:
+      stream_->println(F("Mode demande: MAINTENANCE"));
+      break;
+    case SimulatorCommandAction::MODE_MANUAL:
+      stream_->println(F("Mode demande: MANUEL"));
+      break;
+    case SimulatorCommandAction::PULSE_RESET:
+      stream_->println(F("RESET impulsion simulee"));
+      break;
+    case SimulatorCommandAction::PULSE_TEST_LAVAGE:
+      stream_->println(F("TEST_LAVAGE impulsion simulee"));
+      break;
+    case SimulatorCommandAction::SET_MANU_TAMBOUR:
+      setBool("MANU_TAMBOUR", result.boolValue);
+      break;
+    case SimulatorCommandAction::SET_MANU_RINCAGE:
+      setBool("MANU_RINCAGE", result.boolValue);
+      break;
+    case SimulatorCommandAction::TEMP_BASSIN_LOST:
+      stream_->println(F("TEMP_BASSIN = LOST"));
+      break;
+    case SimulatorCommandAction::TEMP_LOCAL_LOST:
+      stream_->println(F("TEMP_LOCAL = LOST"));
+      break;
+    case SimulatorCommandAction::SET_TEMP_BASSIN:
+      stream_->print(F("TEMP_BASSIN = "));
+      stream_->println(result.temperatureC, 1);
+      break;
+    case SimulatorCommandAction::SET_TEMP_LOCAL:
+      stream_->print(F("TEMP_LOCAL = "));
+      stream_->println(result.temperatureC, 1);
+      break;
+    case SimulatorCommandAction::UNKNOWN:
+      stream_->print(F("Commande inconnue: "));
+      stream_->println(command);
+      stream_->println(F("Tapez 'help' pour la liste des commandes."));
+      break;
   }
 }
 
@@ -232,24 +219,4 @@ void SerialSimulator::setBool(const char* label, bool value) const {
   stream_->print(label);
   stream_->print(F(" = "));
   stream_->println(boolText(value));
-}
-
-bool SerialSimulator::parseTemperature(const String& command, const char* prefix, float& target) const {
-  if (!command.startsWith(prefix)) {
-    return false;
-  }
-
-  const String value = command.substring(strlen(prefix));
-  if (value.length() == 0) {
-    return false;
-  }
-
-  char* end = nullptr;
-  const float parsed = strtof(value.c_str(), &end);
-  if (end == value.c_str() || *end != '\0') {
-    return false;
-  }
-
-  target = parsed;
-  return true;
 }

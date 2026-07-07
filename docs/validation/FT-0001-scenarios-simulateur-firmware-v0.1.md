@@ -20,7 +20,7 @@ Un banc de tests automatise couvre les scenarios FT-0001 au niveau logique metie
 - Entrees pilotees : `InputsSnapshot`
 - Temps pilote : `nowMs` simule
 
-Limites de couverture : ces tests valident les transitions d'etat, alarmes, messages metier et sorties commandees par le `Controller`. Ils ne valident pas l'affichage serie, le parsing des commandes du `SerialSimulator`, ni les entrees/sorties physiques de la carte KC868-A32.
+Limites de couverture : ces tests valident les transitions d'etat, alarmes, messages metier et sorties commandees par le `Controller`. Le parsing des commandes du simulateur est couvert separement par `test_simulator_commands`. L'affichage serie, le transport `Stream` Arduino et les entrees/sorties physiques de la carte KC868-A32 restent hors couverture host-side.
 
 ## Preconditions
 
