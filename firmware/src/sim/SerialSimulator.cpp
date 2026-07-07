@@ -84,6 +84,10 @@ void SerialSimulator::handleCommand(const String& command, InputsSnapshot& input
     inputs.modeAuto = false;
     inputs.modeMaintenance = true;
     stream_->println(F("Mode demandé: MAINTENANCE"));
+  } else if (command == F("manual")) {
+    inputs.modeAuto = false;
+    inputs.modeMaintenance = false;
+    stream_->println(F("Mode demande: MANUEL"));
   } else if (command == F("reset")) {
     inputs.btnReset = true;
     stream_->println(F("RESET impulsion simulée"));
@@ -133,7 +137,7 @@ void SerialSimulator::printHelp() const {
   stream_->println(F("  lavage on|off"));
   stream_->println(F("  critique on|off"));
   stream_->println(F("  capot open|close"));
-  stream_->println(F("  auto | maintenance"));
+  stream_->println(F("  auto | maintenance | manual"));
   stream_->println(F("  reset | test"));
   stream_->println(F("  tambour on|off"));
   stream_->println(F("  rincage on|off"));
