@@ -1,4 +1,4 @@
-﻿# Contrôleur de filtre à tambour pour bassin
+# Contrôleur de filtre à tambour pour bassin
 
 Ce dépôt accueillera la documentation, les schémas, les décisions de conception et le logiciel d'un contrôleur de filtre à tambour pour bassin. L'objectif est de construire un système fiable, maintenable et documenté, basé autant que possible sur des cartes électroniques du commerce, avec la possibilité de concevoir une carte dédiée si le besoin devient justifié.
 
@@ -12,6 +12,7 @@ Ce dépôt accueillera la documentation, les schémas, les décisions de concept
 | `docs/decisions/` | Journal de décisions de type ADR pour garder l'historique des choix importants. |
 | `docs/achats/` | Listes de course, nomenclatures et points de commande matériel. |
 | `docs/backlog/` | Backlog de cadrage, prototype, firmware, documentation et validation. |
+| `docs/firmware/` | Plans de réalisation et de découpage du firmware. |
 | `docs/validation/` | Plan de tests, traçabilité exigences/preuves et résultats de validation. |
 
 Les documents de spécification et d'architecture sont rédigés en Markdown pour pouvoir combiner texte, tableaux, diagrammes Mermaid et images stockées dans les dossiers `assets/`.
@@ -38,6 +39,7 @@ Les objectifs principaux sont :
 - [Journal de décisions](docs/decisions/README.md)
 - [Achats](docs/achats/README.md)
 - [Backlog](docs/backlog/backlog.md)
+- [Firmware](docs/firmware/README.md)
 - [Validation](docs/validation/README.md)
 
 ## Prochaine étape

@@ -1,4 +1,4 @@
-﻿$ErrorActionPreference = "Stop"
+$ErrorActionPreference = "Stop"
 
 $paths = @(
   "README.md",
@@ -36,6 +36,8 @@ $paths = @(
   "docs/achats/commandes-2026-07-06.md",
   "docs/backlog/README.md",
   "docs/backlog/backlog.md",
+  "docs/firmware/README.md",
+  "docs/firmware/plan-firmware-v0.1.md",
   "docs/validation/README.md",
   "docs/validation/plan-tests-exigences.md",
   "docs/validation/checklist-go-no-go-materiel-v1.md"
