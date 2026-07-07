@@ -21,4 +21,25 @@ python -m platformio test -e native
 
 Le banc pilote directement `Controller::update()` avec des `InputsSnapshot` et un `nowMs` simule. Il se trouve dans `firmware/test/test_ft0001_controller/`.
 
+## Preuve automatisee courante
+
+La preuve automatisee de reference est le workflow GitHub Actions `Firmware`, defini dans `.github/workflows/firmware.yml`.
+
+Ce workflow est execute a chaque push ou pull request touchant le firmware. Il lance :
+
+```powershell
+cd firmware
+python -m platformio test -e native
+python -m platformio run
+```
+
+La CI couvre donc :
+
+- les tests host-side FT-0001 du `Controller` ;
+- les tests host-side du parsing des commandes simulateur ;
+- les tests host-side du buffer de ligne serie ;
+- la compilation du firmware ESP32 `kc868_a32`.
+
+Limite : cette preuve valide le code et la compilation dans l'environnement CI, mais ne remplace pas les essais materiels sur carte KC868-A32, les mesures hydrauliques ni la validation des entrees/sorties physiques.
+
 Les procédures longues ou risquées peuvent être détaillées dans des fiches de test séparées, tout en restant référencées par la matrice de traçabilité.
