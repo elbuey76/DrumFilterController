@@ -14,7 +14,7 @@ const char* boolText(bool value) {
 
 void SerialSimulator::begin(Stream& stream) {
   stream_ = &stream;
-  bufferLength_ = 0;
+  lineBuffer_.reset();
   printHelp();
 }
 
@@ -26,22 +26,16 @@ void SerialSimulator::poll(InputsSnapshot& inputs, const Controller& controller,
   while (stream_->available() > 0) {
     const char received = static_cast<char>(stream_->read());
 
-    if (received == '\r') {
-      continue;
-    }
-
-    if (received == '\n') {
-      buffer_[bufferLength_] = '\0';
-      handleCommand(normalizedCommand(String(buffer_)), inputs, controller, outputs);
-      bufferLength_ = 0;
-      continue;
-    }
-
-    if (bufferLength_ < kBufferSize - 1) {
-      buffer_[bufferLength_++] = received;
-    } else {
-      bufferLength_ = 0;
-      stream_->println(F("Commande trop longue, tampon reinitialise."));
+    switch (lineBuffer_.push(received)) {
+      case SimulatorLineEvent::NONE:
+        break;
+      case SimulatorLineEvent::LINE_READY:
+        handleCommand(normalizedCommand(String(lineBuffer_.line())), inputs, controller, outputs);
+        lineBuffer_.reset();
+        break;
+      case SimulatorLineEvent::BUFFER_OVERFLOW:
+        stream_->println(F("Commande trop longue, tampon reinitialise."));
+        break;
     }
   }
 }

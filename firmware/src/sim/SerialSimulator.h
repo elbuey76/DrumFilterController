@@ -5,6 +5,7 @@
 #include "app/Controller.h"
 #include "app/Types.h"
 #include "sim/SimulatorCommands.h"
+#include "sim/SimulatorLineBuffer.h"
 
 class SerialSimulator {
 public:
@@ -24,5 +25,5 @@ private:
 
   Stream* stream_ = nullptr;
   char buffer_[kBufferSize]{};
-  size_t bufferLength_ = 0;
+  SimulatorLineBuffer lineBuffer_{buffer_, kBufferSize};
 };
