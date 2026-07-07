@@ -16,6 +16,27 @@ enum class SystemState {
   FAULT
 };
 
+enum class AlarmSeverity {
+  INFO,
+  WARNING,
+  DEGRADED,
+  BLOCKING
+};
+
+enum class AlarmCode {
+  NONE,
+  A01,
+  A02,
+  A03,
+  A04,
+  A05,
+  A11,
+  A12,
+  A13,
+  A14,
+  A15
+};
+
 struct InputsSnapshot {
   bool epLavage = false;
   bool epCritique = false;

@@ -82,10 +82,51 @@ WashCycleResult WashCycle::update(const InputsSnapshot& inputs, unsigned long no
         result.message = "LAVAGE INEFFICACE - PAUSE AVANT RETENTATIVE";
         return result;
 
+      case Phase::TestWashing:
+        if (nowMs - phaseStartedAtMs_ >= config_.washMinMs) {
+          if (!testStartedWithEpLavage_) {
+            phase_ = Phase::TestDone;
+            phaseStartedAtMs_ = nowMs;
+            testResultMessage_ = "TEST OK - CYCLE EXECUTE";
+            continue;
+          }
+
+          if (!inputs.epLavage) {
+            phase_ = Phase::TestDone;
+            phaseStartedAtMs_ = nowMs;
+            testResultMessage_ = "TEST OK - NIVEAU OK";
+            continue;
+          }
+
+          phase_ = Phase::TestDone;
+          phaseStartedAtMs_ = nowMs;
+          testResultMessage_ = "TEST ECHEC - LAVAGE INEFFICACE";
+          continue;
+        }
+
+        result.state = SystemState::TEST_WASH;
+        result.message = "TEST LAVAGE";
+        result.cmdTambour = true;
+        result.cmdRincage = true;
+        result.voyantLavage = true;
+        return result;
+
+      case Phase::TestDone:
+        if (nowMs - phaseStartedAtMs_ >= config_.residualRotationMs) {
+          phase_ = Phase::Idle;
+          testStartedWithEpLavage_ = false;
+          testResultMessage_ = nullptr;
+          continue;
+        }
+
+        result.state = SystemState::AUTO_WAIT;
+        result.message = testResultMessage_ == nullptr ? "TEST TERMINE" : testResultMessage_;
+        return result;
+
       case Phase::Degraded:
         result.state = SystemState::DEGRADED;
         result.message = "A04 - LAVAGE INEFFICACE";
-        result.alarmCode = "A04";
+        result.alarmCode = AlarmCode::A04;
         result.voyantAlarme = true;
         return result;
 
@@ -96,11 +137,25 @@ WashCycleResult WashCycle::update(const InputsSnapshot& inputs, unsigned long no
   }
 }
 
+bool WashCycle::startTest(bool epLavageActiveAtStart, unsigned long nowMs) {
+  if (phase_ != Phase::Idle) {
+    return false;
+  }
+
+  phase_ = Phase::TestWashing;
+  phaseStartedAtMs_ = nowMs;
+  testStartedWithEpLavage_ = epLavageActiveAtStart;
+  epLavageWasActive_ = false;
+  return true;
+}
+
 void WashCycle::abort() {
   if (phase_ != Phase::Degraded) {
     phase_ = Phase::Idle;
     attemptCount_ = 0;
     epLavageWasActive_ = false;
+    testStartedWithEpLavage_ = false;
+    testResultMessage_ = nullptr;
   }
 }
 
@@ -108,10 +163,16 @@ void WashCycle::resetAlarm() {
   phase_ = Phase::Idle;
   attemptCount_ = 0;
   epLavageWasActive_ = false;
+  testStartedWithEpLavage_ = false;
+  testResultMessage_ = nullptr;
 }
 
 bool WashCycle::hasBlockingAlarm() const {
   return phase_ == Phase::Degraded;
+}
+
+bool WashCycle::isTestRunning() const {
+  return phase_ == Phase::TestWashing;
 }
 
 void WashCycle::startWash(unsigned long nowMs) {

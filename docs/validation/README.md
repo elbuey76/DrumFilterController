@@ -8,5 +8,6 @@ Fichier principal :
 
 - [Plan de tests par exigences](plan-tests-exigences.md)
 - [Checklist go/no-go materiel V1](checklist-go-no-go-materiel-v1.md)
+- [FT-0001 - Scenarios simulateur firmware V0.1](FT-0001-scenarios-simulateur-firmware-v0.1.md)
 
 Les procédures longues ou risquées peuvent être détaillées dans des fiches de test séparées, tout en restant référencées par la matrice de traçabilité.

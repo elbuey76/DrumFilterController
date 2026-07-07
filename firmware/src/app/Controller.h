@@ -1,5 +1,6 @@
 #pragma once
 
+#include "AlarmManager.h"
 #include "Config.h"
 #include "Safety.h"
 #include "Types.h"
@@ -18,14 +19,20 @@ private:
   OutputsCommand nominalOutputs() const;
   OutputsCommand maintenanceOutputs() const;
   OutputsCommand manualOutputs(const InputsSnapshot& inputs) const;
+  OutputsCommand washOutputs(const WashCycleResult& wash) const;
   bool resetAllowed(const InputsSnapshot& inputs, const SafetyStatus& safety) const;
   const char* resetRefusalMessage(const InputsSnapshot& inputs, const SafetyStatus& safety) const;
+  AlarmCode temperatureAlarm(const InputsSnapshot& inputs) const;
+  OutputsCommand testRefusedOutputs(bool blocking) const;
+  bool capotOpen(const InputsSnapshot& inputs, const SafetyStatus& safety) const;
   void setStatus(SystemState state, const char* message, const char* alarmCode = nullptr);
+  void setAlarmStatus(SystemState state, AlarmCode alarmCode, const char* messageOverride = nullptr);
   OutputsCommand finishUpdate(const OutputsCommand& outputs);
 
+  AlarmManager alarmManager_;
   Safety safety_;
   WashCycle washCycle_;
-  bool capotDangerFaultLatched_ = false;
+  AlarmCode blockingAlarmLatched_ = AlarmCode::NONE;
   bool dangerousOutputWasActive_ = false;
   SystemState state_ = SystemState::BOOT;
   ControllerStatus status_{};

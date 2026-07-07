@@ -6,7 +6,7 @@
 struct WashCycleResult {
   SystemState state = SystemState::AUTO_WAIT;
   const char* message = "AUTO - ATTENTE";
-  const char* alarmCode = nullptr;
+  AlarmCode alarmCode = AlarmCode::NONE;
 
   bool cmdTambour = false;
   bool cmdRincage = false;
@@ -19,9 +19,11 @@ public:
   explicit WashCycle(const Config& config);
 
   WashCycleResult update(const InputsSnapshot& inputs, unsigned long nowMs);
+  bool startTest(bool epLavageActiveAtStart, unsigned long nowMs);
   void abort();
   void resetAlarm();
   bool hasBlockingAlarm() const;
+  bool isTestRunning() const;
 
 private:
   enum class Phase {
@@ -30,6 +32,8 @@ private:
     PostWash,
     SafetyPause,
     RetryPause,
+    TestWashing,
+    TestDone,
     Degraded
   };
 
@@ -40,6 +44,8 @@ private:
   Phase phase_ = Phase::Idle;
   unsigned long phaseStartedAtMs_ = 0;
   unsigned long epLavageActiveSinceMs_ = 0;
+  const char* testResultMessage_ = nullptr;
   bool epLavageWasActive_ = false;
+  bool testStartedWithEpLavage_ = false;
   uint8_t attemptCount_ = 0;
 };

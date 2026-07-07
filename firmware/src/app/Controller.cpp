@@ -9,44 +9,67 @@ void Controller::begin(unsigned long /*nowMs*/) {
 OutputsCommand Controller::update(const InputsSnapshot& inputs, unsigned long nowMs) {
   const SafetyStatus safety = safety_.update(inputs, nowMs);
 
-  if (safety.capotOpen && dangerousOutputWasActive_) {
-    capotDangerFaultLatched_ = true;
+  if (capotOpen(inputs, safety) && dangerousOutputWasActive_) {
+    blockingAlarmLatched_ = AlarmCode::A03;
   }
 
   if (inputs.btnReset) {
     if (!resetAllowed(inputs, safety)) {
-      setStatus(SystemState::FAULT, resetRefusalMessage(inputs, safety), "A05");
+      setAlarmStatus(SystemState::FAULT, AlarmCode::A05, resetRefusalMessage(inputs, safety));
       return finishUpdate(safeOutputs());
     }
 
-    capotDangerFaultLatched_ = false;
+    blockingAlarmLatched_ = AlarmCode::NONE;
     washCycle_.resetAlarm();
   }
 
+  if (inputs.btnTestLavage) {
+    if (capotOpen(inputs, safety)) {
+      setAlarmStatus(SystemState::MAINTENANCE, AlarmCode::A13);
+      return finishUpdate(testRefusedOutputs(false));
+    }
+
+    if (safety.levelCritical || safety.levelIncoherent || blockingAlarmLatched_ != AlarmCode::NONE || (!inputs.modeAuto && !inputs.modeMaintenance)) {
+      setAlarmStatus(SystemState::FAULT, AlarmCode::A14);
+      return finishUpdate(testRefusedOutputs(true));
+    }
+
+    if (!washCycle_.startTest(inputs.epLavage, nowMs)) {
+      setAlarmStatus(SystemState::FAULT, AlarmCode::A14, "A14 - TEST REFUSE CYCLE ACTIF");
+      return finishUpdate(testRefusedOutputs(true));
+    }
+  }
+
   if (safety.levelIncoherent) {
+    blockingAlarmLatched_ = AlarmCode::A02;
+  }
+
+  if (!safety.levelIncoherent && safety.levelCritical) {
+    blockingAlarmLatched_ = AlarmCode::A01;
+  }
+
+  if (blockingAlarmLatched_ != AlarmCode::NONE) {
     washCycle_.abort();
-    setStatus(SystemState::FAULT, "A02 - CAPTEURS NIVEAU INCOHERENTS", "A02");
+    setAlarmStatus(SystemState::FAULT, blockingAlarmLatched_);
     return finishUpdate(safeOutputs());
   }
 
-  if (safety.levelCritical) {
-    washCycle_.abort();
-    setStatus(SystemState::FAULT, "A01 - NIVEAU CRITIQUE", "A01");
-    return finishUpdate(safeOutputs());
+  if (washCycle_.hasBlockingAlarm()) {
+    WashCycleResult degraded;
+    degraded.state = SystemState::DEGRADED;
+    degraded.message = alarmManager_.message(AlarmCode::A04);
+    degraded.alarmCode = AlarmCode::A04;
+    degraded.voyantAlarme = true;
+    setAlarmStatus(SystemState::DEGRADED, AlarmCode::A04);
+    return finishUpdate(washOutputs(degraded));
   }
 
-  if (capotDangerFaultLatched_) {
-    washCycle_.abort();
-    setStatus(SystemState::FAULT, "A03 - CAPOT OUVERT DANGER", "A03");
-    return finishUpdate(safeOutputs());
-  }
-
-  if (safety.capotOpen) {
+  if (capotOpen(inputs, safety)) {
     washCycle_.abort();
     OutputsCommand outputs = maintenanceOutputs();
     if (safety.capotOpenLong) {
       outputs.voyantAlarme = true;
-      setStatus(SystemState::MAINTENANCE, "A15 - CAPOT OUVERT LONG", "A15");
+      setAlarmStatus(SystemState::MAINTENANCE, AlarmCode::A15);
     } else if (inputs.btnManuTambour || inputs.btnManuRincage) {
       setStatus(SystemState::MAINTENANCE, "MANU REFUSE - CAPOT");
     } else {
@@ -55,7 +78,7 @@ OutputsCommand Controller::update(const InputsSnapshot& inputs, unsigned long no
     return finishUpdate(outputs);
   }
 
-  if (inputs.modeMaintenance || !inputs.modeAuto) {
+  if ((inputs.modeMaintenance || !inputs.modeAuto) && !washCycle_.isTestRunning()) {
     washCycle_.abort();
 
     if (inputs.btnManuTambour || inputs.btnManuRincage) {
@@ -68,13 +91,20 @@ OutputsCommand Controller::update(const InputsSnapshot& inputs, unsigned long no
   }
 
   WashCycleResult wash = washCycle_.update(inputs, nowMs);
-  OutputsCommand outputs = nominalOutputs();
-  outputs.cmdTambour = wash.cmdTambour;
-  outputs.cmdRincage = wash.cmdRincage;
-  outputs.voyantLavage = wash.voyantLavage;
-  outputs.voyantAlarme = wash.voyantAlarme;
+  OutputsCommand outputs = washOutputs(wash);
+  if (wash.alarmCode != AlarmCode::NONE) {
+    setAlarmStatus(wash.state, wash.alarmCode, wash.message);
+    return finishUpdate(outputs);
+  }
 
-  setStatus(wash.state, wash.message, wash.alarmCode);
+  const AlarmCode tempAlarm = temperatureAlarm(inputs);
+  if (tempAlarm != AlarmCode::NONE) {
+    outputs.voyantAlarme = true;
+    setAlarmStatus(wash.state, tempAlarm);
+    return finishUpdate(outputs);
+  }
+
+  setStatus(wash.state, wash.message);
   return finishUpdate(outputs);
 }
 
@@ -114,8 +144,17 @@ OutputsCommand Controller::manualOutputs(const InputsSnapshot& inputs) const {
   return outputs;
 }
 
+OutputsCommand Controller::washOutputs(const WashCycleResult& wash) const {
+  OutputsCommand outputs = nominalOutputs();
+  outputs.cmdTambour = wash.cmdTambour;
+  outputs.cmdRincage = wash.cmdRincage;
+  outputs.voyantLavage = wash.voyantLavage;
+  outputs.voyantAlarme = wash.voyantAlarme;
+  return outputs;
+}
+
 bool Controller::resetAllowed(const InputsSnapshot& inputs, const SafetyStatus& safety) const {
-  if (safety.levelCritical || safety.levelIncoherent || (capotDangerFaultLatched_ && safety.capotOpen)) {
+  if (safety.levelCritical || safety.levelIncoherent || (blockingAlarmLatched_ == AlarmCode::A03 && capotOpen(inputs, safety))) {
     return false;
   }
 
@@ -135,7 +174,7 @@ const char* Controller::resetRefusalMessage(const InputsSnapshot& inputs, const 
     return "A05 - RESET REFUSE - EP_CRITIQUE ACTIF";
   }
 
-  if (capotDangerFaultLatched_ && safety.capotOpen) {
+  if (blockingAlarmLatched_ == AlarmCode::A03 && capotOpen(inputs, safety)) {
     return "A05 - RESET REFUSE - CAPOT OUVERT";
   }
 
@@ -146,11 +185,37 @@ const char* Controller::resetRefusalMessage(const InputsSnapshot& inputs, const 
   return "A05 - RESET REFUSE";
 }
 
+AlarmCode Controller::temperatureAlarm(const InputsSnapshot& inputs) const {
+  if (!inputs.tempBassinValid) {
+    return AlarmCode::A11;
+  }
+
+  if (!inputs.tempLocalValid) {
+    return AlarmCode::A12;
+  }
+
+  return AlarmCode::NONE;
+}
+
+OutputsCommand Controller::testRefusedOutputs(bool blocking) const {
+  OutputsCommand outputs = blocking ? safeOutputs() : maintenanceOutputs();
+  outputs.voyantAlarme = true;
+  return outputs;
+}
+
+bool Controller::capotOpen(const InputsSnapshot& inputs, const SafetyStatus& safety) const {
+  return inputs.capotOuvert || safety.capotOpen;
+}
+
 void Controller::setStatus(SystemState state, const char* message, const char* alarmCode) {
   state_ = state;
   status_.state = state;
   status_.message = message;
   status_.alarmCode = alarmCode;
+}
+
+void Controller::setAlarmStatus(SystemState state, AlarmCode alarmCode, const char* messageOverride) {
+  setStatus(state, messageOverride == nullptr ? alarmManager_.message(alarmCode) : messageOverride, alarmManager_.codeText(alarmCode));
 }
 
 OutputsCommand Controller::finishUpdate(const OutputsCommand& outputs) {
