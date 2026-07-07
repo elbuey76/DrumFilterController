@@ -41,6 +41,7 @@ La structure retenue est double :
 | Échoué | Le test a été exécuté avec un résultat non conforme. |
 | Reporté | L'exigence est explicitement reportée hors itération. |
 | Non applicable | L'exigence ne s'applique pas à l'itération ou à l'architecture retenue. |
+| Passé (host-side) | Le comportement est couvert par test automatisé natif, sans validation matériel. |
 
 ## Fiches de test détaillées
 
@@ -69,24 +70,24 @@ Chaque fiche doit contenir au minimum :
 | F-001 | Must | Test | À définir | À définir | À définir |
 | F-002 | Must | Test | À définir | À définir | À définir |
 | F-003 | Must | Test | À définir | À définir | À définir |
-| F-004 | Must | Test | Durée lavage maxi | Un lavage ne dépasse pas la durée maximale configurée, cible initiale 45 s. | À définir |
-| F-005 | Must | Test | Anti-redémarrage lavage | Deux cycles automatiques ne peuvent pas s'enchaîner sans respecter le délai configuré, cible initiale 30 à 120 s. | À définir |
-| F-040 | Must | Test | Durée lavage mini | Le rinçage et la rotation restent actifs au moins 10 s au réglage initial, même si EP_LAVAGE revient vite normal. | À définir |
+| F-004 | Must | Test | Durée lavage maxi | Un lavage ne dépasse pas la durée maximale configurée, cible initiale 45 s. | Passé (host-side) |
+| F-005 | Must | Test | Anti-redémarrage lavage | Deux cycles automatiques ne peuvent pas s'enchaîner sans respecter le délai configuré, cible initiale 30 à 120 s. | Passé (host-side) |
+| F-040 | Must | Test | Durée lavage mini | Le rinçage et la rotation restent actifs au moins 10 s au réglage initial, même si EP_LAVAGE revient vite normal. | Passé (host-side) |
 | F-031 | Must | Test | Alertes température eau | La sonde DS18B20 `TEMP_BASSIN` est lue en 3,3 V avec pull-up 4,7 kΩ ; les alertes basse < 4 deg C, haute > 28 deg C et perte de mesure A11 sont signalées sans bloquer les fonctions. | À définir |
 | F-033 | Must | Test | Alertes température local | La sonde DS18B20 `TEMP_LOCAL` est lue en 3,3 V avec pull-up 4,7 kΩ ; les alertes basse < 2 deg C, haute > 40 deg C et perte de mesure A12 sont signalées sans bloquer les fonctions. | À définir |
-| F-041 | Must | Test | Rotation résiduelle | Après arrêt rinçage, le tambour continue pendant la durée résiduelle configurée, cible initiale 2 à 5 s, puis l'anti-redémarrage démarré. | À définir |
-| F-043 | Must | Test | Relance après échec lavage | Après durée maxi atteinte avec EP_LAVAGE actif, la tentative suivante attend la pause configurée 30 à 120 s. | À définir |
-| F-044 | Must | Test | Défaut après tentatives max | Après 3 tentatives au réglage initial sans retour normal, le défaut lavage maintenu est déclaré et les lavages auto sont inhibés. | À définir |
+| F-041 | Must | Test | Rotation résiduelle | Après arrêt rinçage, le tambour continue pendant la durée résiduelle configurée, cible initiale 2 à 5 s, puis l'anti-redémarrage démarré. | Passé (host-side) |
+| F-043 | Must | Test | Relance après échec lavage | Après durée maxi atteinte avec EP_LAVAGE actif, la tentative suivante attend la pause configurée 30 à 120 s. | Passé (host-side) |
+| F-044 | Must | Test | Défaut après tentatives max | Après 3 tentatives au réglage initial sans retour normal, le défaut lavage maintenu est déclaré et les lavages auto sont inhibés. | Passé (host-side) |
 | F-006 | Must | Test | À définir | À définir | À définir |
 | F-066 | Must | Revue documentaire | Formulation indirecte alarmes | Aucun message V1 n'affirme une panne d'organe non instrumentée ; les libellés portent sur effets observés. | À définir |
 | F-075 | Must | Test | Alarmes bloquantes V1 | Retour automatique impossible tant que la cause n'a pas disparu et que l'alarme n'est pas acquittée. | À définir |
-| F-076 | Must | Test | Reset refusé cause active | Le reset est refusé et l'IHM indique la cause encore active. | À définir |
+| F-076 | Must | Test | Reset refusé cause active | Le reset est refusé et l'IHM indique la cause encore active. | Passé (host-side) |
 | F-080 | Must | Test | Filtrage EP_LAVAGE | Une activation plus courte que la temporisation configurée ne lance pas de lavage ; une activation maintenue lance le lavage. | À définir |
 | F-081 | Must | Test | Confirmation EP_CRITIQUE | Une impulsion plus courte que l'anti-rebond configuré ne déclenche pas la sécurité ; une activation maintenue déclenche la mise en sécurité. | À définir |
 | F-082 | Must | Test | Reprise après EP_CRITIQUE | Le système refuse le redémarrage avant retour niveau normal stable et acquittement local valide. | À définir |
 | F-083 | Must | Test | Reprise UV après EP_CRITIQUE | Après acquittement, la filtration redémarre avant l'UV et l'UV attend la temporisation de stabilisation. | À définir |
-| F-084 | Must | Test | Incohérence capteurs niveau | EP_CRITIQUE actif avec EP_LAVAGE inactif déclenche un défaut bloquant hydraulique et coupe les sorties protégées. | À définir |
-| F-085 | Must | Test | Reset refusé EP_LAVAGE persistant | Le reset est refusé tant que EP_LAVAGE reste actif après défaut lavage maintenu. | À définir |
+| F-084 | Must | Test | Incohérence capteurs niveau | EP_CRITIQUE actif avec EP_LAVAGE inactif déclenche un défaut bloquant hydraulique et coupe les sorties protégées. | Passé (host-side) |
+| F-085 | Must | Test | Reset refusé EP_LAVAGE persistant | Le reset est refusé tant que EP_LAVAGE reste actif après défaut lavage maintenu. | Passé (host-side) |
 | F-086 | Must | Test | Capteur niveau non fiable | Le système bloque hydrauliquement si EP_CRITIQUE est non fiable et inhibe seulement les lavages auto si le doute porte uniquement sur EP_LAVAGE. | À définir |
 | F-087 | Must | Test | EP_LAVAGE pendant anti-redémarrage | Si EP_LAVAGE revient pendant l'anti-redémarrage, aucun lavage ne repart avant la fin de la temporisation puis confirmation EP_LAVAGE. | À définir |
 | F-088 | Must | Test | Priorité affichage alarmes | Si plusieurs alarmes sont actives, l'IHM affiche la plus prioritaire selon l'ordre V1 défini ; une alarme plus prioritaire masque A15 à l'écran sans l'effacer tant que le capot reste ouvert trop longtemps. | À définir |
@@ -96,20 +97,20 @@ Chaque fiche doit contenir au minimum :
 | F-092 | Must | Test | Voyants V1 | Les voyants LED étanches 16 mm 12 VDC MARCHE vert, ALARME rouge et LAVAGE jaune signalent correctement marche, alarme et cycle/test selon l'affectation retenue. | À définir |
 | IHM-SEL | Must | Test | Sélecteur AUTO / MAINTENANCE | Le sélecteur 22 mm 2 positions maintenues `1NO + 1NC` active exclusivement `MODE_AUTO` ou `MODE_MAINTENANCE`, avec sens logique validé sur banc. | À définir |
 | IHM-BP | Must | Test | Boutons poussoirs V1 | Les boutons 22 mm momentanés `1NO1NC` RESET_ALARME bleu, TEST_LAVAGE jaune, MANU_TAMBOUR noir et MANU_RINCAGE noir activent uniquement leur entrée pendant l'appui, avec étiquettes façade distinctes pour les deux boutons noirs. | À définir |
-| F-093 | Must | Test | TEST_LAVAGE borné | TEST_LAVAGE exécute un seul cycle complet borné et ne lance pas de relances multiples. | À définir |
-| F-094 | Must | Test | TEST_LAVAGE niveau normal | Si EP_LAVAGE est inactif au départ, le verdict est TEST OK - CYCLE EXÉCUTÉ sans prétendre lavage efficace. | À définir |
-| F-095 | Must | Test | TEST_LAVAGE EP_LAVAGE actif | Si EP_LAVAGE est actif au départ, le verdict dépend du retour niveau après le cycle borné et ne déclare pas de défaut lavage maintenu par le test seul. | À définir |
+| F-093 | Must | Test | TEST_LAVAGE borné | TEST_LAVAGE exécute un seul cycle complet borné et ne lance pas de relances multiples. | Passé (host-side) |
+| F-094 | Must | Test | TEST_LAVAGE niveau normal | Si EP_LAVAGE est inactif au départ, le verdict est TEST OK - CYCLE EXÉCUTÉ sans prétendre lavage efficace. | Passé (host-side) |
+| F-095 | Must | Test | TEST_LAVAGE EP_LAVAGE actif | Si EP_LAVAGE est actif au départ, le verdict dépend du retour niveau après le cycle borné et ne déclare pas de défaut lavage maintenu par le test seul. | Passé (host-side) |
 | F-096 | Must | Test | TEST_LAVAGE préconditions | TEST_LAVAGE est autorisé en AUTO et MAINTENANCE seulement si capot fermé, EP_CRITIQUE absent, capteurs cohérents et aucun défaut critique bloquant. | À définir |
-| F-097 | Must | Test | TEST_LAVAGE capot ouvert refusé | Une demande TEST_LAVAGE capot ouvert est refusée sans mouvement avec message explicite A13. | À définir |
-| F-098 | Must | Test | TEST_LAVAGE sécurité refusé | Une demande TEST_LAVAGE avec EP_CRITIQUE, capteurs incohérents ou défaut critique est refusée avec message explicite A14. | À définir |
+| F-097 | Must | Test | TEST_LAVAGE capot ouvert refusé | Une demande TEST_LAVAGE capot ouvert est refusée sans mouvement avec message explicite A13. | Passé (host-side) |
+| F-098 | Must | Test | TEST_LAVAGE sécurité refusé | Une demande TEST_LAVAGE avec EP_CRITIQUE, capteurs incohérents ou défaut critique est refusée avec message explicite A14. | Passé (host-side) |
 | F-099 | Must | Test | Commandes manuelles capot ouvert refusées | MANU_TAMBOUR et MANU_RINCAGE sont refusées capot ouvert sans activation de sortie. | À définir |
 | F-100 | Must | Test | Refus manuel non bloquant | Une commande manuelle refusée avant activation affiche un message local simple sans créer d'alarme bloquante à acquitter. | À définir |
 | F-101 | Must | Inspection | Capot transparent unique | Le capot installé est transparent, permet de voir le tambour tourner et correspond au couvercle transparent unique du FAT. | À définir |
 | F-102 | Must | Test | Contact capot normalement fermé | Avec le ME-8104 monté sur le capot, capot fermé = contact fermé ; capot ouvert, fil coupé ou connecteur débranché sont interprétés comme CAPOT_OUVERT. Le test confirme au multimètre les bornes NO/NC réellement utilisées. | À définir |
 | F-103 | Must | Test | Temporisation capot | L'ouverture est confirmée après 100 à 500 ms et la fermeture doit rester stable 1 à 2 s avant réautorisation. | À définir |
 | F-104 | Must | Test | Capot ouvert trop longtemps | Après 10 minutes au réglage initial, ou après la temporisation configurée, l'IHM affiche A15 - CAPOT OUVERT LONG sans ajouter de blocage supplémentaire. | À définir |
-| F-105 | Must | Test | État capot ouvert informatif | Capot ouvert hors action dangereuse, l'IHM affiche MAINTENANCE - CAPOT OUVERT sans demander d'acquittement. | À définir |
-| F-106 | Must | Test | Retour après fermeture capot | Après fermeture stable 1 à 2 s, le système revient au mode demande si aucune alarme bloquante capot dangereux n'existe ; sinon il attend acquittement. | À définir |
+| F-105 | Must | Test | État capot ouvert informatif | Capot ouvert hors action dangereuse, l'IHM affiche MAINTENANCE - CAPOT OUVERT sans demander d'acquittement. | Passé (host-side) |
+| F-106 | Must | Test | Retour après fermeture capot | Après fermeture stable 1 à 2 s, le système revient au mode demande si aucune alarme bloquante capot dangereux n'existe ; sinon il attend acquittement. | Passé (host-side) |
 | F-107 | Must | Test | Voyant rouge A15 | Lorsque A15 est actif, VOYANT_ALARME rouge est allumé fixe. | À définir |
 | F-108 | Must | Test | A15 sans acquittement | Après fermeture stable du capot, A15 disparaît automatiquement sans reset alarme et sans maintien artificiel du voyant rouge. | À définir |
 | F-109 | Must | Test | Trace persistante A15 | Un compteur persistant, plus le dernier événement si simple à implémenter, est écrit quand A15 survient, persiste après coupure et permet de constater qu'un capot ouvert long s'est produit sans bloquer le fonctionnement. Si la RTC DS3231 est disponible et initialisee facilement, le dernier événement est horodaté ; aucun historique long n'est exigé en V1. | À définir |
@@ -147,21 +148,21 @@ Chaque fiche doit contenir au minimum :
 | F-055 | Should | Test | Consommation estimée | La consommation d'eau est estimée par débit mesuré aux buses x durée de rinçage cumulée. | À définir |
 | F-056 | Should | Revue IHM | Pertes et appoint indicatifs | Les pertes vers évacuation et le besoin de remplissage sont étiquetées comme estimations indicatives sans compteur d'eau dédié. | À définir |
 | S-039 | Must | Test | Alarmes bloquantes V1 | Les alarmes concernees restent actives jusqu'à disparition de la cause et acquittement valide. | À définir |
-| S-040 | Must | Test | Reset refusé cause active | L'acquittement ne masque pas une condition dangereuse ou non resolue. | À définir |
+| S-040 | Must | Test | Reset refusé cause active | L'acquittement ne masque pas une condition dangereuse ou non resolue. | Passé (host-side) |
 | S-043 | Must | Test | Filtrage EP_LAVAGE | La plage configurée est comprise dans la cible V1 et filtre les fluctuations courtes. | À définir |
 | S-044 | Must | Test | Confirmation EP_CRITIQUE | La confirmation reste très courte et déclenche la sécurité sans temporisation longue. | À définir |
 | S-045 | Must | Test | Reprise après EP_CRITIQUE | Le redémarrage automatique reste bloque jusqu'au retour normal stable puis acquittement. | À définir |
 | S-046 | Must | Test | Reprise UV après EP_CRITIQUE | L'UV reste coupé pendant la relance filtration et n'est réautorise qu'après stabilisation. | À définir |
-| S-047 | Must | Test | Incohérence capteurs niveau | Toute incohérence critique bascule en défaut bloquant hydraulique. | À définir |
+| S-047 | Must | Test | Incohérence capteurs niveau | Toute incohérence critique bascule en défaut bloquant hydraulique. | Passé (host-side) |
 | S-048 | Must | Test | Reset refusé EP_LAVAGE persistant | L'acquittement ne masque pas un niveau encore en demande lavage après échec. | À définir |
 | S-049 | Must | Test | Capteur niveau non fiable | La reaction distingue perte de confiance EP_CRITIQUE et doute limité a EP_LAVAGE. | À définir |
 | S-050 | Must | Test | Refus manuel capot ouvert | Les commandes manuelles tambour et rinçage capot ouvert sont refusées avant activation de sortie. | À définir |
-| S-051 | Must | Test | Capot ouvert pendant action dangereuse | L'ouverture capot pendant action active coupe tambour/rinçage et crée une alarme bloquante jusqu'à fermeture et acquittement. | À définir |
+| S-051 | Must | Test | Capot ouvert pendant action dangereuse | L'ouverture capot pendant action active coupe tambour/rinçage et crée une alarme bloquante jusqu'à fermeture et acquittement. | Passé (host-side) |
 | S-052 | Must | Test | Capot fail-safe | Une rupture de liaison ou déconnexion du contact capot ME-8104 est traitée comme capot ouvert. | À définir |
 | S-053 | Must | Test | Anti-rebond ouverture capot | Les rebonds courts sont filtres mais l'ouverture stable est prise en compte en 100 à 500 ms. | À définir |
 | S-054 | Must | Test | Validation fermeture capot | Les commandes dangereuses ne sont réautorisees qu'après fermeture stable 1 à 2 s. | À définir |
-| S-055 | Must | Test | Capot ouvert informatif | Capot ouvert hors action dangereuse reste un état de maintenance sans acquittement. | À définir |
-| S-056 | Must | Test | Reprise capot conditionnelle | La reprise automatique après fermeture stable est bloquee si une alarme capot dangereux reste à acquitter. | À définir |
+| S-055 | Must | Test | Capot ouvert informatif | Capot ouvert hors action dangereuse reste un état de maintenance sans acquittement. | Passé (host-side) |
+| S-056 | Must | Test | Reprise capot conditionnelle | La reprise automatique après fermeture stable est bloquee si une alarme capot dangereux reste à acquitter. | Passé (host-side) |
 
 ## Scenarios transverses a développer
 

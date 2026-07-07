@@ -958,6 +958,35 @@ Le firmware peut être compilé en mode simulation sans dépendre des broches r�
 - affichage série synthétique ;
 - aucune dépendance au matériel reçu.
 
+## État réel V0.1 au 2026-07-07
+
+Le socle firmware V0.1 est déjà présent en mode simulateur et validation host-side.
+
+Modules implémentés :
+
+- `Controller` pour l'orchestration `inputs -> update -> outputs + status` ;
+- `Safety` pour les temporisations et états capot / EP_CRITIQUE / incohérence niveau ;
+- `WashCycle` pour lavage automatique, durée mini/maxi, rotation résiduelle, anti-redémarrage, retry, test lavage et A04 ;
+- `AlarmManager` pour les alarmes principales A01, A02, A03, A04, A05, A11, A12, A13, A14 et A15 ;
+- simulateur série avec commandes de niveau, capot, modes, boutons et températures ;
+- affichage série synthétique via `DisplayService` ;
+- abstraction `InputService` / `OutputService`, sans broches KC868-A32 activées.
+
+Preuves locales :
+
+- `python -m platformio test -e native` : 27 tests passés sur 27 ;
+- `python -m platformio run` : build ESP32 `kc868_a32` réussi.
+
+Écarts restants avant de considérer la V0.1 complète :
+
+- validation matérielle KC868-A32, entrées réelles, relais réels et sens logiques ;
+- LCD 2004 I2C réel, RTC DS3231 réelle et sondes DS18B20 réelles ;
+- seuils température bas/haut, au-delà de la perte de mesure simulée A11/A12 ;
+- reprise après coupure complète, notamment A15 et mini-journal persistant ;
+- persistance des événements V1 ;
+- temporisation dédiée de reprise UV après EP_CRITIQUE ;
+- validation banc/installation des sécurités.
+
 ## 16. Ensuite, quand la KC868-A32 arrive
 
 On passera à **firmware V0.2 matériel**.

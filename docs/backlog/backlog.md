@@ -95,33 +95,38 @@
 
 ## Firmware
 
+Statuts specifiques a la V0.1 firmware :
+
+- `Implémenté simulateur` : code et tests host-side disponibles, sans validation materiel.
+- `Partiel simulateur` : comportement commence ou simule, mais il manque une partie V0.1, une persistance, une interface reelle ou une validation banc.
+
 | ID | Element | Priorité | Statut |
 | --- | --- | --- | --- |
-| B-201 | Créer le squelette du firmware. | Must | À faire |
-| B-202 | Implémenter la machine à états initiale. | Must | À faire |
-| B-203 | Ajouter les temporisations de sécurité : retard EP_LAVAGE configurable, anti-rebond très court EP_CRITIQUE, anti-rebond capot ouverture 100 à 500 ms, fermeture capot stable 1 à 2 s, retour niveau normal stable et acquittement après critique. | Must | À faire |
-| B-204 | Ajouter un mécanisme de configuration simple. | Should | À faire |
+| B-201 | Créer le squelette du firmware. | Must | Implémenté simulateur |
+| B-202 | Implémenter la machine à états initiale. | Must | Implémenté simulateur |
+| B-203 | Ajouter les temporisations de sécurité : retard EP_LAVAGE configurable, anti-rebond très court EP_CRITIQUE, anti-rebond capot ouverture 100 à 500 ms, fermeture capot stable 1 à 2 s, retour niveau normal stable et acquittement après critique. | Must | Partiel simulateur |
+| B-204 | Ajouter un mécanisme de configuration simple. | Should | Implémenté simulateur |
 | B-205 | Ajouter journalisation des cycles et défauts. | Could | À faire |
-| B-206 | Integrer la logique des capteurs de niveau, du capteur d'ouverture du capot transparent et des sécurités associées, avec contact capot normalement fermé fail-safe et stratégie prudente selon perte de confiance EP_CRITIQUE ou EP_LAVAGE. | Must | À faire |
-| B-207 | Implémenter le comportement des pompes et sorties auxiliaires sur niveau bas et capot ouvert : EP_CRITIQUE coupé filtration, décoration, UV et mise à niveau ; capot FAT coupé tambour/rinçage/lavage mais ne coupe pas l'UV si filtration autorisée. | Must | À faire |
-| B-208 | Implémenter l'inhibition de la rotation tambour et de la pompe de rinçage sur niveau bas. | Must | À faire |
+| B-206 | Integrer la logique des capteurs de niveau, du capteur d'ouverture du capot transparent et des sécurités associées, avec contact capot normalement fermé fail-safe et stratégie prudente selon perte de confiance EP_CRITIQUE ou EP_LAVAGE. | Must | Partiel simulateur |
+| B-207 | Implémenter le comportement des pompes et sorties auxiliaires sur niveau bas et capot ouvert : EP_CRITIQUE coupé filtration, décoration, UV et mise à niveau ; capot FAT coupé tambour/rinçage/lavage mais ne coupe pas l'UV si filtration autorisée. | Must | Partiel simulateur |
+| B-208 | Implémenter l'inhibition de la rotation tambour et de la pompe de rinçage sur niveau bas. | Must | Implémenté simulateur |
 | B-209 | Vérifier que les bulleurs cuve bio et bassin sont hors contrôleur et non impactés par l'état niveau bas. | Must | À faire |
-| B-210 | Implémenter la politique de reprise après coupure d'alimentation sans attente indéfinie : boot sorties sûres, auto-test, reprise dégradée EP_LAVAGE seule avec filtration/UV si autorisés, blocage EP_CRITIQUE avec acquittement. | Must | À faire |
-| B-211 | Implémenter le mode manuel V1 limité aux commandes FAT : rotation tambour, rinçage, cycle test et reset alarme, avec interverrouillages critiques et refus capot ouvert pour MANU_TAMBOUR et MANU_RINCAGE. | Must | À faire |
-| B-212 | Implémenter le mode maintenance avec inhibition partielle des alarmes et temporisation de reprise. | Must | À faire |
-| B-213 | Implémenter le mode dégradé et les auto-diagnostics minimaux. | Must | À faire |
-| B-214 | Implémenter le mode test lavage avec un seul cycle borné, autorisé en AUTO et MAINTENANCE sous préconditions, et verdict automatique : cycle exécute si EP_LAVAGE inactif au départ, niveau OK ou échec EP_LAVAGE actif si EP_LAVAGE était actif. | Must | À faire |
-| B-214A | Implémenter les priorités opérateur V1 : capot ouvert prioritaire sur AUTO, commandes manuelles a action maintenue refusées capot ouvert sans alarme bloquante preventive, test lavage autonome refusé avec message si capot ouvert ou sécurité critique, et interrompu par sécurité pendant le cycle. | Must | Tranchée |
-| B-215 | Implémenter l'acquisition de température bassin, la détection de perte de mesure `A11 - SONDE EAU ABSENTE` et les alertes associées, seuils initiaux < 4 deg C et > 28 deg C. | Must | À faire |
-| B-216 | Implémenter l'acquisition de température ambiante local, la détection de perte de mesure `A12 - SONDE LOCAL ABSENTE` et les alertes associées, seuils initiaux < 2 deg C et > 40 deg C. | Must | À faire |
-| B-217 | Implémenter la logique de remontée de statut sur le LCD 2004 I2C local avec priorité EP_CRITIQUE/incohérence capteurs, capot dangereux, défaut lavage, capot ouvert trop longtemps, température puis infos et messages `Axx - MESSAGE COURT`. | Must | À faire |
-| B-217A | Implémenter l'alerte V1 capot ouvert trop longtemps avec temporisation configurable, valeur initiale 10 minutes, message `A15 - CAPOT OUVERT LONG`, allumage fixe du voyant rouge, sans clignotement, et effacement automatique après fermeture stable sans maintien du voyant. | Must | À faire |
-| B-217B | Implémenter l'état IHM `MAINTENANCE - CAPOT OUVERT` et le retour automatique au mode demande après fermeture stable si aucune alarme bloquante capot dangereux n'existe. | Must | À faire |
+| B-210 | Implémenter la politique de reprise après coupure d'alimentation sans attente indéfinie : boot sorties sûres, auto-test, reprise dégradée EP_LAVAGE seule avec filtration/UV si autorisés, blocage EP_CRITIQUE avec acquittement. | Must | Partiel simulateur |
+| B-211 | Implémenter le mode manuel V1 limité aux commandes FAT : rotation tambour, rinçage, cycle test et reset alarme, avec interverrouillages critiques et refus capot ouvert pour MANU_TAMBOUR et MANU_RINCAGE. | Must | Implémenté simulateur |
+| B-212 | Implémenter le mode maintenance avec inhibition partielle des alarmes et temporisation de reprise. | Must | Partiel simulateur |
+| B-213 | Implémenter le mode dégradé et les auto-diagnostics minimaux. | Must | Partiel simulateur |
+| B-214 | Implémenter le mode test lavage avec un seul cycle borné, autorisé en AUTO et MAINTENANCE sous préconditions, et verdict automatique : cycle exécute si EP_LAVAGE inactif au départ, niveau OK ou échec EP_LAVAGE actif si EP_LAVAGE était actif. | Must | Implémenté simulateur |
+| B-214A | Implémenter les priorités opérateur V1 : capot ouvert prioritaire sur AUTO, commandes manuelles a action maintenue refusées capot ouvert sans alarme bloquante preventive, test lavage autonome refusé avec message si capot ouvert ou sécurité critique, et interrompu par sécurité pendant le cycle. | Must | Partiel simulateur |
+| B-215 | Implémenter l'acquisition de température bassin, la détection de perte de mesure `A11 - SONDE EAU ABSENTE` et les alertes associées, seuils initiaux < 4 deg C et > 28 deg C. | Must | Partiel simulateur |
+| B-216 | Implémenter l'acquisition de température ambiante local, la détection de perte de mesure `A12 - SONDE LOCAL ABSENTE` et les alertes associées, seuils initiaux < 2 deg C et > 40 deg C. | Must | Partiel simulateur |
+| B-217 | Implémenter la logique de remontée de statut sur le LCD 2004 I2C local avec priorité EP_CRITIQUE/incohérence capteurs, capot dangereux, défaut lavage, capot ouvert trop longtemps, température puis infos et messages `Axx - MESSAGE COURT`. | Must | Partiel simulateur |
+| B-217A | Implémenter l'alerte V1 capot ouvert trop longtemps avec temporisation configurable, valeur initiale 10 minutes, message `A15 - CAPOT OUVERT LONG`, allumage fixe du voyant rouge, sans clignotement, et effacement automatique après fermeture stable sans maintien du voyant. | Must | Partiel simulateur |
+| B-217B | Implémenter l'état IHM `MAINTENANCE - CAPOT OUVERT` et le retour automatique au mode demande après fermeture stable si aucune alarme bloquante capot dangereux n'existe. | Must | Implémenté simulateur |
 | B-217C | Conserver une trace minimale persistante et non bloquante de `A15 - CAPOT OUVERT LONG`, écrite au moment de l'événement et conservée après coupure, sous forme de compteur persistant plus dernier événement si simple ; horodater le dernier événement seulement si la RTC DS3231 est disponible et initialisee facilement dans le MVP. Une mémoire circulaire courte est acceptable, sans historique long. | Must | À faire |
 | B-217D | Au redémarrage, redétecter `A15 - CAPOT OUVERT LONG` si l'alerte était active avant coupure et que le capot est encore ouvert ; sinon relancer la temporisation A15 si le capot est ouvert. | Must | À faire |
 | B-217E | Implémenter le mini-journal persistant V1 : compteurs par code d'événement plus dernier événement global, ou mémoire circulaire 8/16 événements si simple ; persister A15, EP_CRITIQUE, capot ouvert dangereux, lavage inefficace, redémarrage après coupure et acquittements réussis des alarmes bloquantes. | Must | À faire |
 | B-218 | Implémenter pour une V2 la logique de remontée d'état et de notifications à distance selon l'architecture retenue. | Should | V2 |
-| B-219 | Implémenter la logique de lavage avec durée mini 10 s, durée maxi 45 s, rotation résiduelle 2 à 5 s, anti-redémarrage 30 à 120 s, pause entre tentatives 30 à 120 s et défaut après 3 tentatives max. | Must | À faire |
+| B-219 | Implémenter la logique de lavage avec durée mini 10 s, durée maxi 45 s, rotation résiduelle 2 à 5 s, anti-redémarrage 30 à 120 s, pause entre tentatives 30 à 120 s et défaut après 3 tentatives max. | Must | Implémenté simulateur |
 | B-220 | Implémenter le comptage des lavages par heure et par jour ainsi que les alertes associées. | Should | V1.1 |
 | B-221 | Implémenter le test journalier automatique V1.1 avec verdict explicite OK/ÉCHEC, fenêtre 11h-15h par défaut, report sur condition d'inhibition et journalisation du verdict. | Should | V1.1 |
 | B-222 | Implémenter l'indexation périodique au temps du tambour par courte rotation configurable, en respectant les verrouillages de sécurité. | Should | V1.1 |
@@ -133,8 +138,8 @@
 | B-228 | Implémenter pour une V2 l'emission des notifications immédiates retenues, dont `A15 - CAPOT OUVERT LONG`, avec anti-repetition et gestion du retour à la normale. | Should | V2 |
 | B-229 | Implémenter pour une V2 la synthèse quotidienne de fonctionnement désactivée par défaut, configurable, avec horaire par défaut 18h00 et independance vis-a-vis des notifications immédiates. | Should | V2 |
 | B-230 | Implémenter la programmation horaire de la pompe décoration avec deux plages maximum par jour, mêmes horaires tous les jours, interrupteur actif/inactif et sans automatisme hiver au départ. | Should | V1.1/V2 |
-| B-231 | Implémenter la logique d'alarmes indirectes basées sur EP_LAVAGE, EP_CRITIQUE et le résultat observable des cycles de lavage, avec reset refusé tant que EP_LAVAGE reste actif après défaut lavage maintenu. | Must | À faire |
-| B-232 | Implémenter la détection capteurs incohérents, le comportement au démarrage avec niveau bas et la mise en sécurité associée, dont EP_CRITIQUE actif avec EP_LAVAGE inactif comme défaut bloquant. | Must | À faire |
+| B-231 | Implémenter la logique d'alarmes indirectes basées sur EP_LAVAGE, EP_CRITIQUE et le résultat observable des cycles de lavage, avec reset refusé tant que EP_LAVAGE reste actif après défaut lavage maintenu. | Must | Implémenté simulateur |
+| B-232 | Implémenter la détection capteurs incohérents, le comportement au démarrage avec niveau bas et la mise en sécurité associée, dont EP_CRITIQUE actif avec EP_LAVAGE inactif comme défaut bloquant. | Must | Implémenté simulateur |
 | B-233 | Implémenter les alertes de commande incohérente UV, absence anormale de lavage, redémarrages fréquents et sorties commandées trop longtemps. | Should | V1.1 |
 | B-234 | Etendre les statistiques avec temps de retour EP_LAVAGE, tentatives par lavage, activations EP_CRITIQUE, températures min/max/moyenne et historiques capot. | Should | V1.1 |
 | B-235 | Integrer le temps civil RTC DS3231 pour les logs, statistiques, dernier lavage, test journalier et programmation horaire, avec heure inconnue si RTC absente/non initialisee et sans utiliser la RTC pour les temporisations de securite. | Should | V1.1/V2 |
