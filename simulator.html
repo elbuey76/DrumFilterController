@@ -56,13 +56,23 @@
 
       <fieldset class="control-group">
         <legend>Capteurs</legend>
+        <div class="level-control">
+          <div class="level-meter" aria-hidden="true">
+            <div class="level-fill" id="level-fill"></div>
+            <div class="level-threshold level-threshold-wash"><span>EP_LAVAGE</span></div>
+            <div class="level-threshold level-threshold-critical"><span>EP_CRITIQUE</span></div>
+          </div>
+          <input id="level-slider" class="level-slider" type="range" min="0" max="100" value="100" step="1" aria-label="Niveau eau propre">
+          <div class="level-readout">
+            <span>Niveau eau propre</span>
+            <strong id="level-value">100%</strong>
+            <em id="level-ep-lavage">EP_LAVAGE OFF</em>
+            <em id="level-ep-critique">EP_CRITIQUE OFF</em>
+          </div>
+        </div>
         <label class="switch-row">
-          <span>EP_LAVAGE</span>
-          <input id="ep-lavage" type="checkbox">
-        </label>
-        <label class="switch-row">
-          <span>EP_CRITIQUE</span>
-          <input id="ep-critique" type="checkbox">
+          <span>Incoherence niveau</span>
+          <input id="level-incoherent" type="checkbox">
         </label>
         <label class="switch-row">
           <span>Capot ouvert</span>
@@ -92,39 +102,6 @@
         </label>
       </fieldset>
 
-      <fieldset class="control-group">
-        <legend>Tempos simulateur</legend>
-        <label class="temp-row">
-          <span>Tempo EP lavage</span>
-          <input id="cfg-ep-delay" type="number" value="30" min="0" step="1">
-          <span>s</span>
-        </label>
-        <label class="temp-row">
-          <span>Lavage mini</span>
-          <input id="cfg-wash-min" type="number" value="45" min="1" step="1">
-          <span>s</span>
-        </label>
-        <label class="temp-row">
-          <span>Lavage maxi</span>
-          <input id="cfg-wash-max" type="number" value="120" min="1" step="1">
-          <span>s</span>
-        </label>
-        <label class="temp-row">
-          <span>Post-lavage</span>
-          <input id="cfg-residual" type="number" value="10" min="0" step="1">
-          <span>s</span>
-        </label>
-        <label class="temp-row">
-          <span>Anti-redemarrage</span>
-          <input id="cfg-anti-restart" type="number" value="120" min="0" step="1">
-          <span>s</span>
-        </label>
-        <label class="temp-row">
-          <span>Pause tentative</span>
-          <input id="cfg-retry-pause" type="number" value="120" min="0" step="1">
-          <span>s</span>
-        </label>
-      </fieldset>
     </section>
 
     <section class="panel dashboard" aria-labelledby="dashboard-title">
@@ -179,6 +156,40 @@
         <div class="output output-uv" data-output="cmdUv"><i class="actuator-icon"></i><div><span>UV</span><strong>OFF</strong><small>0 s</small></div></div>
         <div class="output output-level" data-output="cmdMiseANiveau"><i class="actuator-icon"></i><div><span>Mise a niveau</span><strong>OFF</strong><small>0 s</small></div></div>
       </div>
+
+      <fieldset class="control-group simulator-timing">
+        <legend>Tempos simulateur</legend>
+        <label class="temp-row">
+          <span>Tempo EP lavage</span>
+          <input id="cfg-ep-delay" type="number" value="30" min="0" step="1">
+          <span>s</span>
+        </label>
+        <label class="temp-row">
+          <span>Lavage mini</span>
+          <input id="cfg-wash-min" type="number" value="45" min="1" step="1">
+          <span>s</span>
+        </label>
+        <label class="temp-row">
+          <span>Lavage maxi</span>
+          <input id="cfg-wash-max" type="number" value="120" min="1" step="1">
+          <span>s</span>
+        </label>
+        <label class="temp-row">
+          <span>Post-lavage</span>
+          <input id="cfg-residual" type="number" value="10" min="0" step="1">
+          <span>s</span>
+        </label>
+        <label class="temp-row">
+          <span>Anti-redemarrage</span>
+          <input id="cfg-anti-restart" type="number" value="120" min="0" step="1">
+          <span>s</span>
+        </label>
+        <label class="temp-row">
+          <span>Pause tentative</span>
+          <input id="cfg-retry-pause" type="number" value="120" min="0" step="1">
+          <span>s</span>
+        </label>
+      </fieldset>
     </section>
 
     <aside class="panel side-panel" aria-labelledby="scenarios-title">

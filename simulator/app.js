@@ -10,6 +10,10 @@
     antiRestartMs: 120000,
     retryPauseMs: 120000
   };
+  const levelThresholds = {
+    lavage: 55,
+    critique: 25
+  };
   let config = { ...logic.defaultConfig(), ...slowDefaults };
   let controller = null;
   let inputs = null;
@@ -30,8 +34,12 @@
     modeSelector: document.getElementById("mode-selector"),
     modePositions: Array.from(document.querySelectorAll(".selector-position")),
     modeInputs: Array.from(document.querySelectorAll("input[name='mode']")),
-    epLavage: document.getElementById("ep-lavage"),
-    epCritique: document.getElementById("ep-critique"),
+    levelSlider: document.getElementById("level-slider"),
+    levelFill: document.getElementById("level-fill"),
+    levelValue: document.getElementById("level-value"),
+    levelEpLavage: document.getElementById("level-ep-lavage"),
+    levelEpCritique: document.getElementById("level-ep-critique"),
+    levelIncoherent: document.getElementById("level-incoherent"),
     capotOuvert: document.getElementById("capot-ouvert"),
     btnReset: document.getElementById("btn-reset"),
     btnTest: document.getElementById("btn-test"),
@@ -254,6 +262,8 @@
         small.textContent = value && typeof activeSince === "number" ? formatDuration(nowMs - activeSince) : "0 s";
       }
     });
+
+    renderLevelControl(Number(dom.levelSlider.value));
   }
 
   function buildLcdLines() {
@@ -402,8 +412,8 @@
   }
 
   function syncControlsFromInputs() {
-    dom.epLavage.checked = inputs.epLavage;
-    dom.epCritique.checked = inputs.epCritique;
+    dom.levelSlider.value = String(levelFromInputs());
+    dom.levelIncoherent.checked = inputs.epCritique && !inputs.epLavage;
     dom.capotOuvert.checked = inputs.capotOuvert;
     dom.tempEau.value = inputs.tempBassinC;
     dom.tempEauValid.checked = inputs.tempBassinValid;
@@ -411,10 +421,78 @@
     dom.tempLocalValid.checked = inputs.tempLocalValid;
 
     const mode = inputs.modeMaintenance ? "maintenance" : "auto";
+    syncModeControlsFromInputs();
+    renderLevelControl(levelFromInputs());
+  }
+
+  function syncModeControlsFromInputs() {
+    const mode = inputs.modeMaintenance ? "maintenance" : "auto";
     dom.modeSelector.dataset.position = mode;
     dom.modeInputs.forEach((input) => {
       input.checked = input.value === mode;
     });
+  }
+
+  function levelFromInputs() {
+    if (inputs.epCritique) {
+      return 15;
+    }
+
+    if (inputs.epLavage) {
+      return 45;
+    }
+
+    return 100;
+  }
+
+  function renderLevelControl(level) {
+    const clampedLevel = Math.max(0, Math.min(100, Number(level)));
+    dom.levelFill.style.height = `${clampedLevel}%`;
+    dom.levelValue.textContent = `${Math.round(clampedLevel)}%`;
+    dom.levelEpLavage.textContent = inputs.epLavage ? "EP_LAVAGE ON" : "EP_LAVAGE OFF";
+    dom.levelEpCritique.textContent = inputs.epCritique ? "EP_CRITIQUE ON" : "EP_CRITIQUE OFF";
+    dom.levelEpLavage.classList.toggle("is-active", inputs.epLavage);
+    dom.levelEpCritique.classList.toggle("is-critical", inputs.epCritique);
+    dom.levelSlider.closest(".level-control").classList.toggle("is-wash", inputs.epLavage && !inputs.epCritique);
+    dom.levelSlider.closest(".level-control").classList.toggle("is-critical", inputs.epCritique);
+  }
+
+  function setLevelFromSlider(logChange) {
+    const level = Number(dom.levelSlider.value);
+    const wasEpLavage = inputs.epLavage;
+    dom.levelIncoherent.checked = false;
+    inputs.epLavage = level <= levelThresholds.lavage;
+    inputs.epCritique = level <= levelThresholds.critique;
+
+    if (inputs.epLavage && !wasEpLavage) {
+      epLavageUiSinceMs = nowMs;
+    } else if (!inputs.epLavage) {
+      epLavageUiSinceMs = null;
+    }
+
+    activeScenario = null;
+    setActiveScenarioButton(null);
+    if (logChange) {
+      const label = inputs.epCritique ? "EP_CRITIQUE" : inputs.epLavage ? "EP_LAVAGE" : "OK";
+      logEvent(`Niveau eau propre: ${Math.round(level)}% (${label})`);
+    }
+    tick();
+  }
+
+  function setLevelIncoherence(active) {
+    if (active) {
+      inputs.epLavage = false;
+      inputs.epCritique = true;
+      epLavageUiSinceMs = null;
+      activeScenario = null;
+      setActiveScenarioButton(null);
+      logEvent("Incoherence niveau: ON");
+      tick();
+      return;
+    }
+
+    logEvent("Incoherence niveau: OFF");
+    setLevelFromSlider(false);
   }
 
   function syncTempoControlsFromConfig() {
@@ -443,7 +521,7 @@
       inputs.modeMaintenance = true;
     }
 
-    syncControlsFromInputs();
+    syncModeControlsFromInputs();
     activeScenario = null;
     setActiveScenarioButton(null);
     logEvent(`Mode demande: ${mode.toUpperCase()}`);
@@ -545,8 +623,9 @@
       requestMode(event.clientX < rect.left + rect.width / 2 ? "auto" : "maintenance");
     });
 
-    dom.epLavage.addEventListener("change", () => updateInput("epLavage", dom.epLavage.checked, "EP_LAVAGE"));
-    dom.epCritique.addEventListener("change", () => updateInput("epCritique", dom.epCritique.checked, "EP_CRITIQUE"));
+    dom.levelSlider.addEventListener("input", () => setLevelFromSlider(false));
+    dom.levelSlider.addEventListener("change", () => setLevelFromSlider(true));
+    dom.levelIncoherent.addEventListener("change", () => setLevelIncoherence(dom.levelIncoherent.checked));
     dom.capotOuvert.addEventListener("change", () => updateInput("capotOuvert", dom.capotOuvert.checked, "Capot ouvert"));
     dom.tempEau.addEventListener("change", () => updateInput("tempBassinC", Number(dom.tempEau.value), "Temperature eau"));
     dom.tempEauValid.addEventListener("change", () => updateInput("tempBassinValid", dom.tempEauValid.checked, "Sonde eau presente"));
