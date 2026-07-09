@@ -151,7 +151,7 @@ La V1 n'ajoute pas de capteur dédié pour diagnostiquer directement rotation ta
 
 ## Commandes manuelles et test V1
 
-Les commandes `MANU_TAMBOUR` et `MANU_RINCAGE` sont des commandes a action maintenue. La sortie correspondante n'est active que tant que le bouton est maintenu et que les interverrouillages restent valides. Les deux commandes sont refusées capot ouvert ; ce refus preventif affiche un message local simple sans créer d'alarme bloquante si aucune sortie dangereuse n'a démarré.
+Les commandes `MANU_TAMBOUR` et `MANU_RINCAGE` sont des commandes a action maintenue. La sortie correspondante n'est active que tant que le bouton est maintenu et que les interverrouillages restent valides. Les deux commandes sont refusées capot ouvert ; ce refus preventif affiche un message local simple sans créer d'alarme bloquante si aucune sortie dangereuse n'a démarré. Si le capot s'ouvre alors qu'une sortie dangereuse est deja active, l'alarme bloquante `A03 - CAPOT OUVERT DANGER` coupe tambour et rinçage, mais maintient filtration, pompe décoration, UV et mise à niveau tant que EP_CRITIQUE est absent et que les capteurs niveau restent cohérents.
 
 Le bouton `TEST_LAVAGE` lance un seul cycle complet autonome et borne après appui bref si les préconditions sont satisfaites. Il est autorisé en AUTO et en MAINTENANCE si le capot est fermé, EP_CRITIQUE absent, les capteurs de niveau cohérents et aucun défaut critique bloquant actif. Ce cycle est interrompu immédiatement par capot ouvert, EP_CRITIQUE ou défaut critique.
 

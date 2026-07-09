@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DrumFilterController - Simulateur visuel</title>
+  <link rel="stylesheet" href="simulator/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Simulateur local</p>
+      <h1>Controleur FAT</h1>
+    </div>
+    <nav class="top-actions" aria-label="Navigation">
+      <a href="index.html">Documentation</a>
+      <button id="reset-sim" type="button">Remise a zero</button>
+    </nav>
+  </header>
+
+  <main class="sim-layout">
+    <section class="panel operator-panel" aria-labelledby="operator-title">
+      <div class="panel-title">
+        <p class="eyebrow">Entrees</p>
+        <h2 id="operator-title">Pupitre</h2>
+      </div>
+
+      <fieldset class="control-group">
+        <legend>Mode</legend>
+        <div id="mode-selector" class="industrial-selector" data-position="auto" role="radiogroup" aria-label="Mode demande">
+          <input id="mode-auto" class="mode-radio" type="radio" name="mode" value="auto" checked>
+          <input id="mode-maintenance" class="mode-radio" type="radio" name="mode" value="maintenance">
+          <button class="selector-position selector-position-auto" type="button" data-mode="auto" aria-label="Mode auto">
+            <span>AUTO</span>
+          </button>
+          <div class="selector-body" aria-hidden="true">
+            <span class="selector-index selector-index-auto"></span>
+            <span class="selector-knob"><span></span></span>
+            <span class="selector-index selector-index-maintenance"></span>
+          </div>
+          <button class="selector-position selector-position-maintenance" type="button" data-mode="maintenance" aria-label="Mode maintenance">
+            <span>MAINT</span>
+          </button>
+        </div>
+      </fieldset>
+
+      <fieldset class="control-group">
+        <legend>Boutons</legend>
+        <div class="button-grid">
+          <button id="btn-reset" type="button" class="physical-button button-reset"><span></span><em>Reset</em></button>
+          <button id="btn-test" type="button" class="physical-button button-test"><span></span><em>Test lavage</em></button>
+          <button id="btn-tambour" type="button" class="physical-button button-manual hold-button"><span></span><em>Tambour manuel</em></button>
+          <button id="btn-rincage" type="button" class="physical-button button-manual hold-button"><span></span><em>Rincage manuel</em></button>
+        </div>
+      </fieldset>
+
+      <fieldset class="control-group">
+        <legend>Capteurs</legend>
+        <label class="switch-row">
+          <span>EP_LAVAGE</span>
+          <input id="ep-lavage" type="checkbox">
+        </label>
+        <label class="switch-row">
+          <span>EP_CRITIQUE</span>
+          <input id="ep-critique" type="checkbox">
+        </label>
+        <label class="switch-row">
+          <span>Capot ouvert</span>
+          <input id="capot-ouvert" type="checkbox">
+        </label>
+      </fieldset>
+
+      <fieldset class="control-group">
+        <legend>Temperatures</legend>
+        <label class="temp-row">
+          <span>Eau</span>
+          <input id="temp-eau" type="number" value="20" step="0.5">
+          <span>deg C</span>
+        </label>
+        <label class="switch-row compact">
+          <span>Sonde eau presente</span>
+          <input id="temp-eau-valid" type="checkbox" checked>
+        </label>
+        <label class="temp-row">
+          <span>Local</span>
+          <input id="temp-local" type="number" value="20" step="0.5">
+          <span>deg C</span>
+        </label>
+        <label class="switch-row compact">
+          <span>Sonde local presente</span>
+          <input id="temp-local-valid" type="checkbox" checked>
+        </label>
+      </fieldset>
+
+      <fieldset class="control-group">
+        <legend>Tempos simulateur</legend>
+        <label class="temp-row">
+          <span>Tempo EP lavage</span>
+          <input id="cfg-ep-delay" type="number" value="30" min="0" step="1">
+          <span>s</span>
+        </label>
+        <label class="temp-row">
+          <span>Lavage mini</span>
+          <input id="cfg-wash-min" type="number" value="45" min="1" step="1">
+          <span>s</span>
+        </label>
+        <label class="temp-row">
+          <span>Lavage maxi</span>
+          <input id="cfg-wash-max" type="number" value="120" min="1" step="1">
+          <span>s</span>
+        </label>
+        <label class="temp-row">
+          <span>Post-lavage</span>
+          <input id="cfg-residual" type="number" value="10" min="0" step="1">
+          <span>s</span>
+        </label>
+        <label class="temp-row">
+          <span>Anti-redemarrage</span>
+          <input id="cfg-anti-restart" type="number" value="120" min="0" step="1">
+          <span>s</span>
+        </label>
+        <label class="temp-row">
+          <span>Pause tentative</span>
+          <input id="cfg-retry-pause" type="number" value="120" min="0" step="1">
+          <span>s</span>
+        </label>
+      </fieldset>
+    </section>
+
+    <section class="panel dashboard" aria-labelledby="dashboard-title">
+      <div class="panel-title">
+        <p class="eyebrow">Etat instantane</p>
+        <h2 id="dashboard-title">Ecran et sorties</h2>
+      </div>
+
+      <div class="faceplate">
+        <div class="lcd" aria-label="Ecran LCD 20 par 4">
+          <div id="lcd-line-1">BOOT</div>
+          <div id="lcd-line-2"></div>
+          <div id="lcd-line-3"></div>
+          <div id="lcd-line-4"></div>
+        </div>
+
+        <div class="indicator-grid" aria-label="Voyants">
+          <div class="indicator" data-indicator="voyantMarche"><span></span>Marche</div>
+          <div class="indicator" data-indicator="voyantLavage"><span></span>Lavage</div>
+          <div class="indicator" data-indicator="voyantAlarme"><span></span>Alarme</div>
+        </div>
+      </div>
+
+      <div class="status-strip">
+        <div><span>Temps</span><strong id="sim-time">00:00.000</strong></div>
+        <div><span>Etat</span><strong id="state-name">BOOT</strong></div>
+        <div><span>Alarme</span><strong id="alarm-code">-</strong></div>
+      </div>
+
+      <div class="time-controls" aria-label="Controle du temps">
+        <button id="play-pause" type="button">Pause</button>
+        <label>
+          Vitesse
+          <select id="speed-select">
+            <option value="0.25">x0.25</option>
+            <option value="0.5">x0.5</option>
+            <option value="1" selected>x1</option>
+            <option value="10">x10</option>
+            <option value="60">x60</option>
+          </select>
+        </label>
+        <button data-step-ms="1000" type="button">+1 s</button>
+        <button data-step-ms="10000" type="button">+10 s</button>
+        <button data-step-ms="60000" type="button">+60 s</button>
+      </div>
+
+      <div class="output-grid" aria-label="Sorties commandees">
+        <div class="output output-tambour" data-output="cmdTambour"><i class="actuator-icon"></i><div><span>Tambour</span><strong>OFF</strong><small>0 s</small></div></div>
+        <div class="output output-rincage" data-output="cmdRincage"><i class="actuator-icon"></i><div><span>Rincage</span><strong>OFF</strong><small>0 s</small></div></div>
+        <div class="output output-motor" data-output="cmdPompeFiltration"><i class="actuator-icon"></i><div><span>Filtration</span><strong>OFF</strong><small>0 s</small></div></div>
+        <div class="output output-motor" data-output="cmdPompeDeco"><i class="actuator-icon"></i><div><span>Pompe deco</span><strong>OFF</strong><small>0 s</small></div></div>
+        <div class="output output-uv" data-output="cmdUv"><i class="actuator-icon"></i><div><span>UV</span><strong>OFF</strong><small>0 s</small></div></div>
+        <div class="output output-level" data-output="cmdMiseANiveau"><i class="actuator-icon"></i><div><span>Mise a niveau</span><strong>OFF</strong><small>0 s</small></div></div>
+      </div>
+    </section>
+
+    <aside class="panel side-panel" aria-labelledby="scenarios-title">
+      <div class="panel-title">
+        <p class="eyebrow">Banc d'essai</p>
+        <h2 id="scenarios-title">Scenarios</h2>
+      </div>
+      <div id="scenario-list" class="scenario-list"></div>
+
+      <div class="log-header">
+        <h2>Journal</h2>
+        <button id="clear-log" type="button">Vider</button>
+      </div>
+      <ol id="event-log" class="event-log"></ol>
+    </aside>
+  </main>
+
+  <script src="simulator/logic.js"></script>
+  <script src="simulator/scenarios.js"></script>
+  <script src="simulator/app.js"></script>
+</body>
+</html>

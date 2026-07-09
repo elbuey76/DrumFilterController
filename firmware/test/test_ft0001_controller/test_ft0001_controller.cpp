@@ -117,6 +117,21 @@ void expectNominalFiltrationOn(const OutputsCommand& outputs) {
   TEST_ASSERT_TRUE(outputs.cmdUv);
 }
 
+void expectLifeSupportOutputsOn(const OutputsCommand& outputs) {
+  TEST_ASSERT_TRUE(outputs.cmdPompeFiltration);
+  TEST_ASSERT_TRUE(outputs.cmdPompeDeco);
+  TEST_ASSERT_TRUE(outputs.cmdUv);
+  TEST_ASSERT_TRUE(outputs.cmdMiseANiveau);
+}
+
+void expectProtectedOutputsOff(const OutputsCommand& outputs) {
+  TEST_ASSERT_FALSE(outputs.cmdPompeFiltration);
+  TEST_ASSERT_FALSE(outputs.cmdPompeDeco);
+  TEST_ASSERT_FALSE(outputs.cmdUv);
+  TEST_ASSERT_FALSE(outputs.cmdMiseANiveau);
+  expectDangerousOutputsOff(outputs);
+}
+
 void expectJournalCount(const FakePersistentStore& store, PersistentEventCode eventCode, uint32_t expectedCount) {
   TEST_ASSERT_EQUAL_UINT32(expectedCount, store.count(eventCode));
 }
@@ -166,7 +181,7 @@ void test_sim_003_critical_level_incoherence_latches_until_reset() {
 
   TEST_ASSERT_EQUAL(SystemState::FAULT, h.status().state);
   expectAlarm(h.status(), "A02");
-  expectDangerousOutputsOff(h.outputs);
+  expectProtectedOutputsOff(h.outputs);
   TEST_ASSERT_TRUE(h.outputs.voyantAlarme);
 
   h.inputs.epCritique = false;
@@ -261,6 +276,7 @@ void test_sim_007_capot_open_during_wash_triggers_a03_and_blocks_reset() {
   TEST_ASSERT_EQUAL(SystemState::FAULT, h.status().state);
   expectAlarm(h.status(), "A03");
   expectDangerousOutputsOff(h.outputs);
+  expectLifeSupportOutputsOn(h.outputs);
   TEST_ASSERT_TRUE(h.outputs.voyantAlarme);
 
   h.pressReset();
@@ -268,6 +284,7 @@ void test_sim_007_capot_open_during_wash_triggers_a03_and_blocks_reset() {
   TEST_ASSERT_EQUAL(SystemState::FAULT, h.status().state);
   expectAlarm(h.status(), "A05");
   expectDangerousOutputsOff(h.outputs);
+  expectLifeSupportOutputsOn(h.outputs);
 }
 
 void test_sim_008_capot_fault_can_reset_after_capot_close_stable() {
@@ -280,10 +297,18 @@ void test_sim_008_capot_fault_can_reset_after_capot_close_stable() {
 
   TEST_ASSERT_EQUAL(SystemState::FAULT, h.status().state);
   expectAlarm(h.status(), "A03");
+  expectLifeSupportOutputsOn(h.outputs);
 
   h.inputs.capotOuvert = false;
   h.tick();
   h.advance(h.config.capotCloseStableMs);
+  h.pressTest();
+
+  TEST_ASSERT_EQUAL(SystemState::FAULT, h.status().state);
+  expectAlarm(h.status(), "A14");
+  expectDangerousOutputsOff(h.outputs);
+  expectLifeSupportOutputsOn(h.outputs);
+
   h.pressReset();
 
   TEST_ASSERT_EQUAL(SystemState::AUTO_WAIT, h.status().state);
@@ -302,7 +327,8 @@ void test_sim_009_test_refused_when_capot_open() {
   TEST_ASSERT_EQUAL(SystemState::MAINTENANCE, h.status().state);
   expectAlarm(h.status(), "A13");
   expectDangerousOutputsOff(h.outputs);
-  TEST_ASSERT_TRUE(h.outputs.voyantAlarme);
+  expectLifeSupportOutputsOn(h.outputs);
+  TEST_ASSERT_FALSE(h.outputs.voyantAlarme);
 }
 
 void test_sim_010_test_refused_when_level_safety_fault_active() {
@@ -316,7 +342,7 @@ void test_sim_010_test_refused_when_level_safety_fault_active() {
 
   TEST_ASSERT_EQUAL(SystemState::FAULT, h.status().state);
   expectAlarm(h.status(), "A14");
-  expectDangerousOutputsOff(h.outputs);
+  expectProtectedOutputsOff(h.outputs);
   TEST_ASSERT_TRUE(h.outputs.voyantAlarme);
 }
 
@@ -342,6 +368,21 @@ void test_sim_011_test_wash_ok_returns_success_message() {
   TEST_ASSERT_EQUAL(SystemState::AUTO_WAIT, h.status().state);
   TEST_ASSERT_EQUAL_STRING("AUTO - ATTENTE", h.status().message);
   expectNoAlarm(h.status());
+}
+
+void test_sim_011b_repeated_test_press_during_active_test_is_ignored() {
+  ControllerHarness h;
+  h.tick();
+
+  h.pressTest();
+  h.pressTest();
+
+  TEST_ASSERT_EQUAL(SystemState::TEST_WASH, h.status().state);
+  TEST_ASSERT_EQUAL_STRING("TEST LAVAGE", h.status().message);
+  expectNoAlarm(h.status());
+  TEST_ASSERT_TRUE(h.outputs.cmdTambour);
+  TEST_ASSERT_TRUE(h.outputs.cmdRincage);
+  TEST_ASSERT_FALSE(h.outputs.voyantAlarme);
 }
 
 void test_sim_012_manual_tambour_command_runs_in_manual_mode() {
@@ -378,6 +419,7 @@ void test_sim_013_capot_open_during_manual_command_triggers_a03() {
   TEST_ASSERT_EQUAL(SystemState::FAULT, h.status().state);
   expectAlarm(h.status(), "A03");
   expectDangerousOutputsOff(h.outputs);
+  expectLifeSupportOutputsOn(h.outputs);
 }
 
 void test_sim_014_missing_water_temperature_warns_without_stopping_nominal_outputs() {
@@ -513,6 +555,7 @@ void test_persist_005_critical_level_and_reset_ok_are_persisted() {
 
   TEST_ASSERT_EQUAL(SystemState::FAULT, h.status().state);
   expectAlarm(h.status(), "A01");
+  expectProtectedOutputsOff(h.outputs);
   expectJournalCount(store, PersistentEventCode::A01, 1);
 
   h.inputs.epCritique = false;
@@ -539,6 +582,7 @@ void test_persist_006_incoherent_level_is_persisted_once_until_reset() {
 
   TEST_ASSERT_EQUAL(SystemState::FAULT, h.status().state);
   expectAlarm(h.status(), "A02");
+  expectProtectedOutputsOff(h.outputs);
   expectJournalCount(store, PersistentEventCode::A02, 1);
 }
 
@@ -591,6 +635,7 @@ int main(int argc, char** argv) {
   RUN_TEST(test_sim_009_test_refused_when_capot_open);
   RUN_TEST(test_sim_010_test_refused_when_level_safety_fault_active);
   RUN_TEST(test_sim_011_test_wash_ok_returns_success_message);
+  RUN_TEST(test_sim_011b_repeated_test_press_during_active_test_is_ignored);
   RUN_TEST(test_sim_012_manual_tambour_command_runs_in_manual_mode);
   RUN_TEST(test_sim_013_capot_open_during_manual_command_triggers_a03);
   RUN_TEST(test_sim_014_missing_water_temperature_warns_without_stopping_nominal_outputs);

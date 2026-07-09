@@ -24,6 +24,7 @@ public:
   void resetAlarm();
   bool hasBlockingAlarm() const;
   bool isTestRunning() const;
+  bool isTestActive() const;
 
 private:
   enum class Phase {

@@ -24,7 +24,7 @@ OutputsCommand Controller::update(const InputsSnapshot& inputs, unsigned long no
   if (inputs.btnReset) {
     if (!resetAllowed(inputs, safety)) {
       setAlarmStatus(SystemState::FAULT, AlarmCode::A05, resetRefusalMessage(inputs, safety));
-      return finishUpdate(safeOutputs());
+      return finishUpdate(blockingAlarmLatched_ == AlarmCode::A03 && !safety.levelCritical && !safety.levelIncoherent ? capotDangerOutputs() : safeOutputs());
     }
 
     const bool hadBlockingAlarm = blockingAlarmLatched_ != AlarmCode::NONE || washCycle_.hasBlockingAlarm();
@@ -44,10 +44,10 @@ OutputsCommand Controller::update(const InputsSnapshot& inputs, unsigned long no
 
     if (safety.levelCritical || safety.levelIncoherent || blockingAlarmLatched_ != AlarmCode::NONE || (!inputs.modeAuto && !inputs.modeMaintenance)) {
       setAlarmStatus(SystemState::FAULT, AlarmCode::A14);
-      return finishUpdate(testRefusedOutputs(true));
+      return finishUpdate(blockingAlarmLatched_ == AlarmCode::A03 && !safety.levelCritical && !safety.levelIncoherent ? capotDangerOutputs() : testRefusedOutputs(true));
     }
 
-    if (!washCycle_.startTest(inputs.epLavage, nowMs)) {
+    if (!washCycle_.isTestActive() && !washCycle_.startTest(inputs.epLavage, nowMs)) {
       setAlarmStatus(SystemState::FAULT, AlarmCode::A14, "A14 - TEST REFUSE CYCLE ACTIF");
       return finishUpdate(testRefusedOutputs(true));
     }
@@ -64,7 +64,7 @@ OutputsCommand Controller::update(const InputsSnapshot& inputs, unsigned long no
   if (blockingAlarmLatched_ != AlarmCode::NONE) {
     washCycle_.abort();
     setAlarmStatus(SystemState::FAULT, blockingAlarmLatched_);
-    return finishUpdate(safeOutputs());
+    return finishUpdate(blockingAlarmLatched_ == AlarmCode::A03 ? capotDangerOutputs() : safeOutputs());
   }
 
   if (washCycle_.hasBlockingAlarm()) {
@@ -100,7 +100,7 @@ OutputsCommand Controller::update(const InputsSnapshot& inputs, unsigned long no
     return finishUpdate(outputs);
   }
 
-  if ((inputs.modeMaintenance || !inputs.modeAuto) && !washCycle_.isTestRunning()) {
+  if ((inputs.modeMaintenance || !inputs.modeAuto) && !washCycle_.isTestActive()) {
     washCycle_.abort();
 
     if (inputs.btnManuTambour || inputs.btnManuRincage) {
@@ -140,6 +140,15 @@ PersistentJournalSnapshot Controller::journalSnapshot() const {
 
 OutputsCommand Controller::safeOutputs() const {
   OutputsCommand outputs{};
+  outputs.voyantAlarme = true;
+  return outputs;
+}
+
+OutputsCommand Controller::capotDangerOutputs() const {
+  OutputsCommand outputs = nominalOutputs();
+  outputs.cmdTambour = false;
+  outputs.cmdRincage = false;
+  outputs.voyantLavage = false;
   outputs.voyantAlarme = true;
   return outputs;
 }
@@ -225,7 +234,7 @@ AlarmCode Controller::temperatureAlarm(const InputsSnapshot& inputs) const {
 
 OutputsCommand Controller::testRefusedOutputs(bool blocking) const {
   OutputsCommand outputs = blocking ? safeOutputs() : maintenanceOutputs();
-  outputs.voyantAlarme = true;
+  outputs.voyantAlarme = blocking;
   return outputs;
 }
 

@@ -383,6 +383,9 @@ input[type="search"] {
   border-radius: 999px;
   padding: 10px 14px;
   cursor: pointer;
+  color: inherit;
+  display: inline-flex;
+  text-decoration: none;
 }
 
 .reader-status {

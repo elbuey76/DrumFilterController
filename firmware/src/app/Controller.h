@@ -18,6 +18,7 @@ public:
 
 private:
   OutputsCommand safeOutputs() const;
+  OutputsCommand capotDangerOutputs() const;
   OutputsCommand nominalOutputs() const;
   OutputsCommand maintenanceOutputs() const;
   OutputsCommand manualOutputs(const InputsSnapshot& inputs) const;

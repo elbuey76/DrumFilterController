@@ -175,6 +175,10 @@ bool WashCycle::isTestRunning() const {
   return phase_ == Phase::TestWashing;
 }
 
+bool WashCycle::isTestActive() const {
+  return phase_ == Phase::TestWashing || phase_ == Phase::TestDone;
+}
+
 void WashCycle::startWash(unsigned long nowMs) {
   phase_ = Phase::Washing;
   phaseStartedAtMs_ = nowMs;
