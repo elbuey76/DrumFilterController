@@ -44,4 +44,4 @@ Les objectifs principaux sont :
 
 ## Prochaine étape
 
-Fermer les écarts restants de la firmware V0.1 : validation matérielle KC868-A32, sens logique des entrées/sorties réelles, LCD 2004 I2C, RTC DS3231, sondes DS18B20, reprise après coupure complète, persistance A15 / mini-journal, puis validation banc des sécurités avant installation.
+Fermer les écarts restants de la firmware V0.1 : portage bas niveau vers la KC868-A16, validation des entrees et sorties MOSFET reelles, LCD 2004 I2C, RTC DS3231, sondes DS18B20, reprise après coupure complète, persistance A15 / mini-journal, puis validation banc des sécurités avant installation.

@@ -2,7 +2,9 @@
 
 ## Statut
 
-Acceptee
+Remplacee par [ADR-0012 - Migration de la plateforme KC868-A32 vers KC868-A16](ADR-0012-migration-kc868-a32-vers-a16.md)
+
+Cette ADR conserve l'historique du choix initial de l'A32. Elle ne decrit plus la plateforme cible courante.
 
 ## Contexte
 

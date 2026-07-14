@@ -10,14 +10,15 @@ Un point non valide peut etre accepte uniquement s'il est marque comme non appli
 
 | Point | Critere go/no-go | Statut | Preuve / commentaire |
 | --- | --- | --- | --- |
-| Plateforme controle | KC868-A32 reference finale disponible et inspectee | A faire | |
+| Plateforme controle | KC868-A16 ESP32 classique disponible, revision identifiee et inspectee ; ni A16S ni A16v3 | A faire | |
 | Alimentation 12 VDC | Mean Well NDR-120-12 disponible, entree/sortie reperees | A faire | |
 | Capteurs niveau | 2 x CR18-8DN disponibles, brochage confirme | A faire | |
 | Pompe rincage | VEVOR / Leo EKJ-802S conservee comme reference V1 | A faire | |
 | Moteur tambour | Fyearfly 12 VDC 10 rpm disponible, fixation definie | A faire | |
 | Relais tambour | HELLA 4RD 933 332-551 disponible, support rail DIN defini | A faire | |
 | Contacteurs auxiliaires | TOMZN TOCT1-25Z 12 VDC valides ou alternative definie | A faire | |
-| Contacteur rincage | Schneider TeSys LC1D18P7 avec bobine 230 VAC valide au schema | A faire | Remplace le LC1D12P7 ; confirmer encombrement, bornes et reperage avant cablage. |
+| Relais interface rincage | Bobine 12 VDC < 500 mA, montage DIN, suppression et contact cible AC-15 >= 1 A sous 230 VAC valides | A faire | Reference a choisir avant commande. |
+| Contacteur rincage | Schneider TeSys LC1D18P7 avec bobine 230 VAC valide au schema derriere le relais d'interface | A faire | Remplace le LC1D12P7 ; confirmer encombrement, bornes et reperage avant cablage. |
 | Capot | OMRCH ME-8104 disponible, came/support definis | A faire | |
 | IHM | LCD 2004, boutons, voyants et etiquettes facade definis | A faire | |
 | RTC / temperature | DS3231 et 2 x DS18B20 disponibles, adresses/brochages verifies | A faire | |
@@ -32,7 +33,7 @@ Un point non valide peut etre accepte uniquement s'il est marque comme non appli
 | Boot securise | Toutes les sorties controlees restent OFF au boot avant autorisation | A faire | |
 | Perte 12 VDC | Contacteurs et sorties controlees retombent OFF par conception | A faire | |
 | Distribution 12 VDC | Fusibles 5 A moteur, 3 A automate, 1 A capteurs/boutons, 1 A IHM/accessoires coherents apres mesure | A faire | |
-| CR18-8DN repos/detection | `EP_LAVAGE` et `EP_CRITIQUE` lus correctement sur KC868-A32 | A faire | |
+| CR18-8DN repos/detection | `EP_LAVAGE` et `EP_CRITIQUE` lus correctement sur KC868-A16 ; courant d'entree et sens logique documentes | A faire | |
 | Rupture fils niveau | Fils marron, bleu et noir de chaque capteur testes et comportement documente | A faire | |
 | Incoherence niveau | Incoherence critique declenche defaut bloquant hydraulique | A faire | |
 | Contact capot | Capot ferme = boucle fermee ; capot ouvert, fil coupe ou debranche = capot ouvert | A faire | |
@@ -52,7 +53,7 @@ Un point non valide peut etre accepte uniquement s'il est marque comme non appli
 | Tete tableau | Sectionneur local, differentiel 30 mA type A et disjoncteurs aval conformes au schema | A faire | |
 | Separation BT/secteur | Cheminements, borniers, reperes et distances propres dans le coffret | A faire | |
 | Terre | Pompe de rincage, coffret/equipements classe I et masses raccordes selon schema | A faire | |
-| Contacteur rincage | Bobine 230 VAC commandee proprement par relais automate, avec reperage clair du 230 VAC de commande | A faire | |
+| Contacteur rincage | Sortie MOSFET A16 vers relais d'interface 12 VDC, puis bobine 230 VAC commandee par son contact, avec separation et reperage clairs | A faire | |
 | Contacteurs TOMZN | Consommation bobine, echauffement, bruit et coupure 12 VDC observes | A faire | |
 | Pompe filtration prioritaire | Depart filtration separe du depart UV / decoration / mise a niveau | A faire | |
 | Bulleurs | Bulleurs hors sorties controlees et clairement identifies comme alimentation permanente locale | A faire | |
@@ -66,7 +67,7 @@ Un point non valide peut etre accepte uniquement s'il est marque comme non appli
 | Courant moteur tambour | Courant a vide, en charge, au demarrage et blocage controle mesure | A faire | |
 | Fusible moteur | Fusible 5 A confirme ou ajuste apres mesure | A faire | |
 | Rotation tambour | Sens, vitesse, couple et absence de blocage valides en conditions reelles | A faire | |
-| Transmission | Fixation et ratio reel documentes si transmission ajoutee | A faire | |
+| Transmission | Engrenages PETG module 4, angle 20 degres, largeur 25 mm, rapport 30/60 soit 2:1 ; moyeu aluminium sur arbre D 8 mm ; couronne alesage 160 mm en 3 segments avec queues d'aronde axiales, 4 vis M4/segment sur PCD 198 mm ; entraxe reglable autour de 180 mm, faux-rond, jeu, serrage, absence de points durs et usure initiale valides | A faire | |
 | Rincage | Jet suffisant observe sur rampe et buses reelles | A faire | |
 | Debit rincage | Debit aux buses mesure ; estimation L/cycle documentee | A faire | |
 | Seuils niveau | `EP_LAVAGE` et `EP_CRITIQUE` regles apres observation terrain | A faire | |

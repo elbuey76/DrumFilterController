@@ -2,12 +2,12 @@
 
 ## Objectif
 
-Valider les scenarios obligatoires du firmware MVP V0.1 avec le moniteur serie PlatformIO, sans materiel KC868-A32 raccorde.
+Valider les scenarios obligatoires du firmware MVP V0.1 avec le moniteur serie PlatformIO, sans materiel KC868-A16 raccorde.
 
 ## Version testee
 
 - Firmware : V0.1
-- Environnement : `firmware/platformio.ini`, `env:kc868_a32`
+- Environnement historique : `firmware/platformio.ini`, `env:kc868_a32_sim`, a renommer dans B-237 sans changer la portée de ce test simulateur
 - Commande build : `python -m platformio run`
 - Banc automatise host-side : `python -m platformio test -e native`
 
@@ -20,7 +20,7 @@ Un banc de tests automatise couvre les scenarios FT-0001 au niveau logique metie
 - Entrees pilotees : `InputsSnapshot`
 - Temps pilote : `nowMs` simule
 
-Limites de couverture : ces tests valident les transitions d'etat, alarmes, messages metier et sorties commandees par le `Controller`. Le parsing des commandes du simulateur est couvert separement par `test_simulator_commands`. L'affichage serie, le transport `Stream` Arduino, les entrees/sorties physiques de la carte KC868-A32, le banc electrique et l'installation reelle restent hors couverture host-side.
+Limites de couverture : ces tests valident les transitions d'etat, alarmes, messages metier et sorties commandees par le `Controller`. Le parsing des commandes du simulateur est couvert separement par `test_simulator_commands`. L'affichage serie, le transport `Stream` Arduino, les entrees/sorties physiques de la carte KC868-A16, le banc electrique et l'installation reelle restent hors couverture host-side.
 
 Verdict automatise au 2026-07-07 : `python -m platformio test -e native` passe avec 35 tests reussis sur 35, dont SIM-001 a SIM-016 et les scenarios de persistance minimale.
 
@@ -82,6 +82,6 @@ temp local 18
 | Champ | Valeur |
 | --- | --- |
 | Resultat observe | Automatisation host-side : SIM-001 a SIM-016 et scenarios de persistance minimale passes via `python -m platformio test -e native` ; build ESP32 `python -m platformio run` reussi. |
-| Verdict | Passe pour la couverture simulateur host-side ; validation materiel KC868-A32, transport serie reel et banc physique a faire separement. |
+| Verdict | Passe pour la couverture simulateur host-side ; portage HAL et validation materiel KC868-A16, transport serie reel et banc physique a faire separement. |
 | Date | 2026-07-07 |
 | Operateur | Codex |

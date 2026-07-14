@@ -31,6 +31,7 @@ $paths = @(
   "docs/decisions/ADR-0009-choix-selecteur-mode-auto-maintenance.md",
   "docs/decisions/ADR-0010-choix-boutons-poussoirs-ihm-locale.md",
   "docs/decisions/ADR-0011-strategie-validation-materielle-v1.md",
+  "docs/decisions/ADR-0012-migration-kc868-a32-vers-a16.md",
   "docs/achats/README.md",
   "docs/achats/liste-course-materiel-v1.md",
   "docs/achats/commandes-2026-07-06.md",

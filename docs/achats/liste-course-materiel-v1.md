@@ -20,7 +20,8 @@ Le journal de commande detaille est dans [commandes-2026-07-06.md](commandes-202
 
 | Qté | Article | Reference / caracteristiques | Statut | Notes |
 | ---: | --- | --- | --- | --- |
-| 1 | Carte de controle | KC868-A32 | Commande 2026-07-06 | Plateforme V1 et base V2 ; variante A32G a confirmer a reception. |
+| 1 | Carte de controle cible | KC868-A16 ESP32 classique a sorties MOSFET, boitier si disponible | A commander | Plateforme V1 et base V2 selon ADR-0012 ; confirmer qu'il ne s'agit ni d'une A16S ni d'une A16v3 ESP32-S3 et inspecter la revision recue. |
+| 1 | Ancienne carte de controle | KC868-A32 / variante A32G | Abandonnee pour le FAT | Commandee le 2026-07-06 pour 121,99 EUR puis retiree de la conception cible car surdimensionnee ; retour, revente ou reutilisation a decider. |
 | 1 | Alimentation rail DIN | Mean Well NDR-120-12, 12 VDC, 120 W, 10 A | Commande 2026-07-06 | Alimente automate, capteurs, IHM, contacteurs 12 VDC et moteur via fusibles. |
 | 1 | Porte-fusibles DC 4 departs | ATO 4 emplacements, idealement rail DIN natif | Commande 2026-07-06 | Variante 6 voies commandee ; si modele non DIN, prevoir adaptateur imprime 3D. |
 | 5 | Fusibles ATO 5 A | Depart moteur tambour | Commande 2026-07-06 | Quantites et calibres reels a verifier a reception. |
@@ -65,7 +66,8 @@ Le journal de commande detaille est dans [commandes-2026-07-06.md](commandes-202
 | 1 | Relais moteur tambour | HELLA 4RD 933 332-551, 12 V, charge inductive 15 A | Commande 2026-07-06 | Prevoir support rail DIN imprime 3D. |
 | 1 | Support rail DIN relais HELLA | Piece imprimee 3D ou support compatible | A fabriquer / verifier | Maintien mecanique, acces cosses et reperage. |
 | 1 | Pompe de rincage | VEVOR / Leo EKJ-802S, 220-240 VAC | Deja disponible | Pompe classe I, terre obligatoire, debit reel a mesurer sur rampe. |
-| 1 | Contacteur pompe rincage | Schneider Electric TeSys LC1D18P7, 3P, AC-3 18 A, bobine 230 VAC | Commande 2026-07-06 | Remplace le LC1D12P7 a prix equivalent : meme bobine 230 VAC, marge moteur superieure. Commande bobine par relais KC868-A32, separation BT/secteur a soigner. |
+| 1 | Relais d'interface pompe rincage | Bobine 12 VDC < 500 mA, support rail DIN, contact cible AC-15 >= 1 A sous 230 VAC, suppression de bobine | A choisir avant commande | La sortie MOSFET A16 commande la bobine 12 VDC ; le contact du relais commande la bobine 230 VAC du LC1D18P7. |
+| 1 | Contacteur pompe rincage | Schneider Electric TeSys LC1D18P7, 3P, AC-3 18 A, bobine 230 VAC | Commande 2026-07-06 | Remplace le LC1D12P7 a prix equivalent : meme bobine 230 VAC, marge moteur superieure. Commande via relais d'interface 12 VDC / 230 VAC ; separation BT/secteur a soigner. |
 | 4 | Contacteurs auxiliaires 12 VDC | TOMZN TOCT1-25Z, 25 A, bobine 12 VDC | Commande 2026-07-06 | Filtration, UV, decoration, mise a niveau. |
 | 1 | Contacteur auxiliaire de rechange | TOMZN TOCT1-25Z 12 VDC ou alternative validee | Spare recommande | Si budget/place disponible. |
 
@@ -162,12 +164,12 @@ Ces elements sont cites dans l'architecture mais peuvent deja exister sur l'inst
 
 ## 12. Points a confirmer avant validation panier
 
-- Dimensions du coffret : place disponible pour disjoncteurs, contacteurs, alimentation, KC868-A32, borniers, goulottes, presse-etoupes et reserve V1.1/V2.
+- Dimensions du coffret : place disponible pour disjoncteurs, contacteurs, alimentation, KC868-A16 avec boitier eventuel, relais d'interface, borniers, goulottes, presse-etoupes et reserve V1.1/V2.
 - Reference finale de l'interrupteur differentiel 2P 30 mA 40 A type A et coherence de gamme avec les disjoncteurs.
 - Etat reel du sectionneur TeSys VCDN20 trouve en atelier.
 - Longueurs de cables terrain : moteur tambour, capteurs, sondes, pompe rincage, filtration, UV, decoration, mise a niveau, prises et eclairage.
 - Diametre des cables pour choisir correctement les presse-etoupes.
-- Validation de l'interface directe KC868-A32 / CR18-8DN avant cablage definitif.
+- Validation de l'interface directe KC868-A16 / CR18-8DN avant cablage definitif.
 - Compatibilite 3,3 V reelle du LCD 2004 I2C et du module DS3231.
 - Brochage reel des DS18B20 et couleurs de fils du lot recu.
 - Revue du schema 230 VAC avant achat final si les references tableau changent.

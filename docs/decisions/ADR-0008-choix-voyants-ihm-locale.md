@@ -28,7 +28,7 @@ Le voyant jaune est retenu pour le montage MVP même si la fonction restait opti
 
 - La façade du coffret doit prévoir trois perçages de 16 mm pour les voyants.
 - Les voyants sont raccordés côté 12 VDC, sur le départ `Ecran, voyants, accessoires`.
-- Le schéma électrique devra préciser si chaque voyant est commandé directement par une sortie relais du KC868-A32 ou via une interface dédiée si nécessaire.
+- Le schema electrique devra commander chaque voyant 12 VDC par une sortie MOSFET KC868-A16, apres verification du courant, de la polarite et de l'etat OFF au demarrage.
 - Les références finales doivent confirmer la compatibilité 12 VDC, la présence d'un joint de façade, l'indice d'étanchéité annoncé et le mode de raccordement arrière.
 - Les voyants 220 VAC et 24 V ne sont pas retenus pour l'IHM locale V1.
 

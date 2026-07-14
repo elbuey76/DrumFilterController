@@ -4,9 +4,9 @@
 
 | Bloc | Rôle | Options envisagées |
 | --- | --- | --- |
-| Carte de contrôle | Exécute la logique de lavage et sécurité | KC868-A32 retenu pour la V1 |
+| Carte de contrôle | Exécute la logique de lavage et sécurité | KC868-A16 ESP32 classique retenu pour la V1 |
 | Entrées capteurs | Detectent niveau de lavage, niveau critique, capot, température bassin et température ambiante | Flotteurs, capteurs pression, inductifs, contacts secs, sondes de température |
-| Sorties puissance | Pilotent pompe, moteur et prises auxiliaires | Relais automate vers relais HELLA 12 VDC, contacteur Schneider 230 VAC et contacteurs TOMZN 12 VDC selon organe |
+| Sorties puissance | Pilotent pompe, moteur et prises auxiliaires | Sorties MOSFET 12 VDC vers relais HELLA, contacteurs TOMZN et relais d'interface du contacteur Schneider 230 VAC |
 | Interface locale | Permet conduite, signalisation et diagnostic | LCD 2004 / 20x4 I2C 3,3 V, boutons, voyants |
 | Communication distante | Option V2 pour supervision et notifications à distance | Wi-Fi cible ; BLE seul insuffisant, Ethernet non disponible sur site, SMS non retenu par défaut |
 | Temps fiable | Support futur d'horodatage V2 | Module RTC DS3231 I2C 3,3 V avec batterie rechargeable ; synchronisation réseau possible plus tard en complement, sans dependance exclusive à Internet |
@@ -18,15 +18,15 @@
 | --- | --- | --- |
 | Toile de filtration tambour | Inox 74 microns | Fixe la finesse de filtration mécanique de référence |
 | Capteurs de niveau | CR18-8DN | Imposent une interface d'entrée compatible NPN, 12-24 VDC, 3 fils |
-| Plateforme de contrôle | KC868-A32 | Fixe la base des entrées/sorties V1 et la logique de cablage |
+| Plateforme de contrôle | KC868-A16 ESP32 classique, 16 entrees et 16 sorties MOSFET 12/24 VDC | Couvre les 9 entrees et 9 sorties V1 avec 7 voies libres de chaque type ; remplace l'A32 surdimensionnee selon ADR-0012 |
 | Alimentation 12 VDC | Mean Well NDR-120-12, 120 W, 10 A, rail DIN | Alimente automate, capteurs, IHM, accessoires et moteur tambour via départs fusibles |
 | Porte-fusibles 12 VDC | Porte-fusibles ATO 4 emplacements | Distribution 12 VDC ; adaptateur rail DIN imprime en 3D probable selon modele retenu |
 | Moteur tambour | Motorreducteur Fyearfly 12 VDC 10 rpm | Simplifie la vitesse de tambour par rapport au moteur d'essuie-glace candidat |
 | Relais moteur tambour | HELLA 4RD 933 332-551, 12 V, charge inductive 15 A | Commande le moteur tambour ; support rail DIN a imprimer en 3D |
 | Pompe de rinçage | VEVOR / Leo EKJ-802S, 220-240 VAC, 800 W indique projet | Impose une commande secteur adaptée à une charge moteur et une mesure du débit réel sur la rampe et les buses déjà achetées et fabriquées |
-| Contacteur pompe de rinçage | Schneider Electric TeSys LC1D18P7, 3P, AC-3 18 A, bobine 230 VAC | Remplace le LC1D12P7 a prix equivalent avec une marge moteur superieure ; piloté directement par un relais du KC868-A32 pour commander la pompe de rinçage ; relais intermediaire 12 V -> 230 V non retenu, separation BT/secteur a traiter au schema final |
-| Contacteurs filtration, UV, décoration, mise à niveau | TOMZN TOCT1-25Z, 25 A, bobine 12 VDC | Pilotés en 12 VDC par les relais de l'automate selon les sécurités |
-| Ecran local | LCD 2004 / 20x4 I2C 3,3 V, fond bleu retenu | Afficheur texte principal de l'IHM locale ; raccordement cible sur le port d'extension KC868-A32 en I2C logiciel via `GPIO32` / `GPIO33`, sans charger les bus I2C internes des entrées/sorties |
+| Contacteur pompe de rinçage | Schneider Electric TeSys LC1D18P7, 3P, AC-3 18 A, bobine 230 VAC | Sa bobine 230 VAC est commandee par le contact d'un relais d'interface a bobine 12 VDC, lui-meme pilote par une sortie MOSFET A16 ; reference du relais a choisir et valider |
+| Contacteurs filtration, UV, décoration, mise à niveau | TOMZN TOCT1-25Z, 25 A, bobine 12 VDC | Pilotés directement en 12 VDC par les sorties MOSFET de l'A16 si la mesure confirme moins de 500 mA par bobine, avec suppression de surtension adaptee |
+| Ecran local | LCD 2004 / 20x4 I2C 3,3 V, fond bleu retenu | Afficheur texte principal de l'IHM locale ; raccordement cible en I2C logiciel via `GPIO32` / `GPIO33` de l'A16, sans charger le bus I2C interne des entrees/sorties |
 | Horloge temps reel | Module RTC DS3231 I2C 3,3 V avec batterie rechargeable | Source locale d'heure fiable pour V2, et horodatage MVP seulement si simple ; adresse I2C attendue `0x68`, raccordement cible sur le bus I2C logiciel du port d'extension si la cohabitation avec le LCD est validee |
 | Sondes de temperature | 2 x DS18B20 étanches inox 3 fils, longueur cible 3 m | Meme modele pour `TEMP_BASSIN` et `TEMP_LOCAL` afin de simplifier achat, câblage et firmware ; alimentation 3,3 V, pull-up 4,7 kΩ sur `DATA`, brochage des couleurs a verifier sur banc |
 
@@ -81,7 +81,7 @@ flowchart LR
 | Sous-ensemble | Interface connue | Impact de conception |
 | --- | --- | --- |
 | Tube de report de niveau | 32 mm, bouche en partie haute avec event de 1 mm | Permet une fixation protégée des deux capteurs côté eau propre EP_LAVAGE et EP_CRITIQUE, et facilite le nettoyage |
-| Capteurs de niveau | 2 x CR18-8DN câblés en MVP, M18, distance ajustable 8 mm, sortie NPN normalement ouverte, alimentation 12-24 VDC, 10 mA max, DC 3 fils | EP_LAVAGE au-dessus de EP_CRITIQUE sur supports réglables en hauteur ; réserve mécanique non câblée possible pour un troisième capteur futur ; interface directe sur entrées digitales KC868-A32 retenue par défaut, avec validation banc obligatoire avant câblage final |
+| Capteurs de niveau | 2 x CR18-8DN câblés en MVP, M18, distance ajustable 8 mm, sortie NPN normalement ouverte, alimentation 12-24 VDC, 10 mA max, DC 3 fils | EP_LAVAGE au-dessus de EP_CRITIQUE sur supports réglables en hauteur ; réserve mécanique non câblée possible pour un troisième capteur futur ; interface directe sur entrées digitales KC868-A16 retenue par défaut, avec validation banc obligatoire avant câblage final |
 | Goutiere de trop-plein | seuil fixe à 30,5 cm | Fixe la cote maximale exploitable pour les seuils de pilotage |
 | Support du FAT | a fabriquer | Conditionne tout le régime gravitaire par rapport au bassin |
 | Capot | à créer avec fin de course OMRCH ME-8104, contact `1NO1NC` | Ajoute l'entrée de sécurité `CAPOT_OUVERT`. Le montage doit donner capot fermé = boucle fermée, capot ouvert ou fil coupé = boucle ouverte ; choix `NO` ou `NC` à valider au multimètre selon la mécanique réelle. |
@@ -93,9 +93,9 @@ flowchart LR
 | Rampe de rinçage | Tuyau 32 mm + buses déjà achetés et fabriqués | Le point débit/pression réel de la pompe devra être mesuré sur cet ensemble |
 | Sonde température bassin | DS18B20 étanche inox 3 fils, longueur cible 3 m | A implanter dans une eau représentative : arrivée gravitaire avant pompe/UV ou bassin en zone brassée, ombragée et accessible ; montage protégé et démontable ; alimentation 3,3 V, pull-up 4,7 kΩ sur `DATA` ; alerte informative en V1 avec seuils initiaux < 4 deg C et > 28 deg C |
 | Sonde température ambiante local | DS18B20 étanche inox 3 fils, longueur cible 3 m, même modèle que la sonde bassin | Hors coffret, dans l'air du local, loin de l'alimentation, des contacteurs, des pompes, du soleil et du volume chaud sous capot ; support ventilé et accessible pour conserver une mesure d'air représentative ; alerte informative en V1 avec seuils initiaux < 2 deg C et > 40 deg C |
-| IHM locale | LCD 2004 / 20x4 I2C 3,3 V, commandes physiques, voyants MARCHE, ALARME et LAVAGE | L'écran porte le détail ; raccordement cible sur `GPIO32` / `GPIO33` du port d'extension KC868-A32 en I2C logiciel ; sélecteur AUTO / MAINTENANCE 22 mm 2 positions maintenues `1NO + 1NC` ; boutons poussoirs 22 mm momentanés `1NO1NC` : reset bleu, test jaune, manuel tambour noir, manuel rinçage noir ; voyants LED étanches 16 mm 12 VDC retenus pour le MVP : MARCHE vert, ALARME rouge et LAVAGE jaune |
+| IHM locale | LCD 2004 / 20x4 I2C 3,3 V, commandes physiques, voyants MARCHE, ALARME et LAVAGE | L'écran porte le détail ; raccordement cible sur `GPIO32` / `GPIO33` des ports capteurs KC868-A16 en I2C logiciel ; sélecteur AUTO / MAINTENANCE 22 mm 2 positions maintenues `1NO + 1NC` ; boutons poussoirs 22 mm momentanés `1NO1NC` : reset bleu, test jaune, manuel tambour noir, manuel rinçage noir ; voyants LED étanches 16 mm 12 VDC retenus pour le MVP : MARCHE vert, ALARME rouge et LAVAGE jaune |
 | Liaison distante | option V2 Wi-Fi | Le matériel MVP est la base définitive de la V2 et doit être prêt pour une V2 Wi-Fi sans remplacement de plateforme principale ; la notification ne doit pas compromettre le fonctionnement local |
-| Horloge fiable | RTC DS3231 retenue, implementation MVP optionnelle | Module RTC DS3231 I2C 3,3 V avec batterie rechargeable, adresse attendue `0x68`. Raccordement cible sur `GPIO32` / `GPIO33` du port d'extension KC868-A32 en I2C logiciel, partage possible avec le LCD 2004 si les essais confirment pull-up 3,3 V, adresses distinctes et stabilite. Sert au temps civil, aux logs et aux statistiques ; les temporisations de securite restent sur timers internes. |
+| Horloge fiable | RTC DS3231 retenue, implementation MVP optionnelle | Module RTC DS3231 I2C 3,3 V avec batterie rechargeable, adresse attendue `0x68`. Raccordement cible sur `GPIO32` / `GPIO33` de la KC868-A16 en I2C logiciel, partage possible avec le LCD 2004 si les essais confirment pull-up 3,3 V, adresses distinctes et stabilite. Sert au temps civil, aux logs et aux statistiques ; les temporisations de securite restent sur timers internes. |
 | Position tambour | option V1.1 à étudier | Peut aider pour l'indexation et certains diagnostics avances |
 
 L'UV est retenu hors tambour dans la chaine de filtration, après la pompe principale. Il reste asservi à la filtration autorisée et à l'absence de EP_CRITIQUE ; il n'est pas coupé sur un défaut FAT non critique si la filtration reste autorisée.
@@ -124,7 +124,7 @@ La commande matérielle visée correspond au MVP définitif, pas à une commande
 | Depart 12 VDC | Fusible | Usage |
 | --- | --- | --- |
 | Moteur tambour | 5 A | Motorreducteur Fyearfly 12 VDC 10 rpm via relais HELLA |
-| Automate | 3 A | KC868-A32 |
+| Automate | 3 A | KC868-A16, alimentation principale et deux alimentations des banques de sorties selon schema final |
 | Capteurs et boutons | 1 A | Capteurs de niveau, capot et commandes locales |
 | Ecran, voyants, accessoires | 1 A | IHM locale, signalisation et accessoires |
 
@@ -132,13 +132,13 @@ Le porte-fusibles ATO devra etre fixe proprement dans le coffret. Preference si 
 
 ### Interface des capteurs CR18-8DN
 
-Les entrées digitales du KC868-A32 sont optocouplées par `EL357`. D'après le schéma KC868-A32, chaque entrée `INPUT_Dx` est alimentée par `12VIN` au travers d'une résistance série `2 kΩ` et s'active lorsque le signal terrain est ramené à `GND`. Le CR18-8DN fournit justement une sortie `NPN` collecteur ouvert : marron sur `+12 VDC`, bleu sur `0 V`, noir vers l'entrée digitale.
+Les entrees digitales du KC868-A16 sont optocouplees et prevues pour des contacts ramenes vers `GND`. Le CR18-8DN fournit une sortie `NPN` collecteur ouvert : marron sur `+12 VDC`, bleu sur `0 V`, noir vers l'entree digitale.
 
-Le câblage direct est donc retenu pour `EP_LAVAGE` et `EP_CRITIQUE`, sans relais d'interface ni conditionneur supplémentaire par défaut. Cette décision reste soumise à un test banc avec les vrais capteurs et le KC868-A32, afin de confirmer le sens logique, la stabilité de lecture, le comportement en fil coupé et l'absence de déclenchements parasites avec les longueurs de câble réelles.
+Le cablage direct est retenu en premiere intention pour `EP_LAVAGE` et `EP_CRITIQUE`, sans relais d'interface ni conditionneur supplementaire. Cette decision reste soumise a un test banc avec les vrais capteurs et la revision A16 recue, afin de confirmer le courant d'entree, le sens logique, la stabilite de lecture, le comportement en fil coupe et l'absence de declenchements parasites avec les longueurs de cable reelles.
 
 ### Interface du contact de capot
 
-Le contact de capot V1 retenu est un fin de course industriel OMRCH `ME-8104`, momentane, avec contact `1NO1NC`. Il est raccorde comme un contact sec vers `GND` sur une entree digitale du KC868-A32.
+Le contact de capot V1 retenu est un fin de course industriel OMRCH `ME-8104`, momentane, avec contact `1NO1NC`. Il est raccorde comme un contact sec vers `GND` sur une entree digitale du KC868-A16.
 
 Le comportement fonctionnel attendu est : capot ferme = boucle fermee vers l'entree automate ; capot ouvert, fil coupe ou connecteur debranche = boucle ouverte. Le choix pratique entre les bornes `NO` et `NC` du `ME-8104` doit etre valide au multimetre apres montage mecanique, car le nom des bornes decrit l'etat du switch au repos, pas forcement l'etat capot ferme.
 
@@ -148,13 +148,13 @@ Le fin de course doit etre fixe sur la partie fixe du bâti ou du petit batiment
 
 L'ecran local V1 retenu est un LCD 2004 / 20x4 I2C 3,3 V, fond bleu, avec module I2C de type PCF8574 ou equivalent. Il est alimente par le depart 12 VDC `Ecran, voyants, accessoires` seulement si le module integre une regulation adaptee ; par defaut, son alimentation logique et ses lignes I2C doivent rester compatibles 3,3 V.
 
-Le raccordement cible utilise le port d'extension du KC868-A32, avec `GPIO32` et `GPIO33` configures en I2C logiciel. Ce choix evite d'ajouter un peripherique sur les bus I2C internes deja utilises par les PCF8574 des relais et des entrees digitales. L'ordre exact `SDA` / `SCL` entre `GPIO32` et `GPIO33` sera fige dans le firmware et le schema.
+Le raccordement cible utilise deux des trois GPIO capteurs de la KC868-A16, avec `GPIO32` et `GPIO33` configures en I2C logiciel. Ce choix evite d'ajouter un peripherique sur le bus I2C interne deja utilise par les PCF8574 des sorties et des entrees digitales. Le brochage de la revision recue et l'ordre exact `SDA` / `SCL` seront figes dans le firmware et le schema apres validation banc.
 
 La validation banc doit verifier l'adresse I2C reelle, probablement `0x27` ou `0x3F`, le contraste, le retroeclairage, la lisibilite en facade, le comportement au redemarrage et l'absence de pull-up vers 5 V sur `SDA` / `SCL`. Si le module recu n'est pas reellement compatible 3,3 V, ajouter un convertisseur de niveau I2C 3,3 V / 5 V ou remplacer le module par une version 3,3 V confirmee.
 
 ### Interface de l'horloge RTC
 
-L'heure fiable V2 retenue est un module RTC DS3231 I2C 3,3 V avec batterie rechargeable. Le module doit etre alimente en 3,3 V cote KC868-A32 / ESP32, avec `SDA` et `SCL` tires au 3,3 V uniquement. L'adresse I2C attendue est `0x68`.
+L'heure fiable V2 retenue est un module RTC DS3231 I2C 3,3 V avec batterie rechargeable. Le module doit etre alimente en 3,3 V cote KC868-A16 / ESP32, avec `SDA` et `SCL` tires au 3,3 V uniquement. L'adresse I2C attendue est `0x68`.
 
 Le raccordement cible reutilise le bus I2C logiciel du port d'extension `GPIO32` / `GPIO33`, partage avec le LCD 2004 I2C si la validation banc confirme la stabilite du bus et l'absence de conflit d'adresse. Si la cohabitation LCD + RTC est instable, la RTC devra etre deplacee sur un bus I2C separe si des GPIO libres le permettent.
 
@@ -164,7 +164,7 @@ La batterie rechargeable livree avec le module sert a conserver l'heure pendant 
 
 Les deux sondes de temperature V1 retenues sont des DS18B20 etanches inox 3 fils, longueur cible 3 m. Le meme modele est utilise pour le bassin et pour le local afin de simplifier l'achat, le stock de rechange, le cablage et le firmware.
 
-Le raccordement cible est un bus 1-Wire alimente en 3,3 V, sans mode parasite : `VCC` sur `3.3 V`, `GND` sur `0 V` commun, `DATA` sur un GPIO libre du KC868-A32 / ESP32, avec une resistance de pull-up `4,7 kΩ` entre `DATA` et `3.3 V`.
+Le raccordement cible est un bus 1-Wire commun alimente en 3,3 V, sans mode parasite : `VCC` sur `3.3 V`, `GND` sur `0 V` commun, `DATA` sur `GPIO14` de la KC868-A16 en premiere intention, avec une resistance de pull-up `4,7 kΩ` entre `DATA` et `3.3 V`.
 
 Si des GPIO libres sont disponibles, la preference est de separer `TEMP_BASSIN` et `TEMP_LOCAL` sur deux bus 1-Wire distincts. Si les GPIO sont limites, un bus commun reste acceptable en V1 puisque ces alertes sont informatives et non bloquantes.
 
@@ -174,12 +174,12 @@ Les couleurs de fils annoncees par les vendeurs ne doivent pas etre prises comme
 
 | Organe | Commande automate | Organe de puissance retenu | Remarque |
 | --- | --- | --- | --- |
-| Moteur tambour | Relais KC868-A32 vers commande 12 VDC | Relais HELLA 4RD 933 332-551, 12 V, 15 A inductif | Support rail DIN a imprimer en 3D. |
-| Pompe de rincage | Relais KC868-A32 vers bobine 230 VAC | Contacteur moteur Schneider TeSys LC1D18P7, AC-3 18 A | Charge moteur secteur a raccorder a la terre ; commande directe retenue sans relais intermediaire. |
-| Pompe filtration | Relais KC868-A32 vers bobine 12 VDC | Contacteur modulaire TOMZN TOCT1-25Z 25 A | Depart separe des organes non essentiels. |
-| UV | Relais KC868-A32 vers bobine 12 VDC | Contacteur modulaire TOMZN TOCT1-25Z 25 A | Asservi a la filtration autorisee et a EP_CRITIQUE absent. |
-| Pompe decoration | Relais KC868-A32 vers bobine 12 VDC | Contacteur modulaire TOMZN TOCT1-25Z 25 A | Suit les memes securites hydrauliques que la filtration. |
-| Mise a niveau | Relais KC868-A32 vers bobine 12 VDC | Contacteur modulaire TOMZN TOCT1-25Z 25 A ou sortie equivalente | Coupee sur EP_CRITIQUE. |
+| Moteur tambour | Sortie MOSFET A16 12 VDC vers bobine HELLA | Relais HELLA 4RD 933 332-551, 12 V, 15 A inductif | Mesurer le courant de bobine, ajouter la suppression adaptee si absente et imprimer le support rail DIN. |
+| Pompe de rincage | Sortie MOSFET A16 vers relais d'interface 12 VDC, puis contact 230 VAC vers bobine LC1D18P7 | Contacteur moteur Schneider TeSys LC1D18P7, AC-3 18 A | Relais d'interface rail DIN a choisir avec contact `AC-15 >= 1 A sous 230 VAC` ; separation BT/secteur obligatoire. |
+| Pompe filtration | Sortie MOSFET A16 12 VDC | Contacteur modulaire TOMZN TOCT1-25Z 25 A | Valider courant de bobine inferieur a 500 mA et suppression de surtension. |
+| UV | Sortie MOSFET A16 12 VDC | Contacteur modulaire TOMZN TOCT1-25Z 25 A | Valider courant de bobine inferieur a 500 mA ; asservi a la filtration autorisee et a EP_CRITIQUE absent. |
+| Pompe decoration | Sortie MOSFET A16 12 VDC | Contacteur modulaire TOMZN TOCT1-25Z 25 A | Valider courant de bobine inferieur a 500 mA ; suit les memes securites hydrauliques que la filtration. |
+| Mise a niveau | Sortie MOSFET A16 12 VDC | Contacteur modulaire TOMZN TOCT1-25Z 25 A ou sortie equivalente | Valider courant de bobine inferieur a 500 mA ; coupee sur EP_CRITIQUE. |
 
 ## Schéma de principe
 
@@ -188,7 +188,7 @@ flowchart TB
     subgraph BT[Basse tension]
         Alim[Mean Well NDR-120-12]
         Fusibles[Porte-fusibles ATO 4 departs]
-        MCU[KC868-A32]
+        MCU[KC868-A16]
         Inputs[Entrees capteurs]
         UI[Commandes, LCD 2004 I2C et voyants complémentaires]
     end
@@ -232,12 +232,12 @@ flowchart TB
 - validation banc du LCD 2004 I2C 3,3 V : adresse, contraste, lisibilite, pull-up I2C et affectation `GPIO32` / `GPIO33` ;
 - validation banc de la RTC DS3231 I2C 3,3 V : adresse `0x68`, batterie rechargeable livree, conservation de l'heure apres coupure, pull-up I2C 3,3 V et cohabitation avec le LCD 2004 sur `GPIO32` / `GPIO33` ;
 - validation des références finales des voyants LED étanches 16 mm 12 VDC : MARCHE vert, ALARME rouge et LAVAGE jaune, avec joint de façade, raccordement arrière et profondeur compatibles coffret ;
-- architecture Wi-Fi V2 autour du KC868-A32, sans remplacement de plateforme principale ;
+- architecture Wi-Fi V2 autour du KC868-A16, sans remplacement de plateforme principale ;
 - architecture de notification pour une V2 : embarquée, serveur local, service mail ou service push simple ;
 - besoin ou non d'un capteur de position tambour ;
 - stratégie matérielle d'indexation du tambour hors lavage pour V1.1 ;
 - methode empirique d'estimation de la consommation d'eau de rinçage pour V1.1 ou V2 ;
-- validation banc de l'interface directe KC868-A32 / CR18-8DN, notamment sens logique, stabilité, rupture de fil et comportement avec longueurs de câble réelles ;
+- validation banc de l'interface directe KC868-A16 / CR18-8DN, notamment courant d'entree, sens logique, stabilité, rupture de fil et comportement avec longueurs de câble réelles ;
 - validation mecanique et electrique du contact capot OMRCH ME-8104 : bornes a utiliser, capot ferme boucle fermee, capot ouvert ou fil coupe boucle ouverte, alignement de la came et repetabilite ;
 - choix des GPIO 1-Wire pour `TEMP_BASSIN` et `TEMP_LOCAL`, bus separes preferes si disponibles ;
 - sections de cables retenues en premiere intention : 2 x 2,5 mm2 pour le moteur tambour 12 VDC, 0,5 mm2 pour voyants et boutons, 1,5 mm2 pour les circuits 230 VAC cote filtration y compris cablage interne d'armoire ; borniers, repérage et implantation physique des protections ;

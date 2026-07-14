@@ -87,16 +87,16 @@ Le capteur de température ambiante local doit mesurer l'air du local de filtrat
 | Référence capteur | CR18-8DN | Capteur de niveau retenu |
 | Format mécanique | M18 | A prendre en compte pour le support sur tube de report |
 | Distance de détection ajustable | 8 mm | Valeur fournie |
-| Sortie | NPN normalement ouverte | Sortie collecteur ouvert compatible avec une entrée KC868-A32 activée par tirage vers 0 V |
+| Sortie | NPN normalement ouverte | Sortie collecteur ouvert compatible en premiere intention avec une entrée KC868-A16 activée par tirage vers 0 V |
 | Alimentation | 12-24 VDC, plage admissible 10-30 VDC | Alimentation V1 retenue en 12 VDC |
 | Consommation | 10 mA max | Valeur unitaire fournie |
-| Courant de sortie | 200 mA max | Très supérieur au courant d'une entrée optocouplée KC868-A32 avec résistance série 2 kΩ |
-| Câblage | DC 3 fils | Marron `+12 VDC`, bleu `0 V`, noir vers entrée digitale KC868-A32 |
+| Courant de sortie | 200 mA max | Marge probablement suffisante ; courant reel de l'entree optocouplee KC868-A16 a mesurer sur la revision recue |
+| Câblage | DC 3 fils | Marron `+12 VDC`, bleu `0 V`, noir vers entrée digitale KC868-A16 |
 | Protection capteur | IP65 | Adapté aux projections, pas à une immersion ou un lavage haute pression |
 
 Le MVP retient deux capteurs câblés sur le tube de report eau propre : EP_LAVAGE au-dessus de EP_CRITIQUE. Les supports doivent être réglables en hauteur afin de caler les seuils après mesure du niveau normal réel. Une réserve mécanique non câblée peut être prévue pour un troisième capteur futur si les essais le justifient.
 
-L'interface électrique retenue est un raccordement direct sur les entrées digitales optocouplées du KC868-A32. Le schéma KC868-A32 montre une entrée `INPUT_Dx` alimentée par `12VIN` au travers d'une résistance série `2 kΩ`, activée par fermeture vers `GND`. Le CR18-8DN NPN est donc raccorde comme un contact électronique vers 0 V, sans relais d'interface par défaut. La validation finale se fait sur banc avec les vrais capteurs, notamment sens logique, stabilité, rupture de fil et longueurs de câble réelles.
+L'interface électrique retenue en premiere intention est un raccordement direct sur les entrées digitales optocouplées de la KC868-A16, prévues pour une activation vers `GND`. Le CR18-8DN NPN est donc raccorde comme un contact électronique vers 0 V, sans relais d'interface par défaut. La validation finale se fait sur banc avec la revision A16 et les vrais capteurs, notamment courant d'entree, sens logique, stabilité, rupture de fil et longueurs de câble réelles.
 
 ### Motorisation tambour
 
@@ -105,16 +105,20 @@ L'interface électrique retenue est un raccordement direct sur les entrées digi
 | Moteur retenu | Motorreducteur Fyearfly 12 VDC 10 rpm | Remplace le candidat initial de moteur d'essuie-glace |
 | Tension moteur | 12 V DC | Alimente par le rail 12 VDC V1 |
 | Vitesse retenue | 10 rpm en sortie motorreducteur | Vitesse finale tambour a valider avec la transmission réelle |
+| Couple nominal annonce | 70 kg.cm, soit environ 6,9 N.m | Donnee fournisseur issue de la capture produit transmise, a confirmer sur montage reel |
+| Couple maximal annonce | 70 kg.cm, soit environ 6,9 N.m | Valeur identique au couple nominal dans la capture ; a traiter avec prudence |
 | Courant nominal annonce | < 1,6 A selon capture produit | Donnee a confirmer par mesure sur montage réel |
 | Courant de blocage / d'arret annonce | 6,5 A selon screenshot fournisseur transmis | Sert d'ordre de grandeur pour choisir une protection plus restrictive ; comportement reel du fusible 5 A a confirmer par test |
 | Fusible retenu | ATO 5 A | Depart 12 VDC moteur tambour |
 | Relais retenu | HELLA 4RD 933 332-551, 12 V, charge inductive 15 A | Relais de puissance moteur, support rail DIN a imprimer en 3D |
-| Couple moteur | Inconnu | Donnée critique à valider par essais |
+| Couple moteur réel | Non mesure | Donnée critique à valider par essais malgré le couple fournisseur annonce |
 | Usage retenu | Intermittent pendant les cycles de lavage | Usage continu 24/24 non recommandé |
 
 La transmission exacte autour du motorreducteur 10 rpm reste a finaliser. Le choix du Fyearfly rend caduque l'hypothèse initiale de moteur d'essuie-glace a 95 tr/min avec réduction 3:1, qui donnait une vitesse tambour probablement trop élevée.
 
-Le moteur doit rester hors eau et protège des projections. Le courant de blocage annoncé de 6,5 A permet de pré-dimensionner la protection moteur du MVP. La vitesse finale, le courant en charge, le couple disponible, la fixation mécanique et le comportement réel en blocage doivent être valides avant cablage final. Le détail du dimensionnement est tracé dans [../calculs/NC-0002-dimensionnement-motorisation-tambour.md](../calculs/NC-0002-dimensionnement-motorisation-tambour.md).
+Le moteur doit rester hors eau et protège des projections. Le courant de blocage annoncé de 6,5 A permet de pré-dimensionner la protection moteur du MVP. Le couple fournisseur annonce de 70 kg.cm, soit environ 6,9 N.m, donne un ordre de grandeur utile pour la transmission, mais ne remplace pas les mesures sur le tambour reel. La vitesse finale, le courant en charge, le couple disponible, la fixation mécanique et le comportement réel en blocage doivent être valides avant cablage final. Le détail du dimensionnement est tracé dans [../calculs/NC-0002-dimensionnement-motorisation-tambour.md](../calculs/NC-0002-dimensionnement-motorisation-tambour.md).
+
+Hypothèse de transmission mécanique en cours de conception : engrenages droits PETG module 4, angle de pression 20 degres, largeur 25 mm et rapport 2:1. Le pignon moteur fait 30 dents et est monté sur un moyeu aluminium pour arbre en D 8 mm ; la couronne tambour fait 60 dents, avec alesage central diametre 160 mm, et est imprimée en 3 segments de 120 degres. Chaque segment est vissé sur la plaque latérale par 4 vis M4 sur un cercle de percage diametre 198 mm, avec rondelles larges diametre 12 mm et alignement par queues d'aronde axiales. Cette géométrie donne environ 5 tr/min au tambour, soit environ 8,1 cm/s en vitesse périphérique et environ 12 s par tour complet. L'entraxe théorique est de 180 mm ; le support moteur doit permettre son réglage autour de cette valeur. Le détail de fabrication et les paramètres d'impression sont tracés dans la note NC-0002.
 
 ### Architecture electrique V1
 
@@ -126,9 +130,9 @@ Le moteur doit rester hors eau et protège des projections. Le courant de blocag
 | Coupure locale cadenassable | Schneider Electric TeSys VCDN20, interrupteur-sectionneur 3P 690 V 20 A, poignee rouge cadenassable | Piece trouvee en atelier, candidate pour la coupure/consignation du coffret FAT, placee avant l'interrupteur differentiel local. Ne remplace pas le differentiel ni les disjoncteurs ; verifier etat, montage, coupure phase/neutre, calibre amont 16 A et maintien des bulleurs hors coupure automatique |
 | Alimentation 12 VDC | Mean Well NDR-120-12, 120 W, 10 A, rail DIN | Protegee par disjoncteur 4 A courbe C |
 | Distribution 12 VDC | Porte-fusibles ATO 4 emplacements | Depart moteur 5 A, automate 3 A, capteurs/boutons 1 A, ecran/voyants/accessoires 1 A ; adaptateur rail DIN imprime en 3D probable selon modele retenu |
-| Plateforme controle | KC868-A32 | Base automate V1 |
-| Ecran local | LCD 2004 / 20x4 I2C 3,3 V, fond bleu | Raccordement cible sur port d'extension KC868-A32 via `GPIO32` / `GPIO33` en I2C logiciel ; validation banc requise avant cablage final |
-| Horloge temps reel | Module RTC DS3231 I2C 3,3 V avec batterie rechargeable | Source locale d'heure fiable V2 ; adresse attendue `0x68`, raccordement cible sur le bus I2C logiciel du port d'extension KC868-A32 si cohabitation validee avec le LCD 2004 |
+| Plateforme controle | KC868-A16 ESP32 classique | Base automate V1/V2 selon ADR-0012 ; 16 entrees et 16 sorties MOSFET 12/24 VDC |
+| Ecran local | LCD 2004 / 20x4 I2C 3,3 V, fond bleu | Raccordement cible sur KC868-A16 via `GPIO32` / `GPIO33` en I2C logiciel ; validation banc requise avant cablage final |
+| Horloge temps reel | Module RTC DS3231 I2C 3,3 V avec batterie rechargeable | Source locale d'heure fiable V2 ; adresse attendue `0x68`, raccordement cible sur le bus I2C logiciel KC868-A16 si cohabitation validee avec le LCD 2004 |
 | Pompe rincage | Disjoncteur 10 A courbe C + contacteur Schneider TeSys LC1D18P7, bobine 230 VAC | La bobine est pilotee directement par un relais de l'automate. Le LC1D18P7 remplace le LC1D12P7 a prix equivalent avec une marge AC-3 superieure ; le disjoncteur reste 10 A courbe C. Solution retenue pour eviter un relais intermediaire 12 V -> 230 V, avec separation BT/secteur et reperage a traiter au schema final. |
 | Prises local | Disjoncteur 16 A courbe C | 1 prise bulleur bassin, 1 prise bulleur filtre bio, 2 prises maintenance ponctuelle ; le courant total du coffret reste limite par le disjoncteur amont 16 A cote maison |
 | Pompe filtration | Disjoncteur 6 A courbe C + contacteur TOMZN TOCT1-25Z 25 A, bobine 12 VDC | Depart separe car organe essentiel |
@@ -288,6 +292,7 @@ Le point de fonctionnement nominal recherche reste 8 à 10 m3/h, mais la pompe p
 
 - Fixer EP_LAVAGE et EP_CRITIQUE sur le tube de report en 32 mm, sur supports réglables en hauteur.
 - Valider le sens de rotation, le courant réel et la fixation du motorreducteur Fyearfly 12 VDC 10 rpm.
+- Finaliser et tester la transmission 2:1 en engrenages PETG module 4, angle 20 degres, pignon 30 dents sur moyeu aluminium et couronne 60 dents en 3 segments avec queues d'aronde axiales, vissés sur la plaque latérale du tambour.
 - Installer l'alimentation Mean Well NDR-120-12 et le porte-fusibles ATO 4 departs.
 - Choisir, acheter et cabler le disjoncteur 16 A dedie cote maison pour alimenter le coffret bassin.
 - Integrer le TeSys VCDN20 comme sectionneur local cadenassable avant l'interrupteur differentiel du coffret, si son etat est valide.
@@ -322,7 +327,8 @@ Les choix de principe sont maintenant tranchés pour le MVP, sauf les cotes de n
 
 ### Validations terrain et réglages
 
-- Couple réel, vitesse finale tambour, courant en charge et comportement de protection du moteur de tambour Fyearfly.
+- Couple réel, vitesse finale tambour, courant en charge et comportement de protection du moteur de tambour Fyearfly, en reference au couple fournisseur annonce de 70 kg.cm pour la variante 10 tr/min.
+- Faux-rond, jeu d'engrenement, usure et tenue mécanique de la transmission PETG module 4, 20 degres, 30/60 dents, largeur 25 mm, avec couronne segmentée vissée et queues d'aronde axiales.
 - Débit réel, pression utile aux buses, amorçage et courant réel de la pompe de rinçage.
 - Forme, nombre et surface totale des ouvertures du tambour a calculer avant découpe pour atteindre environ 0,20 à 0,23 m2 de surface filtrante utile.
 - Référence finale du coffret IP55 minimum, préférence IP65, avec presse-étoupes et gestion de condensation si nécessaire.

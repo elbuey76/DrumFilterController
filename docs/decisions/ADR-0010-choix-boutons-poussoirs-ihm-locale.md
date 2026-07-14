@@ -8,7 +8,7 @@ Acceptée
 
 La V1 doit conserver des commandes locales physiques simples pour les actions d'exploitation et de maintenance : lancement d'un test de lavage, acquittement des alarmes et commandes manuelles maintenues du tambour et du rinçage.
 
-Ces boutons ne commandent pas directement la puissance. Ils sont lus par le KC868-A32 en contacts secs basse tension, puis la logique automate applique les interverrouillages : capot, niveau critique, cohérence capteurs et défauts critiques.
+Ces boutons ne commandent pas directement la puissance. Ils sont lus par le KC868-A16 en contacts secs basse tension, puis la logique automate applique les interverrouillages : capot, niveau critique, cohérence capteurs et défauts critiques.
 
 Le coffret est installé dans un local technique humide avec condensation et projections possibles. Les organes de façade doivent donc rester cohérents avec un coffret IP55 minimum, préférence IP65, et rester lisibles avec des étiquettes claires.
 
@@ -19,9 +19,9 @@ Les boutons poussoirs physiques retenus pour le montage MVP sont des boutons de 
 - diamètre de perçage 22 mm ;
 - action momentanée, sans verrouillage ;
 - contact `1NO1NC` ;
-- raccordement en contact sec vers les entrées digitales du KC868-A32 ;
+- raccordement en contact sec vers les entrées digitales du KC868-A16 ;
 - usage principal du contact `NO` : appui = entrée active ;
-- validation banc du sens réel des contacts et du sens logique lu par le KC868-A32.
+- validation banc du sens réel des contacts et du sens logique lu par le KC868-A16.
 
 Les couleurs retenues sont :
 

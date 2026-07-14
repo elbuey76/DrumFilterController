@@ -161,7 +161,7 @@ Une demande de test avec capot ouvert est refusée sans mouvement avec `A13 - TE
 
 ## Statuts a remonter localement
 
-L'IHM locale V1 retient un LCD 2004 / 20x4 I2C 3,3 V, fond bleu, pilote depuis le port d'extension KC868-A32 via `GPIO32` / `GPIO33` en I2C logiciel. Elle doit presenter au minimum :
+L'IHM locale V1 retient un LCD 2004 / 20x4 I2C 3,3 V, fond bleu, pilote depuis `GPIO32` / `GPIO33` de la KC868-A16 en I2C logiciel. Elle doit presenter au minimum :
 
 - mode actif : auto, manuel, maintenance, dégradé ou défaut ;
 - état niveau : OK, lavage ou critique ;

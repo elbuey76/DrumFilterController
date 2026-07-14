@@ -4,6 +4,8 @@
 
 Acceptee
 
+Amendee par [ADR-0012 - Migration de la plateforme KC868-A32 vers KC868-A16](ADR-0012-migration-kc868-a32-vers-a16.md). Les clauses imposant l'A32 et la commande directe de la bobine 230 VAC du LC1D18P7 sont remplacees par l'A16 a sorties MOSFET et un relais d'interface 12 VDC / 230 VAC. Les autres principes de protection et de distribution restent applicables.
+
 ## Contexte
 
 Le controleur du FAT doit separer proprement la distribution secteur 230 VAC, les sorties de puissance et la basse tension 12 VDC. L'installation est dans un local humide protege de la pluie directe, avec des organes essentiels pour la survie du bassin et des organes secondaires qui ne doivent pas pouvoir arreter la filtration principale en cas de defaut.

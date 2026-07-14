@@ -68,30 +68,34 @@
 
 | ID | Element | Priorité | Statut |
 | --- | --- | --- | --- |
-| B-101 | Documenter le choix de plateforme V1 KC868-A32 et vérifier ses interfaces exactes avec capteurs, boutons, relais, contacteurs, écran et voyants. | Must | Tranchée |
+| B-101 | Documenter l'abandon de la KC868-A32 surdimensionnee et l'adoption de la KC868-A16 ESP32 classique a sorties MOSFET comme plateforme V1/V2 ; conserver l'historique d'achat A32 et verifier les interfaces exactes de la revision A16 recue. | Must | Tranchée |
 | B-102 | Définir les entrées/sorties nécessaires au MVP, compatibles avec les capteurs CR18-8DN NPN 12-24 VDC. | Must | Tranchée |
 | B-100 | Geler le nombre minimal d'entrées/sorties V1 avant de rechercher et comparer des références matérielles candidates. | Must | Tranchée |
-| B-103 | Réaliser un schéma de câblage de principe intégrant differentiel 30 mA, disjoncteurs, Mean Well NDR-120-12, KC868-A32, fusibles ATO, relais HELLA, contacteur Schneider et contacteurs TOMZN. | Must | À faire |
+| B-103 | Réaliser un schéma de câblage de principe intégrant differentiel 30 mA, disjoncteurs, Mean Well NDR-120-12, KC868-A16, alimentation principale et banques de sorties A16, fusibles ATO, relais HELLA, relais d'interface de rinçage, contacteur Schneider et contacteurs TOMZN. | Must | À faire |
 | B-104 | Monter le coffret basse tension MVP avec boutons, voyant MARCHE vert 16 mm 12 VDC, voyant ALARME rouge 16 mm 12 VDC et voyant LAVAGE jaune 16 mm 12 VDC. | Should | À faire |
 | B-105 | Réserver des sorties distinctes pour les équipements à couper sur niveau bas, sans integrer les bulleurs branchés directement sur le 220 V. | Must | À faire |
 | B-106 | Définir l'architecture de contacteurs ou relais permettant la coupure de sécurité des équipements controles : HELLA moteur tambour, Schneider pompe rincage, TOMZN filtration/UV/deco/mise a niveau. | Must | Tranchée |
-| B-107 | Définir l'interface électrique des entrées pour lecture fiable des capteurs CR18-8DN 3 fils : sortie NPN directe vers entrée optocouplée KC868-A32, marron +12 VDC, bleu 0 V commun, noir vers `INPUT_Dx`, avec validation banc avant câblage final. | Must | Tranchée |
+| B-107 | Définir et valider l'interface électrique des capteurs CR18-8DN 3 fils vers les entrees optocouplees KC868-A16 : marron +12 VDC, bleu 0 V commun, noir vers `Ix`, avec mesure du courant d'entree, sens logique et essais de rupture avant câblage final. | Must | À faire |
 | B-108 | Prévoir un sélecteur physique AUTO / MAINTENANCE type XB2-BD25 ou équivalent, 22 mm, 2 positions maintenues, contact `1NO + 1NC`, et des boutons poussoirs 22 mm momentanés `1NO1NC` : RESET_ALARME bleu, TEST_LAVAGE jaune, MANU_TAMBOUR noir et MANU_RINCAGE noir. | Must | Tranchée |
 | B-109 | Prévoir l'entrée matérielle nécessaire pour la sonde `TEMP_BASSIN` DS18B20 3 fils : GPIO 1-Wire, alimentation 3,3 V, GND commun, pull-up 4,7 kΩ, cheminement câble et support démontable côté eau représentative. | Must | À faire |
 | B-110 | Prévoir l'entrée matérielle nécessaire pour la sonde `TEMP_LOCAL` DS18B20 3 fils : GPIO 1-Wire, alimentation 3,3 V, GND commun, pull-up 4,7 kΩ, support ventilé hors coffret ; bus séparé préféré si GPIO disponible. | Must | À faire |
 | B-110A | Valider sur banc les deux sondes DS18B20 étanches inox identiques : brochage réel des couleurs, lecture en 3,3 V, perte de sonde, identification eau/local, choix bus 1-Wire séparés ou commun et stabilité avec câble 3 m. | Must | À faire |
-| B-110B | Prévoir et valider le contact capot OMRCH ME-8104 : entrée digitale KC868-A32, contact sec vers GND, bornes NO/NC choisies au multimètre, capot fermé boucle fermée, capot ouvert ou rupture boucle ouverte, came réglable et répétabilité mécanique. | Must | À faire |
+| B-110B | Prévoir et valider le contact capot OMRCH ME-8104 : entrée digitale KC868-A16, contact sec vers GND, bornes NO/NC choisies au multimètre, capot fermé boucle fermée, capot ouvert ou rupture boucle ouverte, came réglable et répétabilité mécanique. | Must | À faire |
 | B-111 | Prévoir les composants nécessaires pour l'IHM locale V1 : LCD 2004 / 20x4 I2C 3,3 V fond bleu, sélecteur AUTO / MAINTENANCE 22 mm 2 positions maintenues `1NO + 1NC`, boutons poussoirs 22 mm momentanés `1NO1NC` bleu/jaune/noir/noir pour reset, test, tambour manuel et rinçage manuel, voyant MARCHE vert 16 mm 12 VDC, voyant ALARME rouge 16 mm 12 VDC et voyant LAVAGE jaune 16 mm 12 VDC. | Must | À faire |
-| B-111A | Valider sur banc le LCD 2004 I2C retenu : adresse I2C, contraste, retroeclairage, lisibilite, affectation `GPIO32` / `GPIO33`, compatibilite 3,3 V des lignes `SDA` / `SCL` et absence de perturbation des bus I2C internes du KC868-A32. | Must | À faire |
+| B-111A | Valider sur banc le LCD 2004 I2C retenu : adresse I2C, contraste, retroeclairage, lisibilite, affectation `GPIO32` / `GPIO33` de l'A16, compatibilite 3,3 V des lignes `SDA` / `SCL` et absence de perturbation du bus I2C interne des expanseurs A16. | Must | À faire |
 | B-111B | Prévoir et valider sur banc la RTC DS3231 I2C 3,3 V avec batterie rechargeable : adresse `0x68`, conservation de l'heure après coupure, absence de pull-up 5 V, cohabitation avec le LCD 2004 sur `GPIO32` / `GPIO33` ou bus I2C separé si nécessaire. | Must | À faire |
 | B-112 | Prévoir pour une V2 les composants et interfaces nécessaires à la remontée distante retenue module radio, réseau ou passerelle. | Should | V2 |
 | B-113 | Garder le capteur de position tambour comme option V2 ou V1.1 tardive, seulement si l'indexation au temps pose problème ou si une position reproductible devient nécessaire. | Should | Tranchée |
 | B-114 | Valider la commande 12 V DC du moteur tambour avec fusible ATO 5 A, relais HELLA 12 V 15 A inductif, alimentation Mean Well NDR-120-12 et courant de blocage annoncé 6,5 A. | Must | En cours |
 | B-115 | Valider le sens de rotation, la connectique et la fixation mécanique du motorreducteur Fyearfly 12 VDC 10 rpm avant câblage définitif. | Must | À faire |
-| B-116 | Valider la commande secteur de la pompe de rinçage EKJ-802S avec disjoncteur 10 A courbe C, contacteur Schneider LC1D18P7 bobine 230 VAC, terre et protection. | Must | En cours |
+| B-116 | Valider la commande secteur de la pompe de rinçage EKJ-802S avec disjoncteur 10 A courbe C, relais d'interface a bobine 12 VDC, contacteur Schneider LC1D18P7 bobine 230 VAC, terre, separation BT/secteur et protection. | Must | En cours |
 | B-117 | Concevoir et imprimer un support rail DIN pour le relais HELLA automobile, avec maintien mécanique, accès aux cosses et repérage clair. | Should | À faire |
-| B-118 | Verifier la compatibilite des relais KC868-A32 avec les bobines des contacteurs TOMZN 12 VDC, la bobine Schneider 230 VAC et la commande du relais HELLA. | Must | À faire |
+| B-118 | Verifier la compatibilite des sorties MOSFET KC868-A16 avec les bobines 12 VDC HELLA, TOMZN et relais d'interface : courant inferieur a 500 mA par voie, polarite, courant simultane, alimentation des deux banques et suppression de surtension. | Must | À faire |
 | B-119 | Concevoir et imprimer si necessaire un adaptateur rail DIN pour le porte-fusibles ATO 4 emplacements, avec maintien mécanique, accès aux fusibles et repérage des departs. | Should | À faire |
+| B-120 | Concevoir, imprimer et tester la transmission tambour 2:1 en engrenages PETG module 4, angle 20 degres, largeur 25 mm : pignon 30 dents sur moyeu aluminium arbre D 8 mm ; couronne 60 dents, alesage 160 mm, en 3 segments de 120 degres avec queues d'aronde axiales ; 4 vis M4 par segment sur PCD 198 mm. Valider entraxe reglable autour de 180 mm, faux-rond, jeu d'engrenement, serrage et usure. | Must | En cours |
+| B-121 | Choisir le relais d'interface de rinçage : bobine 12 VDC consommant moins de 500 mA, montage rail DIN, suppression de bobine et contact avec categorie publiee cible `AC-15 >= 1 A sous 230 VAC` pour commander la bobine du LC1D18P7. | Must | À faire |
+| B-122 | Definir et valider les diodes de roue libre ou protections equivalentes des bobines DC HELLA, TOMZN et relais d'interface, en tenant compte des protections deja integrees et de la polarite des sorties P-MOSFET A16. | Must | À faire |
+| B-123 | Inspecter la KC868-A16 recue : reference ESP32 classique, revision PCB, etat des borniers, alimentation 12 V, alimentation des deux banques de sorties, scan I2C, Ethernet, USB et trois GPIO capteurs ; ne pas accepter automatiquement une A16S ou A16v3. | Must | À faire |
 
 ## Firmware
 
@@ -143,6 +147,10 @@ Statuts specifiques a la V0.1 firmware :
 | B-233 | Implémenter les alertes de commande incohérente UV, absence anormale de lavage, redémarrages fréquents et sorties commandées trop longtemps. | Should | V1.1 |
 | B-234 | Etendre les statistiques avec temps de retour EP_LAVAGE, tentatives par lavage, activations EP_CRITIQUE, températures min/max/moyenne et historiques capot. | Should | V1.1 |
 | B-235 | Integrer le temps civil RTC DS3231 pour les logs, statistiques, dernier lavage, test journalier et programmation horaire, avec heure inconnue si RTC absente/non initialisee et sans utiliser la RTC pour les temporisations de securite. | Should | V1.1/V2 |
+| B-236 | Reprendre la couche HAL KC868 pour la KC868-A16 : deux banques PCF8574 d'entrees, deux banques de sorties, bus I2C interne sur les broches de la revision recue, adresses detectees par scan et cartographie configurable sans supposer les quatre banques de l'A32. | Must | À faire |
+| B-237 | Creer des environnements PlatformIO `kc868_a16_hw_safe` et `kc868_a16_hw_armed`, garder les sorties desarmees par defaut et retirer l'A32 comme cible materielle active sans casser le simulateur ni les tests natifs. | Must | À faire |
+| B-238 | Ajouter des tests bas niveau A16 couvrant cartographie des 9 entrees/sorties, polarite des sorties P-MOSFET, demarrage toutes sorties OFF, banque I2C absente, echec d'ecriture, inversion logique et impossibilite d'armer tant que la cartographie materielle n'est pas validee. | Must | À faire |
+| B-239 | Implementer et valider les auxiliaires A16 : bus I2C logiciel LCD + RTC sur `GPIO32` / `GPIO33` et bus 1-Wire commun des deux DS18B20 sur `GPIO14`, sous reserve du brochage exact de la revision recue. | Must | À faire |
 
 ## Documentation et validation
 

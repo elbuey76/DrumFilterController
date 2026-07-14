@@ -23,9 +23,9 @@ Les temporisations de securite et de cycle, comme EP_CRITIQUE, EP_LAVAGE, capot 
 
 La voie retenue pour l'heure fiable est un module RTC DS3231 haute precision, I2C, compatible 3,3 V, avec batterie rechargeable livree avec le module.
 
-Le module RTC doit etre alimente en 3,3 V cote KC868-A32 / ESP32. Les lignes I2C `SDA` et `SCL` doivent rester tirees au 3,3 V, sans pull-up vers 5 V.
+Le module RTC doit etre alimente en 3,3 V cote KC868-A16 / ESP32. Les lignes I2C `SDA` et `SCL` doivent rester tirees au 3,3 V, sans pull-up vers 5 V.
 
-Le raccordement cible est le bus I2C logiciel du port d'extension du KC868-A32, via `GPIO32` / `GPIO33`, deja retenu pour l'ecran LCD 2004 I2C, sous reserve de validation banc. L'adresse attendue de la RTC DS3231 est `0x68`, distincte des adresses LCD candidates `0x27` ou `0x3F`.
+Le raccordement cible est le bus I2C logiciel de la KC868-A16 via `GPIO32` / `GPIO33`, deja retenu pour l'ecran LCD 2004 I2C, sous reserve de validation du brochage de la revision recue. L'adresse attendue de la RTC DS3231 est `0x68`, distincte des adresses LCD candidates `0x27` ou `0x3F`.
 
 Si les essais montrent qu'un bus partage LCD + RTC est instable, trop sensible aux longueurs de cable ou aux pull-up des modules, la RTC devra etre placee sur un bus I2C separe si des GPIO libres le permettent.
 

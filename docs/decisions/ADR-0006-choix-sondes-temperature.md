@@ -15,7 +15,7 @@ Ces mesures servent aux alertes locales V1, a l'affichage, puis aux statistiques
 
 Les contraintes principales sont :
 
-- compatibilite avec le KC868-A32 / ESP32 en logique 3,3 V ;
+- compatibilite avec le KC868-A16 / ESP32 en logique 3,3 V ;
 - cablage simple et maintenable ;
 - comportement robuste dans un environnement humide ;
 - achat simple de pieces identiques si cela ne degrade pas la fonction ;
@@ -32,7 +32,7 @@ Le raccordement cible est en mode 3 fils, alimente en 3,3 V, sans alimentation p
 | Fil fonctionnel | Raccordement |
 | --- | --- |
 | `VCC` | `3.3 V` |
-| `DATA` | GPIO 1-Wire libre du KC868-A32 / ESP32 |
+| `DATA` | `GPIO14` de la KC868-A16 en premiere intention, avec les deux sondes sur un bus 1-Wire commun |
 | `GND` | `GND / 0 V` commun |
 | Pull-up | `4,7 kΩ` entre `DATA` et `3.3 V` |
 

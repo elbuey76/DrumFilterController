@@ -6,6 +6,12 @@ Ce document trace les achats deja passes pour le controleur FAT V1, a partir des
 
 Il sert de photo d'inventaire avant reception, controle des references et preparation du commit de documentation. Les prix et delais ci-dessous sont des informations de commande, pas des criteres techniques de validation.
 
+## Decision posterieure concernant la plateforme
+
+L'achat de la KC868-A32 reste trace ci-dessous comme fait historique. L'[ADR-0012](../decisions/ADR-0012-migration-kc868-a32-vers-a16.md) abandonne ensuite l'A32 comme plateforme cible du FAT au profit d'une KC868-A16 ESP32 classique, plus compacte et suffisante pour les neuf entrees et neuf sorties V1.
+
+L'A32 ne doit donc pas etre integree au schema cible. Sa destination, retour fournisseur, revente, conservation comme banc d'essai ou reutilisation, reste a decider. La migration ajoute au panier un relais d'interface a bobine 12 VDC et contact 230 VAC pour commander la bobine du Schneider LC1D18P7.
+
 ## Materiel deja disponible
 
 | Article | Etat | Commentaire |
@@ -42,8 +48,8 @@ Il sert de photo d'inventaire avant reception, controle des references et prepar
 | Article | Controle a faire avant montage |
 | --- | --- |
 | Mean Well NDR-120-12 | Verifier entree 230 VAC, sortie 12 VDC, reglage tension, bornier, fixation DIN et absence de choc transport. |
-| KC868-A32 | Verifier reference exacte, alimentation attendue, etat des borniers, boot ESP32, relais et entrees digitales. |
-| Schneider LC1D18P7 | Confirmer bobine 230 VAC, reperage A1/A2, puissance contacts, encombrement et compatibilite avec la commande par relais KC868-A32. |
+| KC868-A32 | Verifier la reference et l'etat uniquement pour decider retour, revente, banc d'essai ou reutilisation ; ne pas la monter comme controleur FAT cible. |
+| Schneider LC1D18P7 | Confirmer bobine 230 VAC, reperage A1/A2, puissance contacts et encombrement ; choisir le relais d'interface 12 VDC / 230 VAC compatible avec sa charge de bobine. |
 | TOMZN TOCT1 | Confirmer bobine 12 VDC, type de contact 1NO1NC, polarite eventuelle, consommation bobine et echauffement. |
 | Motorreducteur 12 V 10 rpm | Mesurer courant a vide, courant en charge, courant au demarrage, courant en blocage controle, sens de rotation et couple utile. |
 | Relais HELLA | Confirmer brochage, type de contact, diode/resistance eventuelle, fixation et besoin de support rail DIN imprime. |

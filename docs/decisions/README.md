@@ -33,3 +33,4 @@ Copier le fichier `_template.md` pour créer une nouvelle decision.
 9. [ADR-0009 - Choix du sélecteur de mode AUTO / MAINTENANCE](ADR-0009-choix-selecteur-mode-auto-maintenance.md)
 10. [ADR-0010 - Choix des boutons poussoirs de l'IHM locale](ADR-0010-choix-boutons-poussoirs-ihm-locale.md)
 11. [ADR-0011 - Strategie de validation materielle V1](ADR-0011-strategie-validation-materielle-v1.md)
+12. [ADR-0012 - Migration de la plateforme KC868-A32 vers KC868-A16](ADR-0012-migration-kc868-a32-vers-a16.md)

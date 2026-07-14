@@ -24,7 +24,7 @@ Le montage doit utiliser le contact qui donne le comportement fonctionnel suivan
 
 Le choix exact entre les bornes `NO` et `NC` doit donc etre valide au multimetre une fois la mecanique montee. L'objectif est `capot ferme = contact ferme`, pas l'usage aveugle d'une borne nommee `NC`.
 
-Le raccordement cible est un contact sec vers `GND` sur une entree digitale du KC868-A32 :
+Le raccordement cible est un contact sec vers `GND` sur une entree digitale du KC868-A16 :
 
 ```text
 INPUT_Dx  ---- contact capot ---- GND
@@ -34,7 +34,7 @@ La partie fixe du batiment ou du châssis porte le fin de course. Le capot trans
 
 ## Consequences
 
-- Le schema doit reserver une entree digitale KC868-A32 pour `CAPOT_OUVERT`.
+- Le schema doit reserver une entree digitale KC868-A16 pour `CAPOT_OUVERT`.
 - La validation banc et mecanique doit verifier le sens logique, les bornes a utiliser, l'ouverture en fil coupe, l'ouverture en connecteur debranche et la repetabilite de fermeture.
 - Le montage doit proteger le fin de course des projections directes autant que possible, malgre le boitier machine annonce etanche.
 - Le firmware conserve le filtrage deja retenu : ouverture confirmee rapidement apres 100 a 500 ms, fermeture stable 1 a 2 s avant reautorisation.

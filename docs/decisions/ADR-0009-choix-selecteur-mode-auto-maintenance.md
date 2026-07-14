@@ -6,7 +6,7 @@ Acceptée
 
 ## Contexte
 
-La V1 doit disposer d'une commande locale simple pour choisir l'intention d'exploitation : mode automatique nominal ou mode maintenance. Ce choix doit être lisible en façade, stable mécaniquement et compatible avec les entrées digitales du KC868-A32.
+La V1 doit disposer d'une commande locale simple pour choisir l'intention d'exploitation : mode automatique nominal ou mode maintenance. Ce choix doit être lisible en façade, stable mécaniquement et compatible avec les entrées digitales du KC868-A16.
 
 Le capot ouvert reste prioritaire sur le sélecteur : même si le sélecteur est sur AUTO, un capot ouvert force l'état maintenance ou sécurité selon la situation. Le sélecteur n'est donc pas une sécurité de capot ni une coupure de puissance.
 
@@ -19,10 +19,10 @@ Le sélecteur physique `AUTO / MAINTENANCE` retenu pour le montage MVP est un s�
 - diamètre de perçage 22 mm ;
 - 2 positions maintenues, non momentanées ;
 - contact `1NO + 1NC` ;
-- raccordement en contacts secs basse tension vers les entrées digitales du KC868-A32 ;
+- raccordement en contacts secs basse tension vers les entrées digitales du KC868-A16 ;
 - commun raccordé au `GND` des entrées, avec une voie pour `MODE_AUTO` et une voie pour `MODE_MAINTENANCE`.
 
-La validation banc doit confirmer au multimètre le sens réel des contacts et le sens logique lu par le KC868-A32. La position AUTO doit activer `MODE_AUTO`, la position MAINTENANCE doit activer `MODE_MAINTENANCE`, et les deux états doivent rester mutuellement exclusifs.
+La validation banc doit confirmer au multimètre le sens réel des contacts et le sens logique lu par le KC868-A16. La position AUTO doit activer `MODE_AUTO`, la position MAINTENANCE doit activer `MODE_MAINTENANCE`, et les deux états doivent rester mutuellement exclusifs.
 
 ## Conséquences
 

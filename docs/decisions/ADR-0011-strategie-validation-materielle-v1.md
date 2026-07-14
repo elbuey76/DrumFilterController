@@ -6,7 +6,7 @@ Acceptee
 
 ## Contexte
 
-L'architecture materielle V1 du controleur de filtre a tambour est maintenant largement fixee : plateforme KC868-A32, alimentation 12 VDC, capteurs de niveau CR18-8DN, motorisation tambour 12 VDC, pompe de rincage 230 VAC deja achetee, contacteurs de puissance, IHM locale, RTC et sondes de temperature.
+L'architecture materielle V1 du controleur de filtre a tambour est maintenant largement fixee : plateforme KC868-A16 ESP32 classique selon ADR-0012, alimentation 12 VDC, capteurs de niveau CR18-8DN, motorisation tambour 12 VDC, pompe de rincage 230 VAC deja achetee, relais d'interface de rinçage a choisir, contacteurs de puissance, IHM locale, RTC et sondes de temperature.
 
 Ces choix ne sont pas des choix de maquette jetable : ils constituent la base cible du MVP et doivent rester compatibles avec la V2. Cependant, plusieurs points critiques restent conditionnes a des validations banc, schema ou terrain : sens logique des entrees, rupture de fils, etats au boot, perte du 12 VDC, separation basse tension / secteur, comportement des contacteurs, courant moteur, debit de rincage, condensation, reglage des seuils hydrauliques et reprise apres defaut.
 
@@ -23,7 +23,7 @@ Les choix materiels acceptes restent figes par defaut, mais une mesure ou un ess
 
 Le banc de test materiel est obligatoire avant cablage definitif du coffret. Il doit couvrir au minimum :
 
-- KC868-A32 ;
+- KC868-A16, avec identification de revision, scan I2C et sorties MOSFET desarmees ;
 - capteurs CR18-8DN `EP_LAVAGE` et `EP_CRITIQUE` ;
 - simulation du contact capot ;
 - boutons et selecteur AUTO / MAINTENANCE ;

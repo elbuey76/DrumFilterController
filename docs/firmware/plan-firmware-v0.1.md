@@ -1,8 +1,10 @@
-# Plan de codage — Firmware MVP V0.1 du contrôleur FAT KC868-A32
+# Plan de codage — Firmware MVP V0.1 du contrôleur FAT KC868-A16
 
 ## Objectif
 
-Obtenir une première version firmware autonome, simulable sans matériel, puis raccordable progressivement à la KC868-A32 dès réception.
+Obtenir une première version firmware autonome, simulable sans matériel, puis raccordable progressivement à la KC868-A16 dès réception.
+
+> Migration materielle : l'[ADR-0012](../decisions/ADR-0012-migration-kc868-a32-vers-a16.md) remplace l'A32 par une A16 ESP32 classique. La logique metier et le simulateur restent valides, mais la couche bas niveau A32 deja codee doit etre reprise selon les taches B-236 a B-239 avant tout armement des sorties physiques.
 
 Cette première version priorise :
 
@@ -57,7 +59,7 @@ Environnement recommandé :
 - PlatformIO ;
 - framework Arduino ;
 - langage C++ ;
-- cible ESP32 / KC868-A32.
+- cible ESP32 / KC868-A16 classique.
 
 Structure proposée :
 
@@ -863,7 +865,7 @@ ALARME: A01 NIVEAU CRITIQUE
 
 À chaque changement d'état, le moniteur série affiche une vue synthétique proche de ce qui sera affiché sur LCD 20x4.
 
-## 13. Étape 11 — Préparer la couche KC868-A32 sans l'activer
+## 13. Étape 11 — Reprendre la couche KC868 pour la KC868-A16 sans l'activer
 
 ### Objectif
 
@@ -973,23 +975,23 @@ Modules implémentés :
 - simulateur série avec commandes de niveau, capot, modes, boutons et températures ;
 - commande simulateur `journal` pour afficher le mini-journal ;
 - affichage série synthétique via `DisplayService` ;
-- abstraction `InputService` / `OutputService`, sans broches KC868-A32 activées.
+- abstraction `InputService` / `OutputService`, sans sorties KC868-A16 activees.
 
 Preuves locales :
 
 - `python -m platformio test -e native` : 35 tests passés sur 35 ;
-- `python -m platformio run` : build ESP32 `kc868_a32` réussi.
+- `python -m platformio run` : build ESP32 A16 reussi apres creation des environnements `kc868_a16_*`.
 
 Écarts restants avant de considérer la V0.1 complète :
 
-- validation matérielle KC868-A32, entrées réelles, relais réels et sens logiques ;
+- validation matérielle KC868-A16, entrees reelles, sorties MOSFET, adresses I2C et sens logiques ;
 - LCD 2004 I2C réel, RTC DS3231 réelle et sondes DS18B20 réelles ;
 - seuils température bas/haut, au-delà de la perte de mesure simulée A11/A12 ;
 - temporisation dédiée de reprise UV après EP_CRITIQUE ;
 - validation réelle de la persistance NVS sur carte ;
 - validation banc/installation des sécurités.
 
-## 16. Ensuite, quand la KC868-A32 arrive
+## 16. Ensuite, quand la KC868-A16 arrive
 
 On passera à **firmware V0.2 matériel**.
 
@@ -1076,7 +1078,7 @@ Firmware V0.1 = logique complète + simulation série + aucune dépendance maté
 Puis :
 
 ```text
-Firmware V0.2 = raccordement progressif à la KC868-A32
+Firmware V0.2 = raccordement progressif a la KC868-A16 apres portage HAL et validation des sorties desarmees
 ```
 
 La priorité n'est pas encore de piloter les vrais relais, mais de verrouiller la logique :

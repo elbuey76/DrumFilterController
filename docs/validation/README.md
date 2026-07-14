@@ -38,8 +38,8 @@ La CI couvre donc :
 - les tests host-side FT-0001 du `Controller` ;
 - les tests host-side du parsing des commandes simulateur ;
 - les tests host-side du buffer de ligne serie ;
-- la compilation du firmware ESP32 `kc868_a32`.
+- la compilation du firmware ESP32 dans les environnements historiques `kc868_a32_*`, a remplacer par `kc868_a16_*` dans B-237.
 
-Limite : cette preuve valide le code et la compilation dans l'environnement CI, mais ne remplace pas les essais materiels sur carte KC868-A32, les mesures hydrauliques ni la validation des entrees/sorties physiques.
+Limite : cette preuve valide le code et la compilation dans l'environnement CI, mais ne remplace pas le portage HAL ni les essais materiels sur carte KC868-A16, les mesures hydrauliques ou la validation des entrees/sorties physiques.
 
 Les procédures longues ou risquées peuvent être détaillées dans des fiches de test séparées, tout en restant référencées par la matrice de traçabilité.
