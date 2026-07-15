@@ -1,35 +1,36 @@
 #pragma once
 
-#include <Arduino.h>
+#include <stddef.h>
+#include <stdint.h>
 
-#include "hal/Kc868Mapping.h"
-
-#ifndef KC868_I2C_SDA
-#define KC868_I2C_SDA 4
-#endif
-
-#ifndef KC868_I2C_SCL
-#define KC868_I2C_SCL 5
-#endif
-
-struct Kc868Pcf8574AddressMap {
-  uint8_t inputBanks[kKc868DigitalBankCount] = {0x20, 0x21, 0x22, 0x23};
-  uint8_t outputBanks[kKc868DigitalBankCount] = {0x24, 0x25, 0x26, 0x27};
-};
+#include "hal/Kc868A16Profile.h"
+#include "hal/Kc868I2cBus.h"
 
 class Kc868Pcf8574Io {
 public:
-  void begin();
+  Kc868Pcf8574Io(Kc868I2cBus& bus, const Kc868A16HardwareProfile& profile);
+
+  bool begin();
   Kc868DigitalInputsRaw readInputs();
   bool writeOutputs(const Kc868DigitalOutputsRaw& raw);
   bool writeAllOutputsOff();
-  void scanI2c(Stream& stream);
+  size_t scanI2c(uint8_t* foundAddresses, size_t capacity);
+
+  const Kc868A16HardwareProfile& profile() const;
+  bool bootOffVerified() const;
+  bool outputBanksHealthy() const;
+  bool outputFaultLatched() const;
+  const bool* lastOutputBankOk() const;
+  const bool* latchedOutputBankFaults() const;
 
 private:
-  bool writeByte(uint8_t address, uint8_t value);
-  bool readByte(uint8_t address, uint8_t& value);
-  bool ping(uint8_t address);
+  bool writeAllOutputsOffInternal();
 
-  Kc868Pcf8574AddressMap addresses_{};
+  Kc868I2cBus& bus_;
+  const Kc868A16HardwareProfile& profile_;
   bool begun_ = false;
+  bool bootOffVerified_ = false;
+  bool outputFaultLatched_ = false;
+  bool outputBankOk_[kKc868DigitalOutputBankCount] = {false, false};
+  bool outputBankFaultLatched_[kKc868DigitalOutputBankCount] = {false, false};
 };

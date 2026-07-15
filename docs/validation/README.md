@@ -9,6 +9,7 @@ Fichier principal :
 - [Plan de tests par exigences](plan-tests-exigences.md)
 - [Checklist go/no-go materiel V1](checklist-go-no-go-materiel-v1.md)
 - [FT-0001 - Scenarios simulateur firmware V0.1](FT-0001-scenarios-simulateur-firmware-v0.1.md)
+- [FT-0002 - Portage firmware KC868-A16](FT-0002-portage-kc868-a16.md)
 
 ## Tests automatises host-side
 
@@ -38,8 +39,9 @@ La CI couvre donc :
 - les tests host-side FT-0001 du `Controller` ;
 - les tests host-side du parsing des commandes simulateur ;
 - les tests host-side du buffer de ligne serie ;
-- la compilation du firmware ESP32 dans les environnements historiques `kc868_a32_*`, a remplacer par `kc868_a16_*` dans B-237.
+- la compilation du firmware ESP32 dans `kc868_a16_sim`, `kc868_a16_hw_safe` et `kc868_a16_hw_armed` ;
+- le verrouillage du build `hw_armed` tant que le profil de la carte recue reste non valide.
 
-Limite : cette preuve valide le code et la compilation dans l'environnement CI, mais ne remplace pas le portage HAL ni les essais materiels sur carte KC868-A16, les mesures hydrauliques ou la validation des entrees/sorties physiques.
+La preuve locale du portage A16 couvre 51 tests host-side. Limite : cette preuve valide le code, les profils candidats et la compilation, mais ne remplace pas les essais materiels sur carte KC868-A16, les mesures hydrauliques ou la validation des entrees/sorties physiques.
 
 Les procédures longues ou risquées peuvent être détaillées dans des fiches de test séparées, tout en restant référencées par la matrice de traçabilité.

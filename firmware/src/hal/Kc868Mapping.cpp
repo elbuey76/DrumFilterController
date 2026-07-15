@@ -61,7 +61,7 @@ const Kc868DigitalMapping& defaultKc868DigitalMapping() {
 }
 
 bool kc868AllInputBanksOk(const Kc868DigitalInputsRaw& raw) {
-  for (size_t index = 0; index < kKc868DigitalBankCount; ++index) {
+  for (size_t index = 0; index < kKc868DigitalInputBankCount; ++index) {
     if (!raw.bankOk[index]) {
       return false;
     }
@@ -99,15 +99,20 @@ InputsSnapshot kc868MapInputs(const Kc868DigitalInputsRaw& raw, const Kc868Digit
   inputs.btnManuTambour = active(Kc868InputSignal::MANU_TAMBOUR);
   inputs.btnManuRincage = active(Kc868InputSignal::MANU_RINCAGE);
 
-  inputs.tempBassinValid = true;
-  inputs.tempLocalValid = true;
-  inputs.tempBassinC = 20.0F;
-  inputs.tempLocalC = 20.0F;
+  // Hardware temperatures are supplied separately by TemperatureService.
+  // Never substitute a plausible value when no physical probe was read.
+  inputs.tempBassinValid = false;
+  inputs.tempLocalValid = false;
   return inputs;
 }
 
-OutputsCommand kc868EffectiveOutputs(const OutputsCommand& requested, bool hardwareOutputsArmed, bool hardwareIoHealthy) {
-  if (!hardwareOutputsArmed || !hardwareIoHealthy) {
+bool kc868HardwareOutputsArmed(const Kc868HardwareSafetyState& safety) {
+  return safety.armRequested && safety.profileValidated && safety.bootOffVerified && safety.inputBanksHealthy &&
+         safety.outputBanksHealthy;
+}
+
+OutputsCommand kc868EffectiveOutputs(const OutputsCommand& requested, const Kc868HardwareSafetyState& safety) {
+  if (!kc868HardwareOutputsArmed(safety)) {
     return OutputsCommand{};
   }
   return requested;

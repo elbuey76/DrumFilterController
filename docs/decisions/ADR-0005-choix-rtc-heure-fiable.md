@@ -25,7 +25,7 @@ La voie retenue pour l'heure fiable est un module RTC DS3231 haute precision, I2
 
 Le module RTC doit etre alimente en 3,3 V cote KC868-A16 / ESP32. Les lignes I2C `SDA` et `SCL` doivent rester tirees au 3,3 V, sans pull-up vers 5 V.
 
-Le raccordement cible est le bus I2C logiciel de la KC868-A16 via `GPIO32` / `GPIO33`, deja retenu pour l'ecran LCD 2004 I2C, sous reserve de validation du brochage de la revision recue. L'adresse attendue de la RTC DS3231 est `0x68`, distincte des adresses LCD candidates `0x27` ou `0x3F`.
+Le raccordement cible est le bus I2C auxiliaire separe de la KC868-A16 via `GPIO32` / `GPIO33`, porte par le second controleur `TwoWire` de l'ESP32 et deja retenu pour l'ecran LCD 2004 I2C, sous reserve de validation du brochage de la revision recue. L'adresse attendue de la RTC DS3231 est `0x68`, distincte des adresses LCD candidates `0x27` ou `0x3F`.
 
 Si les essais montrent qu'un bus partage LCD + RTC est instable, trop sensible aux longueurs de cable ou aux pull-up des modules, la RTC devra etre placee sur un bus I2C separe si des GPIO libres le permettent.
 

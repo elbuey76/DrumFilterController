@@ -7,9 +7,11 @@
 #include "hal/OutputService.h"
 #include "sim/SimulatorLineBuffer.h"
 
+class A16AuxiliaryService;
+
 class Kc868Diagnostics {
 public:
-  void begin(Stream& stream);
+  void begin(Stream& stream, A16AuxiliaryService* auxiliaryService = nullptr);
   void poll(InputService& inputService, OutputService& outputService, const InputsSnapshot& inputs, const Controller& controller);
 
 private:
@@ -21,10 +23,12 @@ private:
   void printOutputs(const OutputService& outputService) const;
   void printController(const InputsSnapshot& inputs, const Controller& controller) const;
   void printBool(const char* label, bool value) const;
-  void printRawBanks(const char* label, const uint8_t* banks) const;
-  bool parseRelayPulse(const String& command, uint8_t& relayNumber, uint16_t& pulseMs) const;
+  void printRawBanks(const char* label, const uint8_t* banks, size_t bankCount) const;
+  bool parseOutputPulse(const String& command, uint8_t& outputNumber, uint16_t& pulseMs) const;
+  void printRtc() const;
 
   Stream* stream_ = nullptr;
+  A16AuxiliaryService* auxiliaryService_ = nullptr;
   char buffer_[kBufferSize]{};
   SimulatorLineBuffer lineBuffer_{buffer_, kBufferSize};
 };

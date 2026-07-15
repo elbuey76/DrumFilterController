@@ -979,12 +979,12 @@ Modules implémentés :
 
 Preuves locales :
 
-- `python -m platformio test -e native` : 35 tests passés sur 35 ;
-- `python -m platformio run` : build ESP32 A16 reussi apres creation des environnements `kc868_a16_*`.
+- `python -m platformio test -e native` : 51 tests passes sur 51, dont cartographie, profils et defauts I2C A16 ;
+- `python -m platformio run -e kc868_a16_sim -e kc868_a16_hw_safe -e kc868_a16_hw_armed` : trois builds ESP32 A16 reussis ; le profil candidat reste `validated=false`, y compris dans le build arme.
 
 Écarts restants avant de considérer la V0.1 complète :
 
-- validation matérielle KC868-A16, entrees reelles, sorties MOSFET, adresses I2C et sens logiques ;
+- validation matérielle KC868-A16, profil exact de la carte recue, entrees reelles, sorties MOSFET, adresses I2C et sens logiques ;
 - LCD 2004 I2C réel, RTC DS3231 réelle et sondes DS18B20 réelles ;
 - seuils température bas/haut, au-delà de la perte de mesure simulée A11/A12 ;
 - temporisation dédiée de reprise UV après EP_CRITIQUE ;

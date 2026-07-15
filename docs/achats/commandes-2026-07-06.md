@@ -56,7 +56,7 @@ L'A32 ne doit donc pas etre integree au schema cible. Sa destination, retour fou
 | Porte-fusibles et fusibles | Confirmer nombre de voies, calibres reels recus, tenue mecanique, possibilite de montage propre en coffret. |
 | Boutons, selecteur et voyants | Controler couleurs, contacts NO/NC, profondeur de facade, joints, tension LED 12 V et logique des contacts. |
 | Fins de course ME8104 | Identifier bornes NO/NC au multimetre et choisir le cablage donnant capot ferme = boucle fermee. |
-| DS3231 et LCD 2004 | Verifier alimentation 3,3 V, adresses I2C, pull-up I2C, cohabitation sur bus logiciel `GPIO32` / `GPIO33`. |
+| DS3231 et LCD 2004 | Verifier alimentation 3,3 V, adresses I2C, pull-up I2C, cohabitation sur le bus I2C auxiliaire separe `GPIO32` / `GPIO33`. |
 
 ## Ecarts et achats restant probables
 

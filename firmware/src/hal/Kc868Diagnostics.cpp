@@ -1,5 +1,9 @@
 #include "Kc868Diagnostics.h"
 
+#if USE_A16_AUXILIARIES
+#include "hal/A16AuxiliaryService.h"
+#endif
+
 namespace {
 String normalizedCommand(String command) {
   command.trim();
@@ -12,8 +16,9 @@ const char* boolText(bool value) {
 }
 }  // namespace
 
-void Kc868Diagnostics::begin(Stream& stream) {
+void Kc868Diagnostics::begin(Stream& stream, A16AuxiliaryService* auxiliaryService) {
   stream_ = &stream;
+  auxiliaryService_ = auxiliaryService;
   lineBuffer_.reset();
   printHelp();
 }
@@ -61,26 +66,45 @@ void Kc868Diagnostics::handleCommand(const String& command, InputService& inputS
     printInputs(inputService, inputs);
   } else if (command == "diag outputs") {
     printOutputs(outputService);
-  } else if (command.startsWith("diag relay ")) {
-    uint8_t relayNumber = 0;
+  } else if (command == "diag aux i2c") {
+#if USE_A16_AUXILIARIES
+    if (auxiliaryService_ != nullptr) {
+      auxiliaryService_->scanI2c(*stream_);
+    } else {
+      stream_->println(F("Bus auxiliaire indisponible."));
+    }
+#else
+    stream_->println(F("Auxiliaires desactives dans ce build."));
+#endif
+  } else if (command == "diag rtc") {
+    printRtc();
+  } else if (command == "diag temp") {
+#if USE_A16_AUXILIARIES
+    inputService.printTemperatureDiagnostics(*stream_);
+#else
+    stream_->println(F("DS18B20 desactives dans ce build."));
+#endif
+  } else if (command.startsWith("diag output ") || command.startsWith("diag relay ")) {
+    uint8_t outputNumber = 0;
     uint16_t pulseMs = 0;
-    if (!parseRelayPulse(command, relayNumber, pulseMs)) {
-      stream_->println(F("Syntaxe: diag relay <1-9> pulse <ms>"));
+    if (!parseOutputPulse(command, outputNumber, pulseMs)) {
+      stream_->println(F("Syntaxe: diag output <1-9> pulse <ms>"));
       return;
     }
 
     if (!outputService.hardwareOutputsArmed()) {
-      stream_->println(F("Refus: HARDWARE_OUTPUTS_ARMED=0"));
+      stream_->print(F("Refus: "));
+      stream_->println(outputService.hardwareDisarmReason());
       return;
     }
 
-    if (!outputService.pulseRelayForDiagnostics(relayNumber, pulseMs)) {
-      stream_->println(F("Impulsion relais echouee ou refusee."));
+    if (!outputService.pulseOutputForDiagnostics(outputNumber, pulseMs)) {
+      stream_->println(F("Impulsion sortie echouee ou refusee."));
       return;
     }
 
-    stream_->print(F("Relais R"));
-    stream_->print(relayNumber);
+    stream_->print(F("Sortie O"));
+    stream_->print(outputNumber);
     stream_->print(F(" pulse "));
     stream_->print(pulseMs);
     stream_->println(F(" ms OK"));
@@ -101,17 +125,30 @@ void Kc868Diagnostics::printHelp() const {
   stream_->println(F("  diag i2c"));
   stream_->println(F("  diag inputs"));
   stream_->println(F("  diag outputs"));
-  stream_->println(F("  diag relay <1-9> pulse <ms>"));
+  stream_->println(F("  diag aux i2c | diag rtc | diag temp"));
+  stream_->println(F("  diag output <1-9> pulse <ms>"));
+  stream_->println(F("  diag relay ... (alias historique)"));
 }
 
 void Kc868Diagnostics::printInputs(InputService& inputService, const InputsSnapshot& inputs) const {
   const Kc868DigitalInputsRaw raw = inputService.lastHardwareRawInputs();
   stream_->println(F("--- INPUTS ---"));
+#if USE_KC868_IO
+  const Kc868A16HardwareProfile& profile = inputService.hardwareProfile();
+  stream_->print(F("Profil: "));
+  stream_->println(profile.name);
+  stream_->print(F("Revision attendue: "));
+  stream_->println(profile.pcbRevision);
+  stream_->print(F("I2C interne SDA/SCL: "));
+  stream_->print(profile.internalI2cSda);
+  stream_->print('/');
+  stream_->println(profile.internalI2cScl);
+#endif
   stream_->print(F("Hardware IO: "));
   stream_->println(inputService.hardwareIoHealthy() ? F("OK") : F("FAULT"));
-  printRawBanks("Raw", raw.banks);
+  printRawBanks("Raw", raw.banks, kKc868DigitalInputBankCount);
 
-  for (uint8_t index = 0; index < kKc868DigitalBankCount; ++index) {
+  for (uint8_t index = 0; index < kKc868DigitalInputBankCount; ++index) {
     stream_->print(F("Bank "));
     stream_->print(index + 1);
     stream_->print(F(": "));
@@ -131,10 +168,32 @@ void Kc868Diagnostics::printInputs(InputService& inputService, const InputsSnaps
 
 void Kc868Diagnostics::printOutputs(const OutputService& outputService) const {
   stream_->println(F("--- OUTPUTS ---"));
-  stream_->print(F("Hardware outputs armed: "));
+  stream_->print(F("Profil: "));
+  stream_->println(outputService.hardwareProfile().name);
+  stream_->print(F("Revision attendue: "));
+  stream_->println(outputService.hardwareProfile().pcbRevision);
+  stream_->print(F("Armement demande par build: "));
+  stream_->println(outputService.hardwareArmRequested() ? F("YES") : F("NO"));
+  stream_->print(F("Profil materiel valide: "));
+  stream_->println(outputService.hardwareProfileValidated() ? F("YES") : F("NO"));
+  stream_->print(F("Boot toutes sorties OFF: "));
+  stream_->println(outputService.bootOffVerified() ? F("OK") : F("FAULT"));
+  stream_->print(F("Hardware outputs effectively armed: "));
   stream_->println(outputService.hardwareOutputsArmed() ? F("YES") : F("NO"));
+  stream_->print(F("Etat armement: "));
+  stream_->println(outputService.hardwareDisarmReason());
   stream_->print(F("Hardware IO: "));
   stream_->println(outputService.hardwareIoHealthy() ? F("OK") : F("FAULT"));
+  stream_->print(F("Defaut sortie verrouille: "));
+  stream_->println(outputService.outputFaultLatched() ? F("YES") : F("NO"));
+  for (size_t index = 0; index < kKc868DigitalOutputBankCount; ++index) {
+    stream_->print(F("Bank sorties "));
+    stream_->print(index + 1);
+    stream_->print(F(": "));
+    stream_->print(outputService.outputBankHealthy(index) ? F("OK") : F("FAULT"));
+    stream_->print(F("; defaut memorise: "));
+    stream_->println(outputService.outputBankFaultLatched(index) ? F("YES") : F("NO"));
+  }
 
   const OutputsCommand requested = outputService.lastRequested();
   const OutputsCommand applied = outputService.lastApplied();
@@ -161,7 +220,7 @@ void Kc868Diagnostics::printOutputs(const OutputService& outputService) const {
   printBool("VOYANT_ALARME", applied.voyantAlarme);
 
   const Kc868DigitalOutputsRaw raw = outputService.lastHardwareRawOutputs();
-  printRawBanks("Raw sorties", raw.banks);
+  printRawBanks("Raw sorties", raw.banks, kKc868DigitalOutputBankCount);
 }
 
 void Kc868Diagnostics::printController(const InputsSnapshot& inputs, const Controller& controller) const {
@@ -182,10 +241,10 @@ void Kc868Diagnostics::printBool(const char* label, bool value) const {
   stream_->println(boolText(value));
 }
 
-void Kc868Diagnostics::printRawBanks(const char* label, const uint8_t* banks) const {
+void Kc868Diagnostics::printRawBanks(const char* label, const uint8_t* banks, size_t bankCount) const {
   stream_->print(label);
   stream_->print(F(":"));
-  for (uint8_t index = 0; index < kKc868DigitalBankCount; ++index) {
+  for (size_t index = 0; index < bankCount; ++index) {
     stream_->print(F(" 0x"));
     if (banks[index] < 16) {
       stream_->print('0');
@@ -195,7 +254,7 @@ void Kc868Diagnostics::printRawBanks(const char* label, const uint8_t* banks) co
   stream_->println();
 }
 
-bool Kc868Diagnostics::parseRelayPulse(const String& command, uint8_t& relayNumber, uint16_t& pulseMs) const {
+bool Kc868Diagnostics::parseOutputPulse(const String& command, uint8_t& outputNumber, uint16_t& pulseMs) const {
   const int firstSpace = command.indexOf(' ');
   const int secondSpace = command.indexOf(' ', firstSpace + 1);
   const int thirdSpace = command.indexOf(' ', secondSpace + 1);
@@ -204,7 +263,8 @@ bool Kc868Diagnostics::parseRelayPulse(const String& command, uint8_t& relayNumb
     return false;
   }
 
-  if (command.substring(firstSpace + 1, secondSpace) != "relay" || command.substring(thirdSpace + 1, fourthSpace) != "pulse") {
+  const String target = command.substring(firstSpace + 1, secondSpace);
+  if ((target != "output" && target != "relay") || command.substring(thirdSpace + 1, fourthSpace) != "pulse") {
     return false;
   }
 
@@ -214,7 +274,47 @@ bool Kc868Diagnostics::parseRelayPulse(const String& command, uint8_t& relayNumb
     return false;
   }
 
-  relayNumber = static_cast<uint8_t>(relay);
+  outputNumber = static_cast<uint8_t>(relay);
   pulseMs = static_cast<uint16_t>(ms > 1000 ? 1000 : ms);
   return true;
+}
+
+void Kc868Diagnostics::printRtc() const {
+  if (stream_ == nullptr) {
+    return;
+  }
+#if USE_A16_AUXILIARIES
+  if (auxiliaryService_ == nullptr) {
+    stream_->println(F("RTC indisponible."));
+    return;
+  }
+  const A16RtcStatus& rtc = auxiliaryService_->rtcStatus();
+  stream_->println(F("--- RTC DS3231 ---"));
+  stream_->print(F("Presente: "));
+  stream_->println(rtc.present ? F("YES") : F("NO"));
+  stream_->print(F("Heure valide: "));
+  stream_->println(rtc.timeValid ? F("YES") : F("NO"));
+  stream_->print(F("Perte alimentation detectee: "));
+  stream_->println(rtc.lostPower ? F("YES") : F("NO"));
+  if (rtc.present) {
+    stream_->print(rtc.year);
+    stream_->print('-');
+    if (rtc.month < 10) stream_->print('0');
+    stream_->print(rtc.month);
+    stream_->print('-');
+    if (rtc.day < 10) stream_->print('0');
+    stream_->print(rtc.day);
+    stream_->print(' ');
+    if (rtc.hour < 10) stream_->print('0');
+    stream_->print(rtc.hour);
+    stream_->print(':');
+    if (rtc.minute < 10) stream_->print('0');
+    stream_->print(rtc.minute);
+    stream_->print(':');
+    if (rtc.second < 10) stream_->print('0');
+    stream_->println(rtc.second);
+  }
+#else
+  stream_->println(F("RTC desactivee dans ce build."));
+#endif
 }

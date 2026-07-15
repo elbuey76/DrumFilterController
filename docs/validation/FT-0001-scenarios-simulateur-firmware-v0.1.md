@@ -7,7 +7,7 @@ Valider les scenarios obligatoires du firmware MVP V0.1 avec le moniteur serie P
 ## Version testee
 
 - Firmware : V0.1
-- Environnement historique : `firmware/platformio.ini`, `env:kc868_a32_sim`, a renommer dans B-237 sans changer la portée de ce test simulateur
+- Environnement courant : `firmware/platformio.ini`, `env:kc868_a16_sim`, sans changement de la portee de ce test simulateur
 - Commande build : `python -m platformio run`
 - Banc automatise host-side : `python -m platformio test -e native`
 
@@ -22,7 +22,7 @@ Un banc de tests automatise couvre les scenarios FT-0001 au niveau logique metie
 
 Limites de couverture : ces tests valident les transitions d'etat, alarmes, messages metier et sorties commandees par le `Controller`. Le parsing des commandes du simulateur est couvert separement par `test_simulator_commands`. L'affichage serie, le transport `Stream` Arduino, les entrees/sorties physiques de la carte KC868-A16, le banc electrique et l'installation reelle restent hors couverture host-side.
 
-Verdict automatise au 2026-07-07 : `python -m platformio test -e native` passe avec 35 tests reussis sur 35, dont SIM-001 a SIM-016 et les scenarios de persistance minimale.
+Verdict historique au 2026-07-07 : 35 tests reussis sur 35, dont SIM-001 a SIM-016 et les scenarios de persistance minimale. La suite courante atteint 51 tests avec la couverture HAL A16 detaillee dans FT-0002.
 
 ## Preconditions
 

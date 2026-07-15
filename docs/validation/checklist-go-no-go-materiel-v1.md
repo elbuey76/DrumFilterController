@@ -30,7 +30,9 @@ Un point non valide peut etre accepte uniquement s'il est marque comme non appli
 
 | Point | Critere go/no-go | Statut | Preuve / commentaire |
 | --- | --- | --- | --- |
-| Boot securise | Toutes les sorties controlees restent OFF au boot avant autorisation | A faire | |
+| Boot securise | Toutes les sorties controlees restent OFF au boot avant autorisation | Logiciel passe, banc a faire | FT-0002 couvre l'ordre des ecritures et les verrous ; mesure physique requise. |
+| Profil firmware A16 | Revision, adresses PCF8574, cartographie, polarites et ROM DS18B20 correspondent exactement a la carte recue | A faire | Les profils candidats restent `validated=false`. |
+| Armement firmware | Le build arme reste OFF si profil non valide, boot OFF echoue ou banque I2C absente | Logiciel passe, banc a faire | Matrice de verrous couverte par FT-0002. |
 | Perte 12 VDC | Contacteurs et sorties controlees retombent OFF par conception | A faire | |
 | Distribution 12 VDC | Fusibles 5 A moteur, 3 A automate, 1 A capteurs/boutons, 1 A IHM/accessoires coherents apres mesure | A faire | |
 | CR18-8DN repos/detection | `EP_LAVAGE` et `EP_CRITIQUE` lus correctement sur KC868-A16 ; courant d'entree et sens logique documentes | A faire | |
@@ -39,10 +41,10 @@ Un point non valide peut etre accepte uniquement s'il est marque comme non appli
 | Contact capot | Capot ferme = boucle fermee ; capot ouvert, fil coupe ou debranche = capot ouvert | A faire | |
 | Boutons / selecteur | AUTO et MAINTENANCE exclusifs ; reset, test, manuel tambour et manuel rincage lus sans confusion | A faire | |
 | Voyants | Marche, lavage et alarme visibles et conformes a l'affectation V1 | A faire | |
-| LCD | Adresse, contraste, lisibilite, reboot et pull-up I2C 3,3 V verifies | A faire | |
-| RTC | Adresse `0x68`, conservation heure apres coupure, pull-up 3,3 V verifies | A faire | |
-| I2C partage | LCD + RTC stables ensemble sur `GPIO32` / `GPIO33` pendant essai prolonge | A faire | |
-| DS18B20 | Brochage reel, pull-up 4,7 kOhm, identification eau/local et perte de sonde verifies | A faire | |
+| LCD | Adresse, contraste, lisibilite, reboot et pull-up I2C 3,3 V verifies | Integre logiciel, banc a faire | Rendu 20x4 non bloquant sur bus auxiliaire. |
+| RTC | Adresse `0x68`, conservation heure apres coupure, pull-up 3,3 V verifies | Integre logiciel, banc a faire | Diagnostic presence, perte alimentation et heure valide. |
+| I2C partage | LCD + RTC stables ensemble sur `GPIO32` / `GPIO33` pendant essai prolonge | Integre logiciel, banc a faire | Bus `Wire1` separe du bus PCF8574 interne. |
+| DS18B20 | Brochage reel, pull-up 4,7 kOhm, identification eau/local et perte de sonde verifies | Integre logiciel, banc a faire | Conversion asynchrone ; affectation obligatoire par ROM. |
 
 ## Puissance 230 VAC et coffret
 

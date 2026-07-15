@@ -131,8 +131,8 @@ Hypothèse de transmission mécanique en cours de conception : engrenages droits
 | Alimentation 12 VDC | Mean Well NDR-120-12, 120 W, 10 A, rail DIN | Protegee par disjoncteur 4 A courbe C |
 | Distribution 12 VDC | Porte-fusibles ATO 4 emplacements | Depart moteur 5 A, automate 3 A, capteurs/boutons 1 A, ecran/voyants/accessoires 1 A ; adaptateur rail DIN imprime en 3D probable selon modele retenu |
 | Plateforme controle | KC868-A16 ESP32 classique | Base automate V1/V2 selon ADR-0012 ; 16 entrees et 16 sorties MOSFET 12/24 VDC |
-| Ecran local | LCD 2004 / 20x4 I2C 3,3 V, fond bleu | Raccordement cible sur KC868-A16 via `GPIO32` / `GPIO33` en I2C logiciel ; validation banc requise avant cablage final |
-| Horloge temps reel | Module RTC DS3231 I2C 3,3 V avec batterie rechargeable | Source locale d'heure fiable V2 ; adresse attendue `0x68`, raccordement cible sur le bus I2C logiciel KC868-A16 si cohabitation validee avec le LCD 2004 |
+| Ecran local | LCD 2004 / 20x4 I2C 3,3 V, fond bleu | Raccordement cible sur KC868-A16 via `GPIO32` / `GPIO33` et un bus I2C auxiliaire separe ; validation banc requise avant cablage final |
+| Horloge temps reel | Module RTC DS3231 I2C 3,3 V avec batterie rechargeable | Source locale d'heure fiable V2 ; adresse attendue `0x68`, raccordement cible sur le bus I2C auxiliaire KC868-A16 si cohabitation validee avec le LCD 2004 |
 | Pompe rincage | Disjoncteur 10 A courbe C + contacteur Schneider TeSys LC1D18P7, bobine 230 VAC | La bobine est pilotee directement par un relais de l'automate. Le LC1D18P7 remplace le LC1D12P7 a prix equivalent avec une marge AC-3 superieure ; le disjoncteur reste 10 A courbe C. Solution retenue pour eviter un relais intermediaire 12 V -> 230 V, avec separation BT/secteur et reperage a traiter au schema final. |
 | Prises local | Disjoncteur 16 A courbe C | 1 prise bulleur bassin, 1 prise bulleur filtre bio, 2 prises maintenance ponctuelle ; le courant total du coffret reste limite par le disjoncteur amont 16 A cote maison |
 | Pompe filtration | Disjoncteur 6 A courbe C + contacteur TOMZN TOCT1-25Z 25 A, bobine 12 VDC | Depart separe car organe essentiel |

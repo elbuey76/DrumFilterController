@@ -50,7 +50,7 @@ Le relais d'interface de rinçage reste a choisir. Il devra au minimum posseder 
 
 Les capteurs CR18-8DN restent raccordes en 12 VDC avec sortie NPN vers les entrees digitales A16 : marron sur `+12 VDC`, bleu sur `0 V`, noir vers l'entree. Le sens logique, la stabilite et les cas de rupture de fil doivent etre valides sur banc avec la carte recue.
 
-Le raccordement cible des auxiliaires utilise les trois GPIO capteurs de l'A16 : `GPIO32` et `GPIO33` pour un bus I2C logiciel partage par le LCD 2004 et la RTC DS3231, et `GPIO14` pour un bus 1-Wire commun aux deux DS18B20. Cette affectation reste soumise au controle du brochage de la revision recue et aux essais de coexistence, de niveaux 3,3 V et de longueur de cable.
+Le raccordement cible des auxiliaires utilise les trois GPIO capteurs de l'A16 : `GPIO32` et `GPIO33` pour un bus I2C auxiliaire separe, porte par le second controleur `TwoWire` de l'ESP32 et partage par le LCD 2004 et la RTC DS3231, et `GPIO14` pour un bus 1-Wire commun aux deux DS18B20. Cette affectation reste soumise au controle du brochage de la revision recue et aux essais de coexistence, de niveaux 3,3 V et de longueur de cable.
 
 ## Consequences
 

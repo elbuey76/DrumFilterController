@@ -44,4 +44,4 @@ jobs:
 
       - name: Build ESP32 firmware
         working-directory: firmware
-        run: python -m platformio run -e kc868_a32_sim -e kc868_a32_hw_safe
+        run: python -m platformio run -e kc868_a16_sim -e kc868_a16_hw_safe -e kc868_a16_hw_armed

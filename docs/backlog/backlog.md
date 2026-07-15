@@ -147,10 +147,10 @@ Statuts specifiques a la V0.1 firmware :
 | B-233 | Implémenter les alertes de commande incohérente UV, absence anormale de lavage, redémarrages fréquents et sorties commandées trop longtemps. | Should | V1.1 |
 | B-234 | Etendre les statistiques avec temps de retour EP_LAVAGE, tentatives par lavage, activations EP_CRITIQUE, températures min/max/moyenne et historiques capot. | Should | V1.1 |
 | B-235 | Integrer le temps civil RTC DS3231 pour les logs, statistiques, dernier lavage, test journalier et programmation horaire, avec heure inconnue si RTC absente/non initialisee et sans utiliser la RTC pour les temporisations de securite. | Should | V1.1/V2 |
-| B-236 | Reprendre la couche HAL KC868 pour la KC868-A16 : deux banques PCF8574 d'entrees, deux banques de sorties, bus I2C interne sur les broches de la revision recue, adresses detectees par scan et cartographie configurable sans supposer les quatre banques de l'A32. | Must | À faire |
-| B-237 | Creer des environnements PlatformIO `kc868_a16_hw_safe` et `kc868_a16_hw_armed`, garder les sorties desarmees par defaut et retirer l'A32 comme cible materielle active sans casser le simulateur ni les tests natifs. | Must | À faire |
-| B-238 | Ajouter des tests bas niveau A16 couvrant cartographie des 9 entrees/sorties, polarite des sorties P-MOSFET, demarrage toutes sorties OFF, banque I2C absente, echec d'ecriture, inversion logique et impossibilite d'armer tant que la cartographie materielle n'est pas validee. | Must | À faire |
-| B-239 | Implementer et valider les auxiliaires A16 : bus I2C logiciel LCD + RTC sur `GPIO32` / `GPIO33` et bus 1-Wire commun des deux DS18B20 sur `GPIO14`, sous reserve du brochage exact de la revision recue. | Must | À faire |
+| B-236 | Reprendre la couche HAL KC868 pour la KC868-A16 : deux banques PCF8574 d'entrees, deux banques de sorties, bus I2C interne sur les broches de la revision recue, adresses detectees par scan et cartographie configurable sans supposer les quatre banques de l'A32. | Must | Implémente logiciel, profil carte à valider |
+| B-237 | Creer des environnements PlatformIO `kc868_a16_hw_safe` et `kc868_a16_hw_armed`, garder les sorties desarmees par defaut et retirer l'A32 comme cible materielle active sans casser le simulateur ni les tests natifs. | Must | Fait |
+| B-238 | Ajouter des tests bas niveau A16 couvrant cartographie des 9 entrees/sorties, polarite des sorties P-MOSFET, demarrage toutes sorties OFF, banque I2C absente, echec d'ecriture, inversion logique et impossibilite d'armer tant que la cartographie materielle n'est pas validee. | Must | Tests logiciels faits, banc à faire |
+| B-239 | Implementer et valider les auxiliaires A16 : bus I2C auxiliaire separe LCD + RTC sur `GPIO32` / `GPIO33` et bus 1-Wire commun des deux DS18B20 sur `GPIO14`, sous reserve du brochage exact de la revision recue. | Must | Implémente logiciel, banc à faire |
 
 ## Documentation et validation
 
