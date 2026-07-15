@@ -20,9 +20,9 @@
 | Capteurs de niveau | CR18-8DN | Imposent une interface d'entrée compatible NPN, 12-24 VDC, 3 fils |
 | Plateforme de contrôle | KC868-A16 ESP32 classique, 16 entrees et 16 sorties MOSFET 12/24 VDC | Couvre les 9 entrees et 9 sorties V1 avec 7 voies libres de chaque type ; remplace l'A32 surdimensionnee selon ADR-0012 |
 | Alimentation 12 VDC | Mean Well NDR-120-12, 120 W, 10 A, rail DIN | Alimente automate, capteurs, IHM, accessoires et moteur tambour via départs fusibles |
-| Porte-fusibles 12 VDC | Porte-fusibles ATO 4 emplacements | Distribution 12 VDC ; adaptateur rail DIN imprime en 3D probable selon modele retenu |
+| Porte-fusibles 12 VDC | Porte-fusibles ATO 4 emplacements | Distribution 12 VDC ; adaptateur rail DIN imprime 3D realise et fonctionnel |
 | Moteur tambour | Motorreducteur Fyearfly 12 VDC 10 rpm | Simplifie la vitesse de tambour par rapport au moteur d'essuie-glace candidat |
-| Relais moteur tambour | HELLA 4RD 933 332-551, 12 V, charge inductive 15 A | Commande le moteur tambour ; support rail DIN a imprimer en 3D |
+| Relais moteur tambour | HELLA 4RD 933 332-551, 12 V, charge inductive 15 A | Commande le moteur tambour ; support rail DIN imprime 3D realise et fonctionnel |
 | Pompe de rinçage | VEVOR / Leo EKJ-802S, 220-240 VAC, 800 W indique projet | Impose une commande secteur adaptée à une charge moteur et une mesure du débit réel sur la rampe et les buses déjà achetées et fabriquées |
 | Contacteur pompe de rinçage | Schneider Electric TeSys LC1D18P7, 3P, AC-3 18 A, bobine 230 VAC | Sa bobine 230 VAC est commandee par le contact d'un relais d'interface a bobine 12 VDC, lui-meme pilote par une sortie MOSFET A16 ; reference du relais a choisir et valider |
 | Contacteurs filtration, UV, décoration, mise à niveau | TOMZN TOCT1-25Z, 25 A, bobine 12 VDC | Pilotés directement en 12 VDC par les sorties MOSFET de l'A16 si la mesure confirme moins de 500 mA par bobine, avec suppression de surtension adaptee |

@@ -63,8 +63,8 @@ Le journal de commande detaille est dans [commandes-2026-07-06.md](commandes-202
 | Qté | Article | Reference / caracteristiques | Statut | Notes |
 | ---: | --- | --- | --- | --- |
 | 1 | Motorreducteur tambour | Fyearfly 12 VDC, 10 rpm | Commande 2026-07-06 | Mesurer courant a vide, en charge, demarrage et blocage. |
-| 1 | Relais moteur tambour | HELLA 4RD 933 332-551, 12 V, charge inductive 15 A | Commande 2026-07-06 | Prevoir support rail DIN imprime 3D. |
-| 1 | Support rail DIN relais HELLA | Piece imprimee 3D ou support compatible | A fabriquer / verifier | Maintien mecanique, acces cosses et reperage. |
+| 1 | Relais moteur tambour | HELLA 4RD 933 332-551, 12 V, charge inductive 15 A | Commande 2026-07-06 | Support rail DIN imprime 3D realise et fonctionnel. |
+| 1 | Support rail DIN relais HELLA | Piece imprimee 3D ou support compatible | Fabrique et fonctionnel | Maintien mecanique, acces cosses et reperage valides. |
 | 1 | Pompe de rincage | VEVOR / Leo EKJ-802S, 220-240 VAC | Deja disponible | Pompe classe I, terre obligatoire, debit reel a mesurer sur rampe. |
 | 1 | Relais d'interface pompe rincage | Bobine 12 VDC < 500 mA, support rail DIN, contact cible AC-15 >= 1 A sous 230 VAC, suppression de bobine | A choisir avant commande | La sortie MOSFET A16 commande la bobine 12 VDC ; le contact du relais commande la bobine 230 VAC du LC1D18P7. |
 | 1 | Contacteur pompe rincage | Schneider Electric TeSys LC1D18P7, 3P, AC-3 18 A, bobine 230 VAC | Commande 2026-07-06 | Remplace le LC1D12P7 a prix equivalent : meme bobine 230 VAC, marge moteur superieure. Commande via relais d'interface 12 VDC / 230 VAC ; separation BT/secteur a soigner. |
