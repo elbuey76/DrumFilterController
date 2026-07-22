@@ -49,6 +49,7 @@
 | B-043 | Retenir en tete de tableau un interrupteur differentiel 2P 30 mA, 40 A, type A, coherent avec les charges reelles du MVP et la notice AquaForte DM-Vario qui demande 30 mA sans imposer type F ou B. | Must | Tranchée |
 | B-044 | Retenir une distribution 230 VAC avec departs : 4 A courbe C alimentation 12 V, 10 A courbe C pompe rincage, 16 A courbe C prises local, 6 A courbe C pompe filtration, 6 A courbe C UV/pompe decoration/mise a niveau, 6 A courbe C eclairage exterieur. | Must | Tranchée |
 | B-045 | Retenir une distribution 12 VDC Mean Well NDR-120-12 + porte-fusibles ATO 4 departs : moteur 5 A, automate 3 A, capteurs/boutons 1 A, ecran/voyants/accessoires 1 A. | Must | Tranchée |
+| B-046 | Statuer avant gel de la conception sur le comportement du système en restriction d'eau / canicule : autorisation ou inhibition explicite de la mise à niveau automatique et des lavages, information opérateur, maintien impératif de l'aération, seuils de surveillance et conduite à tenir avant `EP_CRITIQUE`. | Must | À faire |
 
 ## FAT existant a finaliser
 
@@ -95,7 +96,7 @@
 | B-120 | Concevoir, imprimer et tester la transmission tambour 2:1 en engrenages PETG module 4, angle 20 degres, largeur 25 mm : pignon 30 dents sur moyeu aluminium arbre D 8 mm ; couronne 60 dents, alesage 160 mm, en 3 segments de 120 degres avec queues d'aronde axiales ; 4 vis M4 par segment sur PCD 198 mm. Valider entraxe reglable autour de 180 mm, faux-rond, jeu d'engrenement, serrage et usure. | Must | En cours |
 | B-121 | Choisir le relais d'interface de rinçage : bobine 12 VDC consommant moins de 500 mA, montage rail DIN, suppression de bobine et contact avec categorie publiee cible `AC-15 >= 1 A sous 230 VAC` pour commander la bobine du LC1D18P7. | Must | À faire |
 | B-122 | Definir et valider les diodes de roue libre ou protections equivalentes des bobines DC HELLA, TOMZN et relais d'interface, en tenant compte des protections deja integrees et de la polarite des sorties P-MOSFET A16. | Must | À faire |
-| B-123 | Inspecter la KC868-A16 recue : reference ESP32 classique, revision PCB, etat des borniers, alimentation 12 V, alimentation des deux banques de sorties, scan I2C, Ethernet, USB et trois GPIO capteurs ; ne pas accepter automatiquement une A16S ou A16v3. | Must | À faire |
+| B-123 | Inspecter la KC868-A16 recue : reference ESP32 classique, revision PCB, etat des borniers, alimentation 12 V, alimentation des deux banques de sorties, scan I2C, Ethernet, USB et trois GPIO capteurs ; ne pas accepter automatiquement une A16S ou A16v3. | Must | Partiel : KC868-A16 REV.1.6.3 recuee, ESP32 classique et scan `0x21/0x22/0x24/0x25` confirmes ; entrees `0x22 = X1-X8` et `0x21 = X9-X16` prouvees. Inspections et essais physiques restants dans VR-0001. |
 
 ## Firmware
 
@@ -147,7 +148,7 @@ Statuts specifiques a la V0.1 firmware :
 | B-233 | Implémenter les alertes de commande incohérente UV, absence anormale de lavage, redémarrages fréquents et sorties commandées trop longtemps. | Should | V1.1 |
 | B-234 | Etendre les statistiques avec temps de retour EP_LAVAGE, tentatives par lavage, activations EP_CRITIQUE, températures min/max/moyenne et historiques capot. | Should | V1.1 |
 | B-235 | Integrer le temps civil RTC DS3231 pour les logs, statistiques, dernier lavage, test journalier et programmation horaire, avec heure inconnue si RTC absente/non initialisee et sans utiliser la RTC pour les temporisations de securite. | Should | V1.1/V2 |
-| B-236 | Reprendre la couche HAL KC868 pour la KC868-A16 : deux banques PCF8574 d'entrees, deux banques de sorties, bus I2C interne sur les broches de la revision recue, adresses detectees par scan et cartographie configurable sans supposer les quatre banques de l'A32. | Must | Implémente logiciel, profil carte à valider |
+| B-236 | Reprendre la couche HAL KC868 pour la KC868-A16 : deux banques PCF8574 d'entrees, deux banques de sorties, bus I2C interne sur les broches de la revision recue, adresses detectees par scan et cartographie configurable sans supposer les quatre banques de l'A32. | Must | Implémente logiciel ; profil REV.1.6.3 non valide avec entrees confirmees `0x22 = X1-X8`, `0x21 = X9-X16`. Sorties et polarites a valider sur banc. |
 | B-237 | Creer des environnements PlatformIO `kc868_a16_hw_safe` et `kc868_a16_hw_armed`, garder les sorties desarmees par defaut et retirer l'A32 comme cible materielle active sans casser le simulateur ni les tests natifs. | Must | Fait |
 | B-238 | Ajouter des tests bas niveau A16 couvrant cartographie des 9 entrees/sorties, polarite des sorties P-MOSFET, demarrage toutes sorties OFF, banque I2C absente, echec d'ecriture, inversion logique et impossibilite d'armer tant que la cartographie materielle n'est pas validee. | Must | Tests logiciels faits, banc à faire |
 | B-239 | Implementer et valider les auxiliaires A16 : bus I2C auxiliaire separe LCD + RTC sur `GPIO32` / `GPIO33` et bus 1-Wire commun des deux DS18B20 sur `GPIO14`, sous reserve du brochage exact de la revision recue. | Must | Implémente logiciel, banc à faire |

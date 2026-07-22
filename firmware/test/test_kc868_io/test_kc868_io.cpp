@@ -82,6 +82,54 @@ void test_a16_candidate_profiles_are_explicit_and_never_validated() {
   TEST_ASSERT_EQUAL_HEX8(0x3C, rev15.addresses.outputBanks[0]);
   TEST_ASSERT_EQUAL_HEX8(0x3D, rev15.addresses.outputBanks[1]);
   TEST_ASSERT_FALSE(rev15.validated);
+
+  const Kc868A16HardwareProfile& rev163 =
+      kc868A16Profile(Kc868A16ProfileId::REV163_INPUTS_CONFIRMED_CANDIDATE);
+  TEST_ASSERT_EQUAL_HEX8(0x22, rev163.addresses.inputBanks[0]);
+  TEST_ASSERT_EQUAL_HEX8(0x21, rev163.addresses.inputBanks[1]);
+  TEST_ASSERT_EQUAL_HEX8(0x24, rev163.addresses.outputBanks[0]);
+  TEST_ASSERT_EQUAL_HEX8(0x25, rev163.addresses.outputBanks[1]);
+  TEST_ASSERT_FALSE(rev163.validated);
+  TEST_ASSERT_TRUE(rev163.diagnosticPulsesValidated);
+}
+
+void test_rev163_maps_x1_to_ep_lavage_and_x9_to_manu_rincage() {
+  const Kc868A16HardwareProfile& profile =
+      kc868A16Profile(Kc868A16ProfileId::REV163_INPUTS_CONFIRMED_CANDIDATE);
+  FakeI2cBus bus;
+  bus.makeProfileReachable(profile);
+  Kc868Pcf8574Io io(bus, profile);
+  TEST_ASSERT_TRUE(io.begin());
+
+  bus.readValues[0x22] = 0xFE;  // X1 closed to GND.
+  Kc868DigitalInputsRaw raw = io.readInputs();
+  InputsSnapshot inputs = kc868MapInputs(raw, profile.mapping);
+  TEST_ASSERT_TRUE(inputs.epLavage);
+  TEST_ASSERT_FALSE(inputs.btnManuRincage);
+
+  bus.readValues[0x22] = 0xFF;
+  bus.readValues[0x21] = 0xFE;  // X9 closed to GND.
+  raw = io.readInputs();
+  inputs = kc868MapInputs(raw, profile.mapping);
+  TEST_ASSERT_FALSE(inputs.epLavage);
+  TEST_ASSERT_TRUE(inputs.btnManuRincage);
+}
+
+void test_rev163_maps_reserved_x10_to_x16_to_the_second_raw_bank() {
+  const Kc868A16HardwareProfile& profile =
+      kc868A16Profile(Kc868A16ProfileId::REV163_INPUTS_CONFIRMED_CANDIDATE);
+  FakeI2cBus bus;
+  bus.makeProfileReachable(profile);
+  Kc868Pcf8574Io io(bus, profile);
+  TEST_ASSERT_TRUE(io.begin());
+
+  const uint8_t expectedSecondBank[] = {0xFD, 0xFB, 0xF7, 0xEF, 0xDF, 0xBF, 0x7F};
+  for (size_t index = 0; index < sizeof(expectedSecondBank); ++index) {
+    bus.readValues[0x21] = expectedSecondBank[index];  // X10 through X16 closed to GND.
+    const Kc868DigitalInputsRaw raw = io.readInputs();
+    TEST_ASSERT_EQUAL_HEX8(0xFF, raw.banks[0]);
+    TEST_ASSERT_EQUAL_HEX8(expectedSecondBank[index], raw.banks[1]);
+  }
 }
 
 void test_a16_boot_writes_both_output_banks_off_before_initializing_inputs() {
@@ -158,6 +206,8 @@ int main(int argc, char** argv) {
   (void)argv;
   UNITY_BEGIN();
   RUN_TEST(test_a16_candidate_profiles_are_explicit_and_never_validated);
+  RUN_TEST(test_rev163_maps_x1_to_ep_lavage_and_x9_to_manu_rincage);
+  RUN_TEST(test_rev163_maps_reserved_x10_to_x16_to_the_second_raw_bank);
   RUN_TEST(test_a16_boot_writes_both_output_banks_off_before_initializing_inputs);
   RUN_TEST(test_a16_missing_input_bank_is_reported_without_changing_output_health);
   RUN_TEST(test_a16_output_write_failure_latches_fault_and_refuses_later_writes);

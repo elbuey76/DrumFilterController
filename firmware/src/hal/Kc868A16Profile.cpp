@@ -7,7 +7,8 @@ Kc868A16HardwareProfile makeProfile(Kc868A16ProfileId id,
                                     uint8_t input1,
                                     uint8_t input2,
                                     uint8_t output1,
-                                    uint8_t output2) {
+                                    uint8_t output2,
+                                    bool diagnosticPulsesValidated = false) {
   Kc868A16HardwareProfile profile{};
   profile.id = id;
   profile.name = name;
@@ -27,6 +28,7 @@ Kc868A16HardwareProfile makeProfile(Kc868A16ProfileId id,
   // Candidate profiles stay deliberately unvalidated until the received
   // board passes the physical mapping and all-outputs-OFF checks.
   profile.validated = false;
+  profile.diagnosticPulsesValidated = diagnosticPulsesValidated;
   return profile;
 }
 }  // namespace
@@ -49,7 +51,25 @@ const Kc868A16HardwareProfile& kc868A16Profile(Kc868A16ProfileId id) {
                   0x3C,
                   0x3D);
 
-  return id == Kc868A16ProfileId::REV15_GREEN_CANDIDATE ? rev15 : standard;
+  static const Kc868A16HardwareProfile rev163 =
+      makeProfile(Kc868A16ProfileId::REV163_INPUTS_CONFIRMED_CANDIDATE,
+                  "a16-rev1.6.3-inputs-confirmed-candidate",
+                  "REV.1.6.3 (input bank order confirmed; outputs unverified)",
+                  0x22,
+                  0x21,
+                  0x24,
+                  0x25,
+                  true);
+
+  switch (id) {
+    case Kc868A16ProfileId::REV15_GREEN_CANDIDATE:
+      return rev15;
+    case Kc868A16ProfileId::REV163_INPUTS_CONFIRMED_CANDIDATE:
+      return rev163;
+    case Kc868A16ProfileId::GENERIC_STANDARD_CANDIDATE:
+    default:
+      return standard;
+  }
 }
 
 const Kc868A16HardwareProfile& selectedKc868A16Profile() {
@@ -64,4 +84,3 @@ bool kc868RomConfigured(const uint8_t rom[8]) {
   }
   return false;
 }
-

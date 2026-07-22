@@ -71,6 +71,9 @@ bool kc868AllInputBanksOk(const Kc868DigitalInputsRaw& raw);
 bool kc868RawSignalActive(uint8_t bankValue, const Kc868SignalPoint& point);
 InputsSnapshot kc868MapInputs(const Kc868DigitalInputsRaw& raw, const Kc868DigitalMapping& mapping = defaultKc868DigitalMapping());
 bool kc868HardwareOutputsArmed(const Kc868HardwareSafetyState& safety);
+bool kc868DiagnosticPulsesPermitted(const Kc868HardwareSafetyState& safety,
+                                    bool profileDiagnosticPulsesValidated,
+                                    bool diagnosticPulseBuild);
 OutputsCommand kc868EffectiveOutputs(const OutputsCommand& requested, const Kc868HardwareSafetyState& safety);
 Kc868DigitalOutputsRaw kc868MapOutputs(const OutputsCommand& outputs, const Kc868DigitalMapping& mapping = defaultKc868DigitalMapping());
 Kc868DigitalOutputsRaw kc868AllOutputsOff(const Kc868DigitalMapping& mapping = defaultKc868DigitalMapping());

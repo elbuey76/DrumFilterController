@@ -20,7 +20,7 @@ Le journal de commande detaille est dans [commandes-2026-07-06.md](commandes-202
 
 | Qté | Article | Reference / caracteristiques | Statut | Notes |
 | ---: | --- | --- | --- | --- |
-| 1 | Carte de controle cible | KC868-A16 ESP32 classique a sorties MOSFET, boitier si disponible | A commander | Plateforme V1 et base V2 selon ADR-0012 ; confirmer qu'il ne s'agit ni d'une A16S ni d'une A16v3 ESP32-S3 et inspecter la revision recue. |
+| 1 | Carte de controle cible | KC868-A16 ESP32 classique REV.1.6.3 a sorties MOSFET | Deja disponible, validation banc en cours | Carte recue le 2026-07-22 ; scan interne `0x21/0x22/0x24/0x25` et demarrage safe documentes. Bornes physiques : entrees `X1-X16`, sorties `Y1-Y16`. |
 | 1 | Ancienne carte de controle | KC868-A32 / variante A32G | Abandonnee pour le FAT | Commandee le 2026-07-06 pour 121,99 EUR puis retiree de la conception cible car surdimensionnee ; retour, revente ou reutilisation a decider. |
 | 1 | Alimentation rail DIN | Mean Well NDR-120-12, 12 VDC, 120 W, 10 A | Commande 2026-07-06 | Alimente automate, capteurs, IHM, contacteurs 12 VDC et moteur via fusibles. |
 | 1 | Porte-fusibles DC 4 departs | ATO 4 emplacements, idealement rail DIN natif | Commande 2026-07-06 | Variante 6 voies commandee ; si modele non DIN, prevoir adaptateur imprime 3D. |

@@ -177,6 +177,19 @@ void test_kc868_outputs_pass_only_when_all_safety_gates_are_true() {
   TEST_ASSERT_TRUE(effective.voyantAlarme);
 }
 
+void test_kc868_diagnostic_pulses_need_an_explicit_test_build_and_validated_boot_proof() {
+  Kc868HardwareSafetyState safety = armedSafety();
+  safety.armRequested = false;
+  safety.profileValidated = false;
+  TEST_ASSERT_FALSE(kc868DiagnosticPulsesPermitted(safety, true, false));
+  TEST_ASSERT_TRUE(kc868DiagnosticPulsesPermitted(safety, true, true));
+
+  safety.bootOffVerified = false;
+  TEST_ASSERT_FALSE(kc868DiagnosticPulsesPermitted(safety, true, true));
+  safety.bootOffVerified = true;
+  TEST_ASSERT_FALSE(kc868DiagnosticPulsesPermitted(safety, false, true));
+}
+
 int main(int argc, char** argv) {
   (void)argc;
   (void)argv;
@@ -192,5 +205,6 @@ int main(int argc, char** argv) {
   RUN_TEST(test_kc868_outputs_are_forced_off_when_not_armed);
   RUN_TEST(test_kc868_outputs_are_forced_off_when_any_safety_gate_is_missing);
   RUN_TEST(test_kc868_outputs_pass_only_when_all_safety_gates_are_true);
+  RUN_TEST(test_kc868_diagnostic_pulses_need_an_explicit_test_build_and_validated_boot_proof);
   return UNITY_END();
 }

@@ -111,6 +111,16 @@ bool kc868HardwareOutputsArmed(const Kc868HardwareSafetyState& safety) {
          safety.outputBanksHealthy;
 }
 
+bool kc868DiagnosticPulsesPermitted(const Kc868HardwareSafetyState& safety,
+                                    bool profileDiagnosticPulsesValidated,
+                                    bool diagnosticPulseBuild) {
+  if (kc868HardwareOutputsArmed(safety)) {
+    return true;
+  }
+  return diagnosticPulseBuild && profileDiagnosticPulsesValidated && safety.bootOffVerified &&
+         safety.inputBanksHealthy && safety.outputBanksHealthy;
+}
+
 OutputsCommand kc868EffectiveOutputs(const OutputsCommand& requested, const Kc868HardwareSafetyState& safety) {
   if (!kc868HardwareOutputsArmed(safety)) {
     return OutputsCommand{};

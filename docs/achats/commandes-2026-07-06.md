@@ -12,6 +12,8 @@ L'achat de la KC868-A32 reste trace ci-dessous comme fait historique. L'[ADR-001
 
 L'A32 ne doit donc pas etre integree au schema cible. Sa destination, retour fournisseur, revente, conservation comme banc d'essai ou reutilisation, reste a decider. La migration ajoute au panier un relais d'interface a bobine 12 VDC et contact 230 VAC pour commander la bobine du Schneider LC1D18P7.
 
+La plateforme cible est desormais disponible : la carte recue le 2026-07-22 est une **KC868-A16 REV.1.6.3**. Son premier demarrage avec le firmware desarme a confirme le bus I2C interne et quatre peripheriques (`0x21`, `0x22`, `0x24`, `0x25`), sans encore valider les niveaux electriques. La fiche de reception [VR-0001](../validation/VR-0001-reception-kc868-a16-rev1.6.3.md) fait foi pour son identification et les essais restants.
+
 ## Materiel deja disponible
 
 | Article | Etat | Commentaire |

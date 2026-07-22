@@ -4,7 +4,7 @@
 
 | Bloc | Rôle | Options envisagées |
 | --- | --- | --- |
-| Carte de contrôle | Exécute la logique de lavage et sécurité | KC868-A16 ESP32 classique retenu pour la V1 |
+| Carte de contrôle | Exécute la logique de lavage et sécurité | KC868-A16 ESP32 classique REV.1.6.3 recuee pour la V1 |
 | Entrées capteurs | Detectent niveau de lavage, niveau critique, capot, température bassin et température ambiante | Flotteurs, capteurs pression, inductifs, contacts secs, sondes de température |
 | Sorties puissance | Pilotent pompe, moteur et prises auxiliaires | Sorties MOSFET 12 VDC vers relais HELLA, contacteurs TOMZN et relais d'interface du contacteur Schneider 230 VAC |
 | Interface locale | Permet conduite, signalisation et diagnostic | LCD 2004 / 20x4 I2C 3,3 V, boutons, voyants |
@@ -18,7 +18,7 @@
 | --- | --- | --- |
 | Toile de filtration tambour | Inox 74 microns | Fixe la finesse de filtration mécanique de référence |
 | Capteurs de niveau | CR18-8DN | Imposent une interface d'entrée compatible NPN, 12-24 VDC, 3 fils |
-| Plateforme de contrôle | KC868-A16 ESP32 classique, 16 entrees et 16 sorties MOSFET 12/24 VDC | Couvre les 9 entrees et 9 sorties V1 avec 7 voies libres de chaque type ; remplace l'A32 surdimensionnee selon ADR-0012 |
+| Plateforme de contrôle | KC868-A16 ESP32 classique REV.1.6.3, 16 entrees `X1` a `X16` et 16 sorties MOSFET `Y1` a `Y16` 12/24 VDC | Carte recue et scannee le 2026-07-22 ; couvre les 9 entrees et 9 sorties V1 avec 7 voies libres de chaque type ; remplace l'A32 surdimensionnee selon ADR-0012. Polarite et niveaux de sortie restent a valider sur banc. |
 | Alimentation 12 VDC | Mean Well NDR-120-12, 120 W, 10 A, rail DIN | Alimente automate, capteurs, IHM, accessoires et moteur tambour via départs fusibles |
 | Porte-fusibles 12 VDC | Porte-fusibles ATO 4 emplacements | Distribution 12 VDC ; adaptateur rail DIN imprime 3D realise et fonctionnel |
 | Moteur tambour | Motorreducteur Fyearfly 12 VDC 10 rpm | Simplifie la vitesse de tambour par rapport au moteur d'essuie-glace candidat |
@@ -29,6 +29,12 @@
 | Ecran local | LCD 2004 / 20x4 I2C 3,3 V, fond bleu retenu | Afficheur texte principal de l'IHM locale ; raccordement cible sur un bus I2C auxiliaire separe via `GPIO32` / `GPIO33` de l'A16, sans charger le bus I2C interne des entrees/sorties |
 | Horloge temps reel | Module RTC DS3231 I2C 3,3 V avec batterie rechargeable | Source locale d'heure fiable pour V2, et horodatage MVP seulement si simple ; adresse I2C attendue `0x68`, raccordement cible sur le bus I2C auxiliaire du port d'extension si la cohabitation avec le LCD est validee |
 | Sondes de temperature | 2 x DS18B20 étanches inox 3 fils, longueur cible 3 m | Meme modele pour `TEMP_BASSIN` et `TEMP_LOCAL` afin de simplifier achat, câblage et firmware ; alimentation 3,3 V, pull-up 4,7 kΩ sur `DATA`, brochage des couleurs a verifier sur banc |
+
+## Carte KC868-A16 effectivement recue
+
+La carte disponible est une **Kincony KC868-A16 REV.1.6.3**, a ESP32-WROOM-32 classique. Le test `kc868_a16_hw_safe` du 2026-07-22 a confirme le bus interne `GPIO4/GPIO5` et les quatre adresses `0x21`, `0x22`, `0x24`, `0x25`. Les essais par contact sec ont confirme que `0x22` lit physiquement `X1` a `X8`, puis `0x21` lit `X9` a `X16`. La serigraphie physique utilise `X1` a `X16` pour les entrees et `Y1` a `Y16` pour les sorties MOSFET. Les aliases firmware `I1` a `I9` et `O1` a `O9` suivent respectivement `X1` a `X9` et `Y1` a `Y9`.
+
+Le test a ecrit l'etat brut OFF `0xFF 0xFF` aux deux banques de sorties et le build safe a refuse toute sortie appliquee. Avec les groupes de sorties alimentes en 12 V et sans charge, chaque borne `Y` mesure 100 a 200 mV au boot : l'etat OFF physique est donc confirme. La polarite active et la commande individuelle des sorties restent a valider. Voir [VR-0001](../validation/VR-0001-reception-kc868-a16-rev1.6.3.md).
 
 ## Données hydrauliques d'entrée
 

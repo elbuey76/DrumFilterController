@@ -19,6 +19,35 @@ Le noyau E/S V1 est gele fonctionnellement avant le choix de plateforme matérie
 | Interface cible | Technologie pressentie ou contrainte connue. |
 | Comportement attendu | Rôle fonctionnel et règles de sécurité associées. |
 
+## Nomenclature physique KC868-A16 recue
+
+La carte effectivement recue est une **Kincony KC868-A16 REV.1.6.3**. Sa serigraphie fait foi pour le cablage : `X1` a `X16` designent les entrees digitales physiques et `Y1` a `Y16` les sorties MOSFET physiques. Les reperes `I` et `O` ci-dessous sont des alias logiques du firmware, pas des etiquettes de bornier.
+
+| Borne physique | Alias firmware | Affectation V1 |
+| --- | --- | --- |
+| X1 | I1 | `EP_LAVAGE` |
+| X2 | I2 | `EP_CRITIQUE` |
+| X3 | I3 | `CAPOT_OUVERT` |
+| X4 | I4 | `MODE_AUTO` |
+| X5 | I5 | `MODE_MAINTENANCE` |
+| X6 | I6 | `RESET_ALARME` |
+| X7 | I7 | `TEST_LAVAGE` |
+| X8 | I8 | `MANU_TAMBOUR` |
+| X9 | I9 | `MANU_RINCAGE` |
+| X10 a X16 | -- | Reserve V1 |
+| Y1 | O1 | `CMD_TAMBOUR` |
+| Y2 | O2 | `CMD_RINCAGE` |
+| Y3 | O3 | `CMD_POMPE_FILTRATION` |
+| Y4 | O4 | `CMD_POMPE_DECO` |
+| Y5 | O5 | `CMD_UV` |
+| Y6 | O6 | `CMD_MISE_A_NIVEAU` |
+| Y7 | O7 | `VOYANT_MARCHE` |
+| Y8 | O8 | `VOYANT_LAVAGE` |
+| Y9 | O9 | `VOYANT_ALARME` |
+| Y10 a Y16 | -- | Reserve V1 |
+
+Le premier scan de la REV.1.6.3 a detecte `0x21`, `0x22`, `0x24` et `0x25` sur le bus I2C interne `GPIO4/GPIO5`. Les contacts secs ont confirme l'ordre `0x22 = X1-X8`, `0x21 = X9-X16`, pris en compte par le profil dedie non valide. Le scan a aussi confirme la communication et l'ecriture brute OFF `0xFF` sur les deux banques de sorties, mais la polarite et les niveaux electriques de `Y1` a `Y16` restent a mesurer avant validation du profil. La preuve detaillee est dans [VR-0001](../validation/VR-0001-reception-kc868-a16-rev1.6.3.md).
+
 ## Entrées automate
 
 | ID | Nom | Priorité | État | Interface cible | Comportement attendu |
@@ -53,7 +82,7 @@ La documentation CR18-8DN indique une sortie `NPN` 3 fils, normalement ouverte p
 | --- | --- | --- |
 | Marron | Alimentation capteur | `+12 VDC` capteurs, départ fusible 1 A |
 | Bleu | 0 V capteur | `GND / 0 V` commun avec les entrées KC868-A16 |
-| Noir | Sortie NPN | Entrée digitale KC868-A16, par exemple `I1` pour `EP_LAVAGE` et `I2` pour `EP_CRITIQUE` |
+| Noir | Sortie NPN | Entrée digitale KC868-A16, par exemple `X1` (`I1`) pour `EP_LAVAGE` et `X2` (`I2`) pour `EP_CRITIQUE` |
 
 La logique firmware doit considérer ces entrées comme actives quand la sortie NPN tire l'entrée vers 0 V. Le sens logique exact lu via les expanseurs d'E/S de la KC868-A16 doit être vérifié sur banc et inversé en logiciel si nécessaire.
 

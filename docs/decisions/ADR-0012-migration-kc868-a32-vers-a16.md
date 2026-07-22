@@ -12,7 +12,7 @@ La KC868-A16 ESP32 classique analysee fournit 16 entrees digitales optocouplees,
 
 L'A16 n'est toutefois pas une A32 reduite : ses sorties ne sont pas des contacts secs de relais. Elles fournissent une tension continue 12/24 V et ne doivent jamais commuter directement du 230 VAC. La pompe de rincage est deja associee a un contacteur Schneider TeSys LC1D18P7 dont la bobine est en 230 VAC ; une interface supplementaire devient donc obligatoire.
 
-Les captures de l'offre A16 montrent plusieurs revisions materielles, notamment REV1.4 et REV1.6. Les adresses I2C des expanseurs PCF8574 peuvent varier selon la revision livree. Le firmware bas niveau deja prepare pour l'A32 ne peut donc pas etre reutilise tel quel.
+Les captures de l'offre A16 montrent plusieurs revisions materielles, notamment REV1.4 et REV1.6. Les adresses I2C des expanseurs PCF8574 peuvent varier selon la revision livree. Le firmware bas niveau deja prepare pour l'A32 ne peut donc pas etre reutilise tel quel. La carte recue le 2026-07-22 est identifiee `KC868-A16 REV.1.6.3` ; son scan initial repond aux adresses standard. Les essais en contact sec ont confirme `0x22 = X1-X8` et `0x21 = X9-X16`, mais la polarite et les bornes physiques des sorties ne sont pas encore validees.
 
 ## Decision
 
@@ -26,17 +26,17 @@ La tension de commande reste fixee a 12 VDC avec la Mean Well NDR-120-12. L'alim
 
 Les sorties A16 sont affectees comme suit en premiere intention :
 
-| Sortie | Signal | Interface cible |
-| --- | --- | --- |
-| O1 | `CMD_TAMBOUR` | Bobine 12 VDC du relais HELLA, sous reserve de mesure de courant et de suppression de surtension adaptee |
-| O2 | `CMD_RINCAGE` | Bobine 12 VDC d'un relais d'interface ; son contact commande la bobine 230 VAC du LC1D18P7 |
-| O3 | `CMD_POMPE_FILTRATION` | Bobine 12 VDC du contacteur TOMZN |
-| O4 | `CMD_POMPE_DECO` | Bobine 12 VDC du contacteur TOMZN |
-| O5 | `CMD_UV` | Bobine 12 VDC du contacteur TOMZN |
-| O6 | `CMD_MISE_A_NIVEAU` | Bobine 12 VDC du contacteur TOMZN |
-| O7 | `VOYANT_MARCHE` | Voyant LED 12 VDC |
-| O8 | `VOYANT_LAVAGE` | Voyant LED 12 VDC |
-| O9 | `VOYANT_ALARME` | Voyant LED 12 VDC |
+| Alias firmware | Borne physique REV.1.6.3 | Signal | Interface cible |
+| --- | --- | --- | --- |
+| O1 | Y1 | `CMD_TAMBOUR` | Bobine 12 VDC du relais HELLA, sous reserve de mesure de courant et de suppression de surtension adaptee |
+| O2 | Y2 | `CMD_RINCAGE` | Bobine 12 VDC d'un relais d'interface ; son contact commande la bobine 230 VAC du LC1D18P7 |
+| O3 | Y3 | `CMD_POMPE_FILTRATION` | Bobine 12 VDC du contacteur TOMZN |
+| O4 | Y4 | `CMD_POMPE_DECO` | Bobine 12 VDC du contacteur TOMZN |
+| O5 | Y5 | `CMD_UV` | Bobine 12 VDC du contacteur TOMZN |
+| O6 | Y6 | `CMD_MISE_A_NIVEAU` | Bobine 12 VDC du contacteur TOMZN |
+| O7 | Y7 | `VOYANT_MARCHE` | Voyant LED 12 VDC |
+| O8 | Y8 | `VOYANT_LAVAGE` | Voyant LED 12 VDC |
+| O9 | Y9 | `VOYANT_ALARME` | Voyant LED 12 VDC |
 
 Chaque charge raccordee directement a une sortie MOSFET doit rester sous la limite publiee de 500 mA par voie. Le courant reel des bobines HELLA et TOMZN doit etre mesure. Une diode de roue libre ou une suppression equivalente doit etre prevue sur chaque bobine DC si elle n'est pas deja integree, en respectant la polarite.
 
@@ -48,9 +48,13 @@ Le relais d'interface de rinçage reste a choisir. Il devra au minimum posseder 
 - une suppression de surtension adaptee cote bobine 12 VDC ;
 - un reperage et une separation propres entre la commande 12 VDC et le circuit de bobine 230 VAC.
 
-Les capteurs CR18-8DN restent raccordes en 12 VDC avec sortie NPN vers les entrees digitales A16 : marron sur `+12 VDC`, bleu sur `0 V`, noir vers l'entree. Le sens logique, la stabilite et les cas de rupture de fil doivent etre valides sur banc avec la carte recue.
+Les capteurs CR18-8DN restent raccordes en 12 VDC avec sortie NPN vers les entrees digitales A16 : marron sur `+12 VDC`, bleu sur `0 V`, noir vers la borne physique `Xn`. Le sens logique, la stabilite et les cas de rupture de fil doivent etre valides sur banc avec la carte recue. Les alias firmware V1 sont `I1` a `I9`, respectivement `X1` a `X9`.
 
 Le raccordement cible des auxiliaires utilise les trois GPIO capteurs de l'A16 : `GPIO32` et `GPIO33` pour un bus I2C auxiliaire separe, porte par le second controleur `TwoWire` de l'ESP32 et partage par le LCD 2004 et la RTC DS3231, et `GPIO14` pour un bus 1-Wire commun aux deux DS18B20. Cette affectation reste soumise au controle du brochage de la revision recue et aux essais de coexistence, de niveaux 3,3 V et de longueur de cable.
+
+### Constat de reception REV.1.6.3
+
+Le firmware `kc868_a16_hw_safe` a ete execute sur la carte recue. Le bus interne `GPIO4/GPIO5` a detecte `0x21`, `0x22`, `0x24` et `0x25`; les deux banques d'entrees et les deux banques de sorties repondent. Les contacts secs confirment le role des entrees : `0x22 = X1-X8`, `0x21 = X9-X16`. L'ecriture boot OFF `0xFF` est confirmee par I2C, tandis que les sorties restent effectivement desarmees par le build safe et le profil non valide. Le detail des preuves et des limites est consigne dans [VR-0001](../validation/VR-0001-reception-kc868-a16-rev1.6.3.md).
 
 ## Consequences
 

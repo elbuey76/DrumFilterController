@@ -44,4 +44,4 @@ Les objectifs principaux sont :
 
 ## Prochaine étape
 
-Fermer les écarts restants de la firmware V0.1 : portage bas niveau vers la KC868-A16, validation des entrees et sorties MOSFET reelles, LCD 2004 I2C, RTC DS3231, sondes DS18B20, reprise après coupure complète, persistance A15 / mini-journal, puis validation banc des sécurités avant installation.
+Poursuivre la validation banc de la KC868-A16 **REV.1.6.3** recuee : les entrees `X1` a `X16` et l'etat OFF de `Y1` a `Y16` sont confirmes. Tester maintenant, sans charge, les impulsions individuelles `Y1` a `Y9` avec `kc868_a16_hw_output_test`, puis LCD 2004 I2C, RTC DS3231 et sondes DS18B20. Le profil materiel reste desarme jusqu'a ces preuves ; voir [VR-0001](docs/validation/VR-0001-reception-kc868-a16-rev1.6.3.md).

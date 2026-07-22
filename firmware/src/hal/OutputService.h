@@ -11,6 +11,14 @@
 #define HARDWARE_OUTPUTS_ARMED 0
 #endif
 
+#ifndef KC868_DIAGNOSTIC_PULSES_ONLY
+#define KC868_DIAGNOSTIC_PULSES_ONLY 0
+#endif
+
+#ifndef KC868_DIAGNOSTIC_PULSE_MAX_MS
+#define KC868_DIAGNOSTIC_PULSE_MAX_MS 1000
+#endif
+
 #include "hal/Kc868Pcf8574Io.h"
 
 class OutputService {
@@ -22,6 +30,8 @@ public:
   OutputsCommand lastApplied() const;
   OutputsCommand lastRequested() const;
   bool hardwareOutputsArmed() const;
+  bool diagnosticPulsesPermitted() const;
+  bool diagnosticPulsesOnlyBuild() const;
   bool hardwareArmRequested() const;
   bool hardwareIoHealthy() const;
   void setInputHardwareHealthy(bool healthy);
@@ -32,6 +42,7 @@ public:
   bool outputBankFaultLatched(size_t bankIndex) const;
   const Kc868A16HardwareProfile& hardwareProfile() const;
   const char* hardwareDisarmReason() const;
+  const char* diagnosticPulseDisarmReason() const;
   Kc868DigitalOutputsRaw lastHardwareRawOutputs() const;
   bool pulseOutputForDiagnostics(uint8_t outputNumber, uint16_t pulseMs);
   bool pulseRelayForDiagnostics(uint8_t relayNumber, uint16_t pulseMs);

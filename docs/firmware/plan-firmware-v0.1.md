@@ -979,28 +979,30 @@ Modules implémentés :
 
 Preuves locales :
 
-- `python -m platformio test -e native` : 51 tests passes sur 51, dont cartographie, profils et defauts I2C A16 ;
+- `python -m platformio test -e native` : 54 tests passes sur 54, dont cartographie, profils, defauts I2C A16 et verrou d'impulsions de diagnostic ;
 - `python -m platformio run -e kc868_a16_sim -e kc868_a16_hw_safe -e kc868_a16_hw_armed` : trois builds ESP32 A16 reussis ; le profil candidat reste `validated=false`, y compris dans le build arme.
 
 Écarts restants avant de considérer la V0.1 complète :
 
-- validation matérielle KC868-A16, profil exact de la carte recue, entrees reelles, sorties MOSFET, adresses I2C et sens logiques ;
+- validation matérielle KC868-A16 REV.1.6.3 recuee : ordre des entrees confirme (`0x22 = X1-X8`, `0x21 = X9-X16`), sorties MOSFET `Y1-Y16`, polarites et sens logiques restant a mesurer ; le scan initial `0x21/0x22/0x24/0x25` est consigne dans VR-0001 ;
 - LCD 2004 I2C réel, RTC DS3231 réelle et sondes DS18B20 réelles ;
 - seuils température bas/haut, au-delà de la perte de mesure simulée A11/A12 ;
 - temporisation dédiée de reprise UV après EP_CRITIQUE ;
 - validation réelle de la persistance NVS sur carte ;
 - validation banc/installation des sécurités.
 
-## 16. Ensuite, quand la KC868-A16 arrive
+## 16. Validation de la KC868-A16 recue
 
-On passera à **firmware V0.2 matériel**.
+La carte recue est une **KC868-A16 REV.1.6.3**. Le build `kc868_a16_hw_safe` a confirme le bus interne `GPIO4/GPIO5`, les adresses `0x21`, `0x22`, `0x24` et `0x25`, l'ordre `0x22 = X1-X8` puis `0x21 = X9-X16`, et l'ecriture brute OFF sur les deux banques. Le profil reste non valide jusqu'aux mesures physiques de [VR-0001](../validation/VR-0001-reception-kc868-a16-rev1.6.3.md).
+
+On passe maintenant a **firmware V0.2 materiel**.
 
 Travaux V0.2 :
 
-- identifier les broches et expanseurs réels ;
-- lire les entrées digitales ;
-- vérifier le sens logique ;
-- commander les relais à vide ;
+- tester les entrees `X1-X16` par contact sec vers le GND du bornier ;
+- verifier le sens logique et consigner la cartographie ;
+- alimenter les groupes `VIN` sans charge et mesurer `Y1-Y16` au boot ;
+- commander les sorties MOSFET a vide seulement apres validation du profil ;
 - vérifier que toutes les sorties restent OFF au boot ;
 - brancher LCD 2004 ;
 - tester RTC DS3231 ;

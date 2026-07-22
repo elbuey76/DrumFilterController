@@ -10,6 +10,7 @@ Fichier principal :
 - [Checklist go/no-go materiel V1](checklist-go-no-go-materiel-v1.md)
 - [FT-0001 - Scenarios simulateur firmware V0.1](FT-0001-scenarios-simulateur-firmware-v0.1.md)
 - [FT-0002 - Portage firmware KC868-A16](FT-0002-portage-kc868-a16.md)
+- [VR-0001 - Reception et identification KC868-A16 REV.1.6.3](VR-0001-reception-kc868-a16-rev1.6.3.md)
 
 ## Tests automatises host-side
 

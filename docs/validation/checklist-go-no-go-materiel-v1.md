@@ -10,7 +10,7 @@ Un point non valide peut etre accepte uniquement s'il est marque comme non appli
 
 | Point | Critere go/no-go | Statut | Preuve / commentaire |
 | --- | --- | --- | --- |
-| Plateforme controle | KC868-A16 ESP32 classique disponible, revision identifiee et inspectee ; ni A16S ni A16v3 | A faire | |
+| Plateforme controle | KC868-A16 ESP32 classique disponible, revision identifiee et inspectee ; ni A16S ni A16v3 | Partiel | Carte recue : KC868-A16 REV.1.6.3, ESP32-WROOM-32. Scan I2C interne passe ; inspection complete borniers, Ethernet et GPIO auxiliaires a terminer (VR-0001). |
 | Alimentation 12 VDC | Mean Well NDR-120-12 disponible, entree/sortie reperees | A faire | |
 | Capteurs niveau | 2 x CR18-8DN disponibles, brochage confirme | A faire | |
 | Pompe rincage | VEVOR / Leo EKJ-802S conservee comme reference V1 | A faire | |
@@ -30,8 +30,9 @@ Un point non valide peut etre accepte uniquement s'il est marque comme non appli
 
 | Point | Critere go/no-go | Statut | Preuve / commentaire |
 | --- | --- | --- | --- |
-| Boot securise | Toutes les sorties controlees restent OFF au boot avant autorisation | Logiciel passe, banc a faire | FT-0002 couvre l'ordre des ecritures et les verrous ; mesure physique requise. |
-| Profil firmware A16 | Revision, adresses PCF8574, cartographie, polarites et ROM DS18B20 correspondent exactement a la carte recue | A faire | Les profils candidats restent `validated=false`. |
+| Boot securise | Toutes les sorties controlees restent OFF au boot avant autorisation | Passe | REV.1.6.3 : ACK I2C, ecriture brute `0xFF 0xFF` et mesure physique de `100-200 mV` entre chaque Y1-Y16 et 0 V, sans charge, confirmes. |
+| Profil firmware A16 | Revision, adresses PCF8574, cartographie, polarites et ROM DS18B20 correspondent exactement a la carte recue | Partiel | Profil `a16-rev1.6.3-inputs-confirmed-candidate` actif : entrees `0x22 = X1-X8`, `0x21 = X9-X16` confirmees ; sorties `O1-Y1` a `O9-Y9` et polarite active confirmees par impulsions 12 V isolees. `Y10-Y16` et ROM DS18B20 restent a faire. `validated=false`. |
+| Bornes X / Y | `X1` a `X16` identifiees comme entrees et `Y1` a `Y16` comme sorties MOSFET ; l'alias firmware reste trace | Partiel | Les 16 entrees X sont confirmees par contact sec : X1-X9 fonctionnelles et X10-X16 par valeurs brutes. Boot OFF valide sur Y1-Y16 ; activation individuelle et isolement validee sur Y1-Y9. Y10-Y16 restent a tester. |
 | Armement firmware | Le build arme reste OFF si profil non valide, boot OFF echoue ou banque I2C absente | Logiciel passe, banc a faire | Matrice de verrous couverte par FT-0002. |
 | Perte 12 VDC | Contacteurs et sorties controlees retombent OFF par conception | A faire | |
 | Distribution 12 VDC | Fusibles 5 A moteur, 3 A automate, 1 A capteurs/boutons, 1 A IHM/accessoires coherents apres mesure | A faire | |

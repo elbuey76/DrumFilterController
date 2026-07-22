@@ -21,9 +21,9 @@ La V1 retient une validation progressive et bloquante avant exploitation autonom
 
 Les choix materiels acceptes restent figes par defaut, mais une mesure ou un essai reel peut rouvrir une ADR si le resultat montre une incompatibilite electrique, une limite de securite, un echauffement anormal, un declenchement intempestif, un comportement instable ou une inefficacite hydraulique majeure.
 
-Le banc de test materiel est obligatoire avant cablage definitif du coffret. Il doit couvrir au minimum :
+Le banc de test materiel est obligatoire avant cablage definitif du coffret. La carte recue est une `KC868-A16 REV.1.6.3` ; le scan initial et le demarrage desarme sont traces dans [VR-0001](../validation/VR-0001-reception-kc868-a16-rev1.6.3.md). Il doit couvrir au minimum :
 
-- KC868-A16, avec identification de revision, scan I2C et sorties MOSFET desarmees ;
+- KC868-A16 REV.1.6.3, avec identification de revision, scan I2C, entrees physiques `X1` a `X16` et sorties MOSFET physiques `Y1` a `Y16` desarmees ;
 - capteurs CR18-8DN `EP_LAVAGE` et `EP_CRITIQUE` ;
 - simulation du contact capot ;
 - boutons et selecteur AUTO / MAINTENANCE ;

@@ -40,6 +40,7 @@ $paths = @(
   "docs/firmware/README.md",
   "docs/firmware/plan-firmware-v0.1.md",
   "docs/validation/README.md",
+  "docs/validation/VR-0001-reception-kc868-a16-rev1.6.3.md",
   "docs/validation/plan-tests-exigences.md",
   "docs/validation/checklist-go-no-go-materiel-v1.md"
 )

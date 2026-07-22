@@ -12,6 +12,7 @@
 enum class Kc868A16ProfileId : uint8_t {
   GENERIC_STANDARD_CANDIDATE = 0,
   REV15_GREEN_CANDIDATE = 1,
+  REV163_INPUTS_CONFIRMED_CANDIDATE = 2,
 };
 
 struct Kc868Pcf8574AddressMap {
@@ -39,9 +40,9 @@ struct Kc868A16HardwareProfile {
   Kc868DigitalMapping mapping;
   Kc868A16AuxiliaryProfile auxiliaries;
   bool validated;
+  bool diagnosticPulsesValidated;
 };
 
 const Kc868A16HardwareProfile& kc868A16Profile(Kc868A16ProfileId id);
 const Kc868A16HardwareProfile& selectedKc868A16Profile();
 bool kc868RomConfigured(const uint8_t rom[8]);
-

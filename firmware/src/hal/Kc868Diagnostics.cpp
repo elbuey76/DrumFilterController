@@ -92,9 +92,9 @@ void Kc868Diagnostics::handleCommand(const String& command, InputService& inputS
       return;
     }
 
-    if (!outputService.hardwareOutputsArmed()) {
+    if (!outputService.diagnosticPulsesPermitted()) {
       stream_->print(F("Refus: "));
-      stream_->println(outputService.hardwareDisarmReason());
+      stream_->println(outputService.diagnosticPulseDisarmReason());
       return;
     }
 
@@ -126,7 +126,9 @@ void Kc868Diagnostics::printHelp() const {
   stream_->println(F("  diag inputs"));
   stream_->println(F("  diag outputs"));
   stream_->println(F("  diag aux i2c | diag rtc | diag temp"));
-  stream_->println(F("  diag output <1-9> pulse <ms>"));
+  stream_->print(F("  diag output <1-9> pulse <ms> (max "));
+  stream_->print(KC868_DIAGNOSTIC_PULSE_MAX_MS);
+  stream_->println(F(" ms)"));
   stream_->println(F("  diag relay ... (alias historique)"));
 }
 
@@ -180,6 +182,10 @@ void Kc868Diagnostics::printOutputs(const OutputService& outputService) const {
   stream_->println(outputService.bootOffVerified() ? F("OK") : F("FAULT"));
   stream_->print(F("Hardware outputs effectively armed: "));
   stream_->println(outputService.hardwareOutputsArmed() ? F("YES") : F("NO"));
+  stream_->print(F("Impulsions diagnostic seulement: "));
+  stream_->println(outputService.diagnosticPulsesOnlyBuild() ? F("YES") : F("NO"));
+  stream_->print(F("Impulsions diagnostic autorisees: "));
+  stream_->println(outputService.diagnosticPulsesPermitted() ? F("YES") : F("NO"));
   stream_->print(F("Etat armement: "));
   stream_->println(outputService.hardwareDisarmReason());
   stream_->print(F("Hardware IO: "));
@@ -275,7 +281,7 @@ bool Kc868Diagnostics::parseOutputPulse(const String& command, uint8_t& outputNu
   }
 
   outputNumber = static_cast<uint8_t>(relay);
-  pulseMs = static_cast<uint16_t>(ms > 1000 ? 1000 : ms);
+  pulseMs = static_cast<uint16_t>(ms > KC868_DIAGNOSTIC_PULSE_MAX_MS ? KC868_DIAGNOSTIC_PULSE_MAX_MS : ms);
   return true;
 }
 

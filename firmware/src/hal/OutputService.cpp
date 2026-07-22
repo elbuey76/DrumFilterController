@@ -23,6 +23,28 @@ void OutputService::begin() {
 
 void OutputService::apply(const OutputsCommand& outputs) {
   lastRequested_ = outputs;
+  const Kc868DigitalMapping& mapping =
+#if USE_KC868_IO
+      kc868Io_ == nullptr ? defaultKc868DigitalMapping() : kc868Io_->profile().mapping;
+#else
+      defaultKc868DigitalMapping();
+#endif
+
+#if KC868_DIAGNOSTIC_PULSES_ONLY
+  // This build is exclusively for a human-triggered, bounded diagnostic pulse.
+  // Never let the controller energize an output in it.
+  lastApplied_ = OutputsCommand{};
+  lastHardwareRawOutputs_ = kc868AllOutputsOff(mapping);
+#if USE_KC868_IO
+  if (kc868Io_ == nullptr || !kc868Io_->writeOutputs(lastHardwareRawOutputs_)) {
+    if (kc868Io_ != nullptr) {
+      kc868Io_->writeAllOutputsOff();
+    }
+  }
+#endif
+  return;
+#endif
+
   Kc868HardwareSafetyState safety;
   safety.armRequested = hardwareArmRequested();
   safety.profileValidated = hardwareProfileValidated();
@@ -32,11 +54,6 @@ void OutputService::apply(const OutputsCommand& outputs) {
   safety.outputBanksHealthy = kc868Io_ != nullptr && kc868Io_->outputBanksHealthy();
 #endif
   lastApplied_ = kc868EffectiveOutputs(outputs, safety);
-#if USE_KC868_IO
-  const Kc868DigitalMapping& mapping = kc868Io_ == nullptr ? defaultKc868DigitalMapping() : kc868Io_->profile().mapping;
-#else
-  const Kc868DigitalMapping& mapping = defaultKc868DigitalMapping();
-#endif
   lastHardwareRawOutputs_ = kc868MapOutputs(lastApplied_, mapping);
 #if USE_KC868_IO
   if (kc868Io_ == nullptr || !kc868Io_->writeOutputs(lastHardwareRawOutputs_)) {
@@ -83,6 +100,26 @@ bool OutputService::hardwareOutputsArmed() const {
   safety.outputBanksHealthy = kc868Io_ != nullptr && kc868Io_->outputBanksHealthy();
 #endif
   return kc868HardwareOutputsArmed(safety);
+}
+
+bool OutputService::diagnosticPulsesPermitted() const {
+  Kc868HardwareSafetyState safety;
+  safety.armRequested = hardwareArmRequested();
+  safety.profileValidated = hardwareProfileValidated();
+  safety.bootOffVerified = bootOffVerified();
+  safety.inputBanksHealthy = inputHardwareHealthy_;
+#if USE_KC868_IO
+  safety.outputBanksHealthy = kc868Io_ != nullptr && kc868Io_->outputBanksHealthy();
+  const bool profileDiagnosticPulsesValidated = kc868Io_ != nullptr && kc868Io_->profile().diagnosticPulsesValidated;
+#else
+  safety.outputBanksHealthy = false;
+  const bool profileDiagnosticPulsesValidated = false;
+#endif
+  return kc868DiagnosticPulsesPermitted(safety, profileDiagnosticPulsesValidated, diagnosticPulsesOnlyBuild());
+}
+
+bool OutputService::diagnosticPulsesOnlyBuild() const {
+  return KC868_DIAGNOSTIC_PULSES_ONLY != 0;
 }
 
 bool OutputService::hardwareArmRequested() const {
@@ -169,17 +206,30 @@ const char* OutputService::hardwareDisarmReason() const {
   return "arme";
 }
 
+const char* OutputService::diagnosticPulseDisarmReason() const {
+  if (diagnosticPulsesPermitted()) return "autorise";
+  if (!diagnosticPulsesOnlyBuild()) return hardwareDisarmReason();
+#if USE_KC868_IO
+  if (kc868Io_ == nullptr) return "pilote A16 absent";
+  if (!kc868Io_->profile().diagnosticPulsesValidated) return "profil non autorise pour impulsions de diagnostic";
+#endif
+  if (!bootOffVerified()) return "boot toutes sorties OFF non verifie";
+  if (!inputHardwareHealthy_) return "banque d'entrees absente ou en defaut";
+  if (outputFaultLatched()) return "defaut sorties verrouille";
+  return "banque de sorties absente ou en defaut";
+}
+
 Kc868DigitalOutputsRaw OutputService::lastHardwareRawOutputs() const {
   return lastHardwareRawOutputs_;
 }
 
 bool OutputService::pulseOutputForDiagnostics(uint8_t outputNumber, uint16_t pulseMs) {
-  if (outputNumber < 1 || outputNumber > kKc868DigitalOutputCount || !hardwareOutputsArmed()) {
+  if (outputNumber < 1 || outputNumber > kKc868DigitalOutputCount || !diagnosticPulsesPermitted()) {
     return false;
   }
 
-  if (pulseMs > 1000) {
-    pulseMs = 1000;
+  if (pulseMs > KC868_DIAGNOSTIC_PULSE_MAX_MS) {
+    pulseMs = KC868_DIAGNOSTIC_PULSE_MAX_MS;
   }
 
   OutputsCommand pulse;
