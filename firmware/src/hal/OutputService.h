@@ -45,6 +45,7 @@ public:
   const char* diagnosticPulseDisarmReason() const;
   Kc868DigitalOutputsRaw lastHardwareRawOutputs() const;
   bool pulseOutputForDiagnostics(uint8_t outputNumber, uint16_t pulseMs);
+  bool pulsePhysicalOutputForDiagnostics(uint8_t physicalOutputNumber, uint16_t pulseMs);
   bool pulseRelayForDiagnostics(uint8_t relayNumber, uint16_t pulseMs);
 
 private:

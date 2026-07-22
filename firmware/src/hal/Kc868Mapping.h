@@ -77,6 +77,8 @@ bool kc868DiagnosticPulsesPermitted(const Kc868HardwareSafetyState& safety,
 OutputsCommand kc868EffectiveOutputs(const OutputsCommand& requested, const Kc868HardwareSafetyState& safety);
 Kc868DigitalOutputsRaw kc868MapOutputs(const OutputsCommand& outputs, const Kc868DigitalMapping& mapping = defaultKc868DigitalMapping());
 Kc868DigitalOutputsRaw kc868AllOutputsOff(const Kc868DigitalMapping& mapping = defaultKc868DigitalMapping());
+Kc868DigitalOutputsRaw kc868PhysicalOutputDiagnosticPulse(uint8_t physicalOutputNumber,
+                                                           const Kc868DigitalMapping& mapping = defaultKc868DigitalMapping());
 
 const char* kc868InputSignalName(Kc868InputSignal signal);
 const char* kc868OutputSignalName(Kc868OutputSignal signal);

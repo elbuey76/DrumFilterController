@@ -88,7 +88,7 @@ void Kc868Diagnostics::handleCommand(const String& command, InputService& inputS
     uint8_t outputNumber = 0;
     uint16_t pulseMs = 0;
     if (!parseOutputPulse(command, outputNumber, pulseMs)) {
-      stream_->println(F("Syntaxe: diag output <1-9> pulse <ms>"));
+      stream_->println(F("Syntaxe: diag output <1-16> pulse <ms>"));
       return;
     }
 
@@ -98,12 +98,12 @@ void Kc868Diagnostics::handleCommand(const String& command, InputService& inputS
       return;
     }
 
-    if (!outputService.pulseOutputForDiagnostics(outputNumber, pulseMs)) {
+    if (!outputService.pulsePhysicalOutputForDiagnostics(outputNumber, pulseMs)) {
       stream_->println(F("Impulsion sortie echouee ou refusee."));
       return;
     }
 
-    stream_->print(F("Sortie O"));
+    stream_->print(F("Sortie Y"));
     stream_->print(outputNumber);
     stream_->print(F(" pulse "));
     stream_->print(pulseMs);
@@ -126,7 +126,7 @@ void Kc868Diagnostics::printHelp() const {
   stream_->println(F("  diag inputs"));
   stream_->println(F("  diag outputs"));
   stream_->println(F("  diag aux i2c | diag rtc | diag temp"));
-  stream_->print(F("  diag output <1-9> pulse <ms> (max "));
+  stream_->print(F("  diag output <1-16> pulse <ms> (max "));
   stream_->print(KC868_DIAGNOSTIC_PULSE_MAX_MS);
   stream_->println(F(" ms)"));
   stream_->println(F("  diag relay ... (alias historique)"));
@@ -276,7 +276,7 @@ bool Kc868Diagnostics::parseOutputPulse(const String& command, uint8_t& outputNu
 
   const int relay = command.substring(secondSpace + 1, thirdSpace).toInt();
   const int ms = command.substring(fourthSpace + 1).toInt();
-  if (relay < 1 || relay > static_cast<int>(kKc868DigitalOutputCount) || ms <= 0) {
+  if (relay < 1 || relay > static_cast<int>(kKc868PhysicalOutputCount) || ms <= 0) {
     return false;
   }
 

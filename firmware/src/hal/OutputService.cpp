@@ -224,7 +224,11 @@ Kc868DigitalOutputsRaw OutputService::lastHardwareRawOutputs() const {
 }
 
 bool OutputService::pulseOutputForDiagnostics(uint8_t outputNumber, uint16_t pulseMs) {
-  if (outputNumber < 1 || outputNumber > kKc868DigitalOutputCount || !diagnosticPulsesPermitted()) {
+  return pulsePhysicalOutputForDiagnostics(outputNumber, pulseMs);
+}
+
+bool OutputService::pulsePhysicalOutputForDiagnostics(uint8_t physicalOutputNumber, uint16_t pulseMs) {
+  if (physicalOutputNumber < 1 || physicalOutputNumber > kKc868PhysicalOutputCount || !diagnosticPulsesPermitted()) {
     return false;
   }
 
@@ -232,24 +236,12 @@ bool OutputService::pulseOutputForDiagnostics(uint8_t outputNumber, uint16_t pul
     pulseMs = KC868_DIAGNOSTIC_PULSE_MAX_MS;
   }
 
-  OutputsCommand pulse;
-  switch (static_cast<Kc868OutputSignal>(outputNumber - 1)) {
-    case Kc868OutputSignal::CMD_TAMBOUR: pulse.cmdTambour = true; break;
-    case Kc868OutputSignal::CMD_RINCAGE: pulse.cmdRincage = true; break;
-    case Kc868OutputSignal::CMD_POMPE_FILTRATION: pulse.cmdPompeFiltration = true; break;
-    case Kc868OutputSignal::CMD_POMPE_DECO: pulse.cmdPompeDeco = true; break;
-    case Kc868OutputSignal::CMD_UV: pulse.cmdUv = true; break;
-    case Kc868OutputSignal::CMD_MISE_A_NIVEAU: pulse.cmdMiseANiveau = true; break;
-    case Kc868OutputSignal::VOYANT_MARCHE: pulse.voyantMarche = true; break;
-    case Kc868OutputSignal::VOYANT_LAVAGE: pulse.voyantLavage = true; break;
-    case Kc868OutputSignal::VOYANT_ALARME: pulse.voyantAlarme = true; break;
-  }
-
 #if USE_KC868_IO
   if (kc868Io_ == nullptr) {
     return false;
   }
-  const bool onOk = kc868Io_->writeOutputs(kc868MapOutputs(pulse, kc868Io_->profile().mapping));
+  const Kc868DigitalOutputsRaw raw = kc868PhysicalOutputDiagnosticPulse(physicalOutputNumber, kc868Io_->profile().mapping);
+  const bool onOk = kc868Io_->writeOutputs(raw);
   delay(pulseMs);
   const bool offOk = kc868Io_->writeAllOutputsOff();
   if (!onOk || !offOk) {

@@ -135,6 +135,20 @@ void test_kc868_all_outputs_off_is_high_on_both_a16_banks() {
   TEST_ASSERT_EQUAL_HEX8(0xFF, raw.banks[1]);
 }
 
+void test_kc868_physical_output_diagnostic_pulse_addresses_each_of_the_16_y_terminals() {
+  const Kc868DigitalOutputsRaw y1 = kc868PhysicalOutputDiagnosticPulse(1);
+  TEST_ASSERT_EQUAL_HEX8(0xFE, y1.banks[0]);
+  TEST_ASSERT_EQUAL_HEX8(0xFF, y1.banks[1]);
+
+  const Kc868DigitalOutputsRaw y9 = kc868PhysicalOutputDiagnosticPulse(9);
+  TEST_ASSERT_EQUAL_HEX8(0xFF, y9.banks[0]);
+  TEST_ASSERT_EQUAL_HEX8(0xFE, y9.banks[1]);
+
+  const Kc868DigitalOutputsRaw y16 = kc868PhysicalOutputDiagnosticPulse(16);
+  TEST_ASSERT_EQUAL_HEX8(0xFF, y16.banks[0]);
+  TEST_ASSERT_EQUAL_HEX8(0x7F, y16.banks[1]);
+}
+
 void test_kc868_outputs_are_forced_off_when_not_armed() {
   OutputsCommand requested;
   requested.cmdTambour = true;
@@ -202,6 +216,7 @@ int main(int argc, char** argv) {
   RUN_TEST(test_kc868_outputs_support_configurable_polarity);
   RUN_TEST(test_kc868_mapping_crosses_bank_boundary_at_input_and_output_nine);
   RUN_TEST(test_kc868_all_outputs_off_is_high_on_both_a16_banks);
+  RUN_TEST(test_kc868_physical_output_diagnostic_pulse_addresses_each_of_the_16_y_terminals);
   RUN_TEST(test_kc868_outputs_are_forced_off_when_not_armed);
   RUN_TEST(test_kc868_outputs_are_forced_off_when_any_safety_gate_is_missing);
   RUN_TEST(test_kc868_outputs_pass_only_when_all_safety_gates_are_true);

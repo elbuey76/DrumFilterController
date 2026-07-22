@@ -46,7 +46,7 @@ La carte effectivement recue est une **Kincony KC868-A16 REV.1.6.3**. Sa serigra
 | Y9 | O9 | `VOYANT_ALARME` |
 | Y10 a Y16 | -- | Reserve V1 |
 
-Le premier scan de la REV.1.6.3 a detecte `0x21`, `0x22`, `0x24` et `0x25` sur le bus I2C interne `GPIO4/GPIO5`. Les contacts secs ont confirme l'ordre `0x22 = X1-X8`, `0x21 = X9-X16`, pris en compte par le profil dedie non valide. Le scan a aussi confirme la communication et l'ecriture brute OFF `0xFF` sur les deux banques de sorties, mais la polarite et les niveaux electriques de `Y1` a `Y16` restent a mesurer avant validation du profil. La preuve detaillee est dans [VR-0001](../validation/VR-0001-reception-kc868-a16-rev1.6.3.md).
+Le premier scan de la REV.1.6.3 a detecte `0x21`, `0x22`, `0x24` et `0x25` sur le bus I2C interne `GPIO4/GPIO5`. Les contacts secs ont confirme l'ordre `0x22 = X1-X8`, `0x21 = X9-X16`, pris en compte par le profil dedie non valide. Le banc sans charge a aussi confirme l'ecriture brute OFF `0xFF` aux deux banques, la polarite active et l'activation isolee de `Y1` a `Y16`. La preuve detaillee est dans [VR-0001](../validation/VR-0001-reception-kc868-a16-rev1.6.3.md).
 
 ## Entrées automate
 

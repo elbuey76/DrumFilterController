@@ -18,7 +18,7 @@
 | --- | --- | --- |
 | Toile de filtration tambour | Inox 74 microns | Fixe la finesse de filtration mécanique de référence |
 | Capteurs de niveau | CR18-8DN | Imposent une interface d'entrée compatible NPN, 12-24 VDC, 3 fils |
-| Plateforme de contrôle | KC868-A16 ESP32 classique REV.1.6.3, 16 entrees `X1` a `X16` et 16 sorties MOSFET `Y1` a `Y16` 12/24 VDC | Carte recue et scannee le 2026-07-22 ; couvre les 9 entrees et 9 sorties V1 avec 7 voies libres de chaque type ; remplace l'A32 surdimensionnee selon ADR-0012. Polarite et niveaux de sortie restent a valider sur banc. |
+| Plateforme de contrôle | KC868-A16 ESP32 classique REV.1.6.3, 16 entrees `X1` a `X16` et 16 sorties MOSFET `Y1` a `Y16` 12/24 VDC | Carte recue et validee a vide le 2026-07-22 ; couvre les 9 entrees et 9 sorties V1 avec 7 voies libres de chaque type ; remplace l'A32 surdimensionnee selon ADR-0012. Les charges et auxiliaires restent a valider. |
 | Alimentation 12 VDC | Mean Well NDR-120-12, 120 W, 10 A, rail DIN | Alimente automate, capteurs, IHM, accessoires et moteur tambour via départs fusibles |
 | Porte-fusibles 12 VDC | Porte-fusibles ATO 4 emplacements | Distribution 12 VDC ; adaptateur rail DIN imprime 3D realise et fonctionnel |
 | Moteur tambour | Motorreducteur Fyearfly 12 VDC 10 rpm | Simplifie la vitesse de tambour par rapport au moteur d'essuie-glace candidat |
@@ -34,7 +34,7 @@
 
 La carte disponible est une **Kincony KC868-A16 REV.1.6.3**, a ESP32-WROOM-32 classique. Le test `kc868_a16_hw_safe` du 2026-07-22 a confirme le bus interne `GPIO4/GPIO5` et les quatre adresses `0x21`, `0x22`, `0x24`, `0x25`. Les essais par contact sec ont confirme que `0x22` lit physiquement `X1` a `X8`, puis `0x21` lit `X9` a `X16`. La serigraphie physique utilise `X1` a `X16` pour les entrees et `Y1` a `Y16` pour les sorties MOSFET. Les aliases firmware `I1` a `I9` et `O1` a `O9` suivent respectivement `X1` a `X9` et `Y1` a `Y9`.
 
-Le test a ecrit l'etat brut OFF `0xFF 0xFF` aux deux banques de sorties et le build safe a refuse toute sortie appliquee. Avec les groupes de sorties alimentes en 12 V et sans charge, chaque borne `Y` mesure 100 a 200 mV au boot : l'etat OFF physique est donc confirme. La polarite active et la commande individuelle des sorties restent a valider. Voir [VR-0001](../validation/VR-0001-reception-kc868-a16-rev1.6.3.md).
+Le test a ecrit l'etat brut OFF `0xFF 0xFF` aux deux banques de sorties et le build safe a refuse toute sortie appliquee. Avec les groupes de sorties alimentes en 12 V et sans charge, chaque borne `Y` mesure 100 a 200 mV au boot : l'etat OFF physique est confirme. Les impulsions de banc ont ensuite valide la polarite active et la commande individuelle isolee de `Y1-Y16`. Voir [VR-0001](../validation/VR-0001-reception-kc868-a16-rev1.6.3.md).
 
 ## Données hydrauliques d'entrée
 
@@ -170,7 +170,7 @@ La batterie rechargeable livree avec le module sert a conserver l'heure pendant 
 
 Les deux sondes de temperature V1 retenues sont des DS18B20 etanches inox 3 fils, longueur cible 3 m. Le meme modele est utilise pour le bassin et pour le local afin de simplifier l'achat, le stock de rechange, le cablage et le firmware.
 
-Le raccordement cible est un bus 1-Wire commun alimente en 3,3 V, sans mode parasite : `VCC` sur `3.3 V`, `GND` sur `0 V` commun, `DATA` sur `GPIO14` de la KC868-A16 en premiere intention, avec une resistance de pull-up `4,7 kΩ` entre `DATA` et `3.3 V`.
+Le raccordement cible est un bus 1-Wire commun alimente en 3,3 V, sans mode parasite : `VCC` sur `3.3 V`, `GND` sur `0 V` commun, `DATA` sur `GPIO14` de la KC868-A16 en premiere intention, avec une resistance de pull-up `4,7 kΩ` entre `DATA` et `3.3 V`. Sur la KC868-A16, le bornier utilisateur `HT3` (parfois marque `GPIO3`) correspond a `GPIO14` ; il ne faut jamais utiliser l'entree optocouplee `X14`. Le brochage confirme des sondes retenues est : rouge = `VCC`, noir = `GND`, jaune = `DATA`.
 
 Si des GPIO libres sont disponibles, la preference est de separer `TEMP_BASSIN` et `TEMP_LOCAL` sur deux bus 1-Wire distincts. Si les GPIO sont limites, un bus commun reste acceptable en V1 puisque ces alertes sont informatives et non bloquantes.
 

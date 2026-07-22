@@ -145,6 +145,21 @@ Kc868DigitalOutputsRaw kc868AllOutputsOff(const Kc868DigitalMapping& mapping) {
   return raw;
 }
 
+Kc868DigitalOutputsRaw kc868PhysicalOutputDiagnosticPulse(uint8_t physicalOutputNumber,
+                                                           const Kc868DigitalMapping& mapping) {
+  Kc868DigitalOutputsRaw raw = kc868AllOutputsOff(mapping);
+  if (physicalOutputNumber < 1 || physicalOutputNumber > kKc868PhysicalOutputCount) {
+    return raw;
+  }
+
+  // The REV.1.6.3 bench proof established active-low MOSFET control on Y1-Y16.
+  const uint8_t index = static_cast<uint8_t>(physicalOutputNumber - 1);
+  const uint8_t bank = static_cast<uint8_t>(index / kKc868DigitalBitsPerBank);
+  const uint8_t bit = static_cast<uint8_t>(index % kKc868DigitalBitsPerBank);
+  raw.banks[bank] = static_cast<uint8_t>(raw.banks[bank] & static_cast<uint8_t>(~(1U << bit)));
+  return raw;
+}
+
 const char* kc868InputSignalName(Kc868InputSignal signal) {
   switch (signal) {
     case Kc868InputSignal::EP_LAVAGE: return "EP_LAVAGE";

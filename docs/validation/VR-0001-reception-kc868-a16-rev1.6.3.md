@@ -43,18 +43,18 @@ Le premier scan a identifie les quatre adresses mais pas leur role. Les essais e
 
 Apres selection du profil REV.1.6.3, les neuf entrees fonctionnelles sont confirmees dans l'ordre attendu : `X1` `EP_LAVAGE`, `X2` `EP_CRITIQUE`, `X3` `CAPOT_OUVERT`, `X4` `MODE_AUTO`, `X5` `MODE_MAINTENANCE`, `X6` `RESET_ALARME`, `X7` `TEST_LAVAGE`, `X8` `MANU_TAMBOUR`, `X9` `MANU_RINCAGE`. Les voies reservees sont aussi confirmees par le diagnostic brut : `X10` `0xFF 0xFD`, `X11` `0xFF 0xFB`, `X12` `0xFF 0xF7`, `X13` `0xFF 0xEF`, `X14` `0xFF 0xDF`, `X15` `0xFF 0xBF`, `X16` `0xFF 0x7F`.
 
-Le firmware selectionne donc le profil non valide `a16-rev1.6.3-inputs-confirmed-candidate` : `GPIO4/GPIO5`, entrees `0x22` / `0x21`, sorties candidates `0x24` / `0x25`. Les quatre adresses repondent et aucune erreur I2C n'est memorisee. L'ecriture OFF a ete acceptee avant toute commande de sortie. Les roles, polarites et niveaux electriques des sorties restent non verifies.
+Le firmware selectionne donc le profil non valide `a16-rev1.6.3-inputs-confirmed-candidate` : `GPIO4/GPIO5`, entrees `0x22` / `0x21`, sorties `0x24` / `0x25`. Les quatre adresses repondent et aucune erreur I2C n'est memorisee. L'ecriture OFF a ete acceptee avant toute commande de sortie.
 
 Les deux banques de sorties ont ensuite ete alimentees en 12 V, sans charge. Au demarrage du build safe, la tension mesuree entre chaque borne `Y1` a `Y16` et le 0 V d'alimentation est comprise entre **100 mV et 200 mV**. Cette mesure confirme physiquement l'etat OFF au boot sur les 16 sorties. Elle ne valide pas encore la commande ON, la polarite active ni l'affectation individuelle des sorties.
 
-Le 2026-07-22, le build dedie `kc868_a16_hw_output_test` a ensuite ete utilise, toujours sans charge. Les commandes `diag output 1 pulse 1000` a `diag output 9 pulse 1000` ont produit **12 V pendant 5 s** sur la seule borne cible `Y1` a `Y9` (la limite du build de banc est 5 000 ms). Les voyants des quinze autres voies sont restes eteints lors de chaque essai. Cette preuve confirme la polarite active, l'isolement entre voies et la correspondance `O1-Y1` a `O9-Y9`. Les sorties reservees `Y10-Y16` restent a tester individuellement avant validation complete du profil.
+Le 2026-07-22, le build dedie `kc868_a16_hw_output_test` a ensuite ete utilise, toujours sans charge. Les commandes `diag output 1 pulse 1000` a `diag output 16 pulse 1000` ont produit **12 V pendant 5 s** sur la seule borne cible `Y1` a `Y16` (la limite du build de banc est 5 000 ms). Les voyants des quinze autres voies sont restes eteints lors de chaque essai. Cette preuve confirme la polarite active et l'isolement entre voies sur les 16 sorties, ainsi que la correspondance `O1-Y1` a `O9-Y9` ; `Y10-Y16` sont confirmees comme voies reservees dans l'ordre physique.
 
 ## Prochaines preuves requises
 
 1. Flasher l'environnement dedie `kc868_a16_hw_output_test`. Il force les commandes de l'automate a OFF et n'autorise qu'une impulsion serie explicite de 5 s maximum, sans rendre le profil `validated`.
-2. Tester individuellement les sorties reservees `Y10` a `Y16`, sans charge, avant toute validation complete de la banque de sortie.
-3. Completer le profil firmware `a16-rev1.6.3-inputs-confirmed-candidate` avec la cartographie et les polarites actives de sortie mesurees ; le maintenir `validated=false` a ce stade.
-4. Tester ensuite chaque voyant et chaque bobine apres mesure de courant et verification des suppressions de surtension.
-5. Completer separement LCD, RTC et DS18B20.
+2. Tester ensuite chaque voyant et chaque bobine apres mesure de courant et verification des suppressions de surtension.
+3. Completer separement LCD, RTC et DS18B20.
+
+Pour les DS18B20 retenues, le brochage confirme par leur documentation est rouge = `VCC`, noir = `GND`, jaune = `DATA`. Le fil jaune doit aller au bornier utilisateur `HT3` / `GPIO3` de la carte, qui correspond a `GPIO14` dans le firmware, avec une resistance de pull-up `4,7 kΩ` entre ce signal et `3.3 V`. La borne `X14` est une entree digitale optocouplee et ne doit pas etre utilisee.
 
 Le profil ne pourra passer a `validated=true` qu'apres les preuves ci-dessus et mise a jour de la checklist go/no-go.

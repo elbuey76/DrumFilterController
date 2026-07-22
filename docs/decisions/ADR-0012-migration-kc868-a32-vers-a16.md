@@ -54,7 +54,7 @@ Le raccordement cible des auxiliaires utilise les trois GPIO capteurs de l'A16 :
 
 ### Constat de reception REV.1.6.3
 
-Le firmware `kc868_a16_hw_safe` a ete execute sur la carte recue. Le bus interne `GPIO4/GPIO5` a detecte `0x21`, `0x22`, `0x24` et `0x25`; les deux banques d'entrees et les deux banques de sorties repondent. Les contacts secs confirment le role des entrees : `0x22 = X1-X8`, `0x21 = X9-X16`. L'ecriture boot OFF `0xFF` est confirmee par I2C, tandis que les sorties restent effectivement desarmees par le build safe et le profil non valide. Le detail des preuves et des limites est consigne dans [VR-0001](../validation/VR-0001-reception-kc868-a16-rev1.6.3.md).
+Le firmware `kc868_a16_hw_safe` a ete execute sur la carte recue. Le bus interne `GPIO4/GPIO5` a detecte `0x21`, `0x22`, `0x24` et `0x25`; les deux banques d'entrees et les deux banques de sorties repondent. Les contacts secs confirment le role des entrees : `0x22 = X1-X8`, `0x21 = X9-X16`. L'ecriture boot OFF `0xFF` est confirmee par I2C. Le build de banc `kc868_a16_hw_output_test` a valide sans charge la polarite active et la commande isolee de `Y1-Y16`; le profil reste non valide et les sorties d'exploitation effectivement desarmees. Le detail des preuves et des limites est consigne dans [VR-0001](../validation/VR-0001-reception-kc868-a16-rev1.6.3.md).
 
 ## Consequences
 

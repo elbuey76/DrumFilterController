@@ -54,7 +54,7 @@ const Kc868A16HardwareProfile& kc868A16Profile(Kc868A16ProfileId id) {
   static const Kc868A16HardwareProfile rev163 =
       makeProfile(Kc868A16ProfileId::REV163_INPUTS_CONFIRMED_CANDIDATE,
                   "a16-rev1.6.3-inputs-confirmed-candidate",
-                  "REV.1.6.3 (input bank order confirmed; outputs unverified)",
+                  "REV.1.6.3 (input order and output mapping confirmed; loads/auxiliaries pending)",
                   0x22,
                   0x21,
                   0x24,
