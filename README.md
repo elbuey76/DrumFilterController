@@ -44,4 +44,4 @@ Les objectifs principaux sont :
 
 ## Prochaine étape
 
-La validation E/S de la KC868-A16 **REV.1.6.3** recuee est terminee a vide : `X1-X16`, boot OFF et impulsions isolees `Y1-Y16` sont confirmes. La prochaine etape est le test des voyants et bobines, une par une apres mesure de courant et verification des suppressions de surtension, puis LCD 2004 I2C, RTC DS3231 et sondes DS18B20. Le profil materiel reste desarme jusqu'a ces preuves ; voir [VR-0001](docs/validation/VR-0001-reception-kc868-a16-rev1.6.3.md).
+La validation E/S de la KC868-A16 **REV.1.6.3** recuee est terminee a vide : `X1-X16`, boot OFF et impulsions isolees `Y1-Y16` sont confirmes. Les deux DS18B20 sont lues et associees par ROM. La prochaine etape est le test des voyants et bobines, une par une apres mesure de courant et verification des suppressions de surtension, puis LCD 2004 I2C et RTC DS3231. Le profil materiel reste desarme jusqu'a ces preuves ; voir [VR-0001](docs/validation/VR-0001-reception-kc868-a16-rev1.6.3.md).

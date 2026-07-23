@@ -51,15 +51,24 @@ const Kc868A16HardwareProfile& kc868A16Profile(Kc868A16ProfileId id) {
                   0x3C,
                   0x3D);
 
-  static const Kc868A16HardwareProfile rev163 =
-      makeProfile(Kc868A16ProfileId::REV163_INPUTS_CONFIRMED_CANDIDATE,
-                  "a16-rev1.6.3-inputs-confirmed-candidate",
-                  "REV.1.6.3 (input order and output mapping confirmed; loads/auxiliaries pending)",
-                  0x22,
-                  0x21,
-                  0x24,
-                  0x25,
-                  true);
+  static const Kc868A16HardwareProfile rev163 = [] {
+    Kc868A16HardwareProfile profile =
+        makeProfile(Kc868A16ProfileId::REV163_INPUTS_CONFIRMED_CANDIDATE,
+                    "a16-rev1.6.3-inputs-confirmed-candidate",
+                    "REV.1.6.3 (I/O and DS18B20 ROMs confirmed; loads/auxiliaries pending)",
+                    0x22,
+                    0x21,
+                    0x24,
+                    0x25,
+                    true);
+    const uint8_t bassinRom[8] = {0x28, 0xA3, 0xAF, 0xC8, 0x00, 0x00, 0x00, 0x62};
+    const uint8_t localRom[8] = {0x28, 0x4C, 0x19, 0xCC, 0x00, 0x00, 0x00, 0xB2};
+    for (size_t index = 0; index < 8; ++index) {
+      profile.auxiliaries.tempBassinRom[index] = bassinRom[index];
+      profile.auxiliaries.tempLocalRom[index] = localRom[index];
+    }
+    return profile;
+  }();
 
   switch (id) {
     case Kc868A16ProfileId::REV15_GREEN_CANDIDATE:

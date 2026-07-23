@@ -73,6 +73,20 @@ void TemperatureService::printDiagnostics(Stream& stream) const {
     stream.print(F("NON CONFIGUREE"));
   }
   stream.println();
+  stream.print(F("TEMP_BASSIN: "));
+  if (bassinValid_) {
+    stream.print(bassinC_, 2);
+    stream.println(F(" deg C"));
+  } else {
+    stream.println(F("INVALIDE"));
+  }
+  stream.print(F("TEMP_LOCAL: "));
+  if (localValid_) {
+    stream.print(localC_, 2);
+    stream.println(F(" deg C"));
+  } else {
+    stream.println(F("INVALIDE"));
+  }
 }
 
 bool TemperatureService::readConfigured(const uint8_t rom[8], float& valueC) {
@@ -102,4 +116,3 @@ void TemperatureService::printRom(Stream& stream, const uint8_t rom[8]) const {
     stream.print(rom[index], HEX);
   }
 }
-

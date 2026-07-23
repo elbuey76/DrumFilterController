@@ -57,4 +57,8 @@ Le 2026-07-22, le build dedie `kc868_a16_hw_output_test` a ensuite ete utilise, 
 
 Pour les DS18B20 retenues, le brochage confirme par leur documentation est rouge = `VCC`, noir = `GND`, jaune = `DATA`. Le fil jaune doit aller au bornier utilisateur `HT3` / `GPIO3` de la carte, qui correspond a `GPIO14` dans le firmware, avec une resistance de pull-up `4,7 kΩ` entre ce signal et `3.3 V`. La borne `X14` est une entree digitale optocouplee et ne doit pas etre utilisee.
 
+Le 2026-07-23, les deux DS18B20 ont ete detectees sur le bus 1-Wire `GPIO14` : `284C19CC000000B2` et `28A3AFC800000062`. Leur alimentation 3,3 V, masse commune, signal et pull-up sont donc fonctionnels. Leur association physique confirmee est `TEMP_BASSIN = 28A3AFC800000062` et `TEMP_LOCAL = 284C19CC000000B2`; ces ROM sont inscrites dans le profil REV.1.6.3, sans jamais dependre de l'ordre de decouverte. Apres reflash du build safe, `diag temp` a affiche les deux valeurs valides et le rechauffement doux de chaque sonde a fait varier uniquement la ligne de son role attendu : lecture et affectation sont validees.
+
+L'essai de deconnexion des deux sondes est valide : `diag temp` affiche `Sondes detectees: 0`, conserve les ROM configurees et retourne `TEMP_BASSIN: INVALIDE` ainsi que `TEMP_LOCAL: INVALIDE`. Aucune valeur fictive n'est injectee apres perte du bus.
+
 Le profil ne pourra passer a `validated=true` qu'apres les preuves ci-dessus et mise a jour de la checklist go/no-go.

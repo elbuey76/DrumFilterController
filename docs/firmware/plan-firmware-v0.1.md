@@ -979,7 +979,7 @@ Modules implémentés :
 
 Preuves locales :
 
-- `python -m platformio test -e native` : 55 tests passes sur 55, dont cartographie, profils, defauts I2C A16, verrou d'impulsions de diagnostic et adressage physique `Y1-Y16` ;
+- `python -m platformio test -e native` : 56 tests passes sur 56, dont cartographie, profils, defauts I2C A16, verrou d'impulsions de diagnostic, adressage physique `Y1-Y16` et association DS18B20 par ROM ;
 - `python -m platformio run -e kc868_a16_sim -e kc868_a16_hw_safe -e kc868_a16_hw_armed` : trois builds ESP32 A16 reussis ; le profil candidat reste `validated=false`, y compris dans le build arme.
 
 Écarts restants avant de considérer la V0.1 complète :

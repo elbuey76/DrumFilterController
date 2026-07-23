@@ -115,6 +115,16 @@ void test_rev163_maps_x1_to_ep_lavage_and_x9_to_manu_rincage() {
   TEST_ASSERT_TRUE(inputs.btnManuRincage);
 }
 
+void test_rev163_identifies_bassin_and_local_ds18b20_by_rom() {
+  const Kc868A16HardwareProfile& profile =
+      kc868A16Profile(Kc868A16ProfileId::REV163_INPUTS_CONFIRMED_CANDIDATE);
+  const uint8_t expectedBassin[8] = {0x28, 0xA3, 0xAF, 0xC8, 0x00, 0x00, 0x00, 0x62};
+  const uint8_t expectedLocal[8] = {0x28, 0x4C, 0x19, 0xCC, 0x00, 0x00, 0x00, 0xB2};
+
+  TEST_ASSERT_EQUAL_UINT8_ARRAY(expectedBassin, profile.auxiliaries.tempBassinRom, 8);
+  TEST_ASSERT_EQUAL_UINT8_ARRAY(expectedLocal, profile.auxiliaries.tempLocalRom, 8);
+}
+
 void test_rev163_maps_reserved_x10_to_x16_to_the_second_raw_bank() {
   const Kc868A16HardwareProfile& profile =
       kc868A16Profile(Kc868A16ProfileId::REV163_INPUTS_CONFIRMED_CANDIDATE);
@@ -207,6 +217,7 @@ int main(int argc, char** argv) {
   UNITY_BEGIN();
   RUN_TEST(test_a16_candidate_profiles_are_explicit_and_never_validated);
   RUN_TEST(test_rev163_maps_x1_to_ep_lavage_and_x9_to_manu_rincage);
+  RUN_TEST(test_rev163_identifies_bassin_and_local_ds18b20_by_rom);
   RUN_TEST(test_rev163_maps_reserved_x10_to_x16_to_the_second_raw_bank);
   RUN_TEST(test_a16_boot_writes_both_output_banks_off_before_initializing_inputs);
   RUN_TEST(test_a16_missing_input_bank_is_reported_without_changing_output_health);

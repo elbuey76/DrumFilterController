@@ -21,7 +21,7 @@ Un point non valide peut etre accepte uniquement s'il est marque comme non appli
 | Contacteur rincage | Schneider TeSys LC1D18P7 avec bobine 230 VAC valide au schema derriere le relais d'interface | A faire | Remplace le LC1D12P7 ; confirmer encombrement, bornes et reperage avant cablage. |
 | Capot | OMRCH ME-8104 disponible, came/support definis | A faire | |
 | IHM | LCD 2004, boutons, voyants et etiquettes facade definis | A faire | |
-| RTC / temperature | DS3231 et 2 x DS18B20 disponibles, adresses/brochages verifies | A faire | |
+| RTC / temperature | DS3231 et 2 x DS18B20 disponibles, adresses/brochages verifies | Partiel | Deux DS18B20 validees sur GPIO14 ; RTC DS3231 reste a raccorder et tester. |
 | Coffret | Reference coffret choisie, IP65 cible ou IP55 justifie | A faire | |
 | Borniers / presse-etoupes | References et quantites suffisantes | A faire | |
 | Pieces de rechange | Fusibles ATO, au moins un capteur niveau, une sonde, un bouton, un voyant, et si possible un contacteur spare | A faire | |
@@ -31,7 +31,7 @@ Un point non valide peut etre accepte uniquement s'il est marque comme non appli
 | Point | Critere go/no-go | Statut | Preuve / commentaire |
 | --- | --- | --- | --- |
 | Boot securise | Toutes les sorties controlees restent OFF au boot avant autorisation | Passe | REV.1.6.3 : ACK I2C, ecriture brute `0xFF 0xFF` et mesure physique de `100-200 mV` entre chaque Y1-Y16 et 0 V, sans charge, confirmes. |
-| Profil firmware A16 | Revision, adresses PCF8574, cartographie, polarites et ROM DS18B20 correspondent exactement a la carte recue | Partiel | Profil `a16-rev1.6.3-inputs-confirmed-candidate` actif : entrees `0x22 = X1-X8`, `0x21 = X9-X16` confirmees ; polarite active et sorties `Y1-Y16` confirmees a vide. ROM DS18B20, charges et auxiliaires restent a faire. `validated=false`. |
+| Profil firmware A16 | Revision, adresses PCF8574, cartographie, polarites et ROM DS18B20 correspondent exactement a la carte recue | Partiel | Profil `a16-rev1.6.3-inputs-confirmed-candidate` actif : entrees `0x22 = X1-X8`, `0x21 = X9-X16`, polarite active et sorties `Y1-Y16` confirmees a vide. ROM DS18B20 configurees et lues. Charges, LCD et RTC restent a faire. `validated=false`. |
 | Bornes X / Y | `X1` a `X16` identifiees comme entrees et `Y1` a `Y16` comme sorties MOSFET ; l'alias firmware reste trace | Passe a vide | Les 16 entrees X sont confirmees par contact sec : X1-X9 fonctionnelles et X10-X16 par valeurs brutes. Boot OFF, activation individuelle et isolement sont valides sur Y1-Y16, sans charge. |
 | Armement firmware | Le build arme reste OFF si profil non valide, boot OFF echoue ou banque I2C absente | Logiciel passe, banc a faire | Matrice de verrous couverte par FT-0002. |
 | Perte 12 VDC | Contacteurs et sorties controlees retombent OFF par conception | A faire | |
@@ -45,7 +45,7 @@ Un point non valide peut etre accepte uniquement s'il est marque comme non appli
 | LCD | Adresse, contraste, lisibilite, reboot et pull-up I2C 3,3 V verifies | Integre logiciel, banc a faire | Rendu 20x4 non bloquant sur bus auxiliaire. |
 | RTC | Adresse `0x68`, conservation heure apres coupure, pull-up 3,3 V verifies | Integre logiciel, banc a faire | Diagnostic presence, perte alimentation et heure valide. |
 | I2C partage | LCD + RTC stables ensemble sur `GPIO32` / `GPIO33` pendant essai prolonge | Integre logiciel, banc a faire | Bus `Wire1` separe du bus PCF8574 interne. |
-| DS18B20 | Brochage reel, pull-up 4,7 kOhm, identification eau/local et perte de sonde verifies | Integre logiciel, banc a faire | Conversion asynchrone ; affectation obligatoire par ROM. |
+| DS18B20 | Brochage reel, pull-up 4,7 kOhm, identification eau/local et perte de sonde verifies | Passe | Brochage 3,3 V et pull-up valides sur GPIO14. ROM configurees : `TEMP_BASSIN = 28A3AFC800000062`, `TEMP_LOCAL = 284C19CC000000B2`. Lectures reelles et role verifies par rechauffement doux. Deconnexion des deux sondes : 0 sonde detectee et deux temperatures correctement invalidees, sans valeur fictive. |
 
 ## Puissance 230 VAC et coffret
 

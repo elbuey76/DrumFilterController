@@ -22,7 +22,7 @@ python -m platformio run -e kc868_a16_hw_output_test
 
 Resultat local du 2026-07-22 :
 
-- 55 tests host-side passes ;
+- 56 tests host-side passes ;
 - compilation reussie des trois environnements A16 ;
 - aucune image n'est televersee ou publiee par la CI.
 
@@ -69,7 +69,7 @@ Le scan ne deduit jamais le role des adresses. Une adresse differente, par exemp
 3. Executer `diag i2c`, relever les quatre PCF8574 et fixer explicitement leurs roles ; pour la REV.1.6.3 recue, `0x22 = X1-X8` et `0x21 = X9-X16` sont confirmes.
 4. Etat OFF au boot physiquement confirme sur Y1 a Y16, sans charge. Flasher `kc868_a16_hw_output_test`, puis tester l'etat ON et la polarite avec les impulsions diagnostiques controlees.
 5. Les contacts secs X1 a X16 sont confirmes. Tester ensuite les CR18-8DN au repos, en detection et avec chaque fil debranche.
-6. Completer le profil nomme de la carte recue avec la polarite des sorties et les adresses ROM des deux DS18B20 ; l'ordre des banques d'entrees REV.1.6.3 est deja confirme.
+6. Le profil nomme de la carte recue contient l'ordre des banques d'entrees, la polarite des sorties et les ROM des deux DS18B20 confirmes. Valider ensuite LCD, RTC, charges et essai de deconnexion des sondes.
 7. Passer ce profil a `validated=true` uniquement apres archivage des mesures precedentes.
 8. Tester `diag output <1-16> pulse <ms>` sans charge, puis avec voyants et bobines une par une apres mesure du courant et validation des suppressions de surtension.
 

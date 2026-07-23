@@ -28,7 +28,7 @@
 | Contacteurs filtration, UV, décoration, mise à niveau | TOMZN TOCT1-25Z, 25 A, bobine 12 VDC | Pilotés directement en 12 VDC par les sorties MOSFET de l'A16 si la mesure confirme moins de 500 mA par bobine, avec suppression de surtension adaptee |
 | Ecran local | LCD 2004 / 20x4 I2C 3,3 V, fond bleu retenu | Afficheur texte principal de l'IHM locale ; raccordement cible sur un bus I2C auxiliaire separe via `GPIO32` / `GPIO33` de l'A16, sans charger le bus I2C interne des entrees/sorties |
 | Horloge temps reel | Module RTC DS3231 I2C 3,3 V avec batterie rechargeable | Source locale d'heure fiable pour V2, et horodatage MVP seulement si simple ; adresse I2C attendue `0x68`, raccordement cible sur le bus I2C auxiliaire du port d'extension si la cohabitation avec le LCD est validee |
-| Sondes de temperature | 2 x DS18B20 étanches inox 3 fils, longueur cible 3 m | Meme modele pour `TEMP_BASSIN` et `TEMP_LOCAL` afin de simplifier achat, câblage et firmware ; alimentation 3,3 V, pull-up 4,7 kΩ sur `DATA`, brochage des couleurs a verifier sur banc |
+| Sondes de temperature | 2 x DS18B20 étanches inox 3 fils, longueur cible 3 m | Meme modele pour `TEMP_BASSIN` et `TEMP_LOCAL` ; alimentation 3,3 V, pull-up 4,7 kΩ sur `DATA`. Brochage banc confirme : rouge VCC, noir GND, jaune DATA ; ROMs associees par role. |
 
 ## Carte KC868-A16 effectivement recue
 
@@ -170,7 +170,7 @@ La batterie rechargeable livree avec le module sert a conserver l'heure pendant 
 
 Les deux sondes de temperature V1 retenues sont des DS18B20 etanches inox 3 fils, longueur cible 3 m. Le meme modele est utilise pour le bassin et pour le local afin de simplifier l'achat, le stock de rechange, le cablage et le firmware.
 
-Le raccordement cible est un bus 1-Wire commun alimente en 3,3 V, sans mode parasite : `VCC` sur `3.3 V`, `GND` sur `0 V` commun, `DATA` sur `GPIO14` de la KC868-A16 en premiere intention, avec une resistance de pull-up `4,7 kΩ` entre `DATA` et `3.3 V`. Sur la KC868-A16, le bornier utilisateur `HT3` (parfois marque `GPIO3`) correspond a `GPIO14` ; il ne faut jamais utiliser l'entree optocouplee `X14`. Le brochage confirme des sondes retenues est : rouge = `VCC`, noir = `GND`, jaune = `DATA`.
+Le raccordement retenu est un bus 1-Wire commun alimente en 3,3 V, sans mode parasite : `VCC` sur `3.3 V`, `GND` sur `0 V` commun, `DATA` sur `GPIO14` de la KC868-A16, avec une resistance de pull-up `4,7 kΩ` entre `DATA` et `3.3 V`. Sur la KC868-A16, le bornier utilisateur `HT3` (parfois marque `GPIO3`) correspond a `GPIO14` ; il ne faut jamais utiliser l'entree optocouplee `X14`. Le brochage confirme est rouge = `VCC`, noir = `GND`, jaune = `DATA`. Les ROMs sont figees dans le profil : `TEMP_BASSIN = 28A3AFC800000062`, `TEMP_LOCAL = 284C19CC000000B2`; les deux lectures et leur role ont ete valides par rechauffement doux.
 
 Si des GPIO libres sont disponibles, la preference est de separer `TEMP_BASSIN` et `TEMP_LOCAL` sur deux bus 1-Wire distincts. Si les GPIO sont limites, un bus commun reste acceptable en V1 puisque ces alertes sont informatives et non bloquantes.
 
