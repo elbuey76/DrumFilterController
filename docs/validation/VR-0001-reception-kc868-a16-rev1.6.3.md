@@ -49,11 +49,26 @@ Les deux banques de sorties ont ensuite ete alimentees en 12 V, sans charge. Au 
 
 Le 2026-07-22, le build dedie `kc868_a16_hw_output_test` a ensuite ete utilise, toujours sans charge. Les commandes `diag output 1 pulse 1000` a `diag output 16 pulse 1000` ont produit **12 V pendant 5 s** sur la seule borne cible `Y1` a `Y16` (la limite du build de banc est 5 000 ms). Les voyants des quinze autres voies sont restes eteints lors de chaque essai. Cette preuve confirme la polarite active et l'isolement entre voies sur les 16 sorties, ainsi que la correspondance `O1-Y1` a `O9-Y9` ; `Y10-Y16` sont confirmees comme voies reservees dans l'ordre physique.
 
+## Validation auxiliaire RTC + LCD
+
+Le 2026-07-23, la RTC DS3231 a ete testee seule sur le bus I2C auxiliaire `Wire1`, configure sur `HT1` / `GPIO32` pour `SDA` et `HT2` / `GPIO33` pour `SCL`. Elle repond a l'adresse `0x68`; sa lecture d'heure, son etat et les essais de banc ont ete declares conformes.
+
+Le LCD 2004 I2C a ensuite ete alimente en `3,3 V` et raccorde en parallele sur les memes lignes `SDA`/`SCL`. Le niveau de repos mesure sur chacune des deux lignes est **3,287 V**. Aucun pull-up externe n'a ete ajoute. Le scan du programme de banc `kc868_a16_rtc_lcd_test` retourne :
+
+```text
+--- SCAN I2C HT1/HT2 ---
+Trouve : 0x27
+Trouve : 0x68
+Nombre de peripheriques : 2
+```
+
+Le LCD est donc confirme a l'adresse `0x27`, la RTC a `0x68`, et leur cohabitation immediate sur le meme bus est validee : les informations de test et l'heure RTC sont lisibles sur l'ecran. Le programme de banc maintient explicitement les sorties `Y` a l'etat OFF.
+
 ## Prochaines preuves requises
 
-1. Flasher l'environnement dedie `kc868_a16_hw_output_test`. Il force les commandes de l'automate a OFF et n'autorise qu'une impulsion serie explicite de 5 s maximum, sans rendre le profil `validated`.
-2. Tester ensuite chaque voyant et chaque bobine apres mesure de courant et verification des suppressions de surtension.
-3. Completer separement LCD, RTC et DS18B20.
+1. Tester chaque voyant et chaque bobine apres mesure de courant et verification des suppressions de surtension.
+2. Valider les entrees avec les organes reels : CR18-8DN, contact capot, selecteur et boutons.
+3. Completer les essais d'endurance du bus I2C partage et l'integration de l'affichage IHM complet.
 
 Pour les DS18B20 retenues, le brochage confirme par leur documentation est rouge = `VCC`, noir = `GND`, jaune = `DATA`. Le fil jaune doit aller au bornier utilisateur `HT3` / `GPIO3` de la carte, qui correspond a `GPIO14` dans le firmware, avec une resistance de pull-up `4,7 kΩ` entre ce signal et `3.3 V`. La borne `X14` est une entree digitale optocouplee et ne doit pas etre utilisee.
 
@@ -61,4 +76,4 @@ Le 2026-07-23, les deux DS18B20 ont ete detectees sur le bus 1-Wire `GPIO14` : `
 
 L'essai de deconnexion des deux sondes est valide : `diag temp` affiche `Sondes detectees: 0`, conserve les ROM configurees et retourne `TEMP_BASSIN: INVALIDE` ainsi que `TEMP_LOCAL: INVALIDE`. Aucune valeur fictive n'est injectee apres perte du bus.
 
-Le profil ne pourra passer a `validated=true` qu'apres les preuves ci-dessus et mise a jour de la checklist go/no-go.
+Le profil ne pourra passer a `validated=true` qu'apres les preuves restantes ci-dessus et mise a jour de la checklist go/no-go.

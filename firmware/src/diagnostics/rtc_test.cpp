@@ -2,6 +2,14 @@
 #include <RTClib.h>
 #include <Wire.h>
 
+#ifndef RTC_LCD_TEST
+#define RTC_LCD_TEST 0
+#endif
+
+#if RTC_LCD_TEST
+#include <LCDi2c.h>
+#endif
+
 namespace {
 constexpr uint8_t kInternalSda = 4;
 constexpr uint8_t kInternalScl = 5;
@@ -10,6 +18,7 @@ constexpr uint8_t kOutputBankAddresses[] = {0x24, 0x25};
 constexpr uint8_t kAuxSda = 32;  // HT1 / GPIO1 on the KC868-A16 terminal.
 constexpr uint8_t kAuxScl = 33;  // HT2 / GPIO2 on the KC868-A16 terminal.
 constexpr uint8_t kRtcAddress = 0x68;
+constexpr uint8_t kLcdAddresses[] = {0x27, 0x3F};
 
 TwoWire& internalWire = Wire;
 TwoWire& rtcWire = Wire1;
@@ -18,6 +27,12 @@ RTC_DS3231 rtc;
 bool rtcPresent = false;
 unsigned long lastPrintMs = 0;
 String serialLine;
+#if RTC_LCD_TEST
+bool lcdPresent = false;
+LCDi2c lcd27(0x27, rtcWire);
+LCDi2c lcd3f(0x3F, rtcWire);
+LCDi2c* lcd = nullptr;
+#endif
 
 bool writeOutputBankOff(uint8_t address) {
   internalWire.beginTransmission(address);
@@ -61,6 +76,14 @@ void printStatus() {
   Serial.println(F("--- RTC DS3231 ---"));
   Serial.print(F("Adresse 0x68 detectee : "));
   Serial.println(ping(rtcWire, kRtcAddress) ? F("OUI") : F("NON"));
+#if RTC_LCD_TEST
+  Serial.print(F("LCD detecte            : "));
+  if (lcdPresent) {
+    Serial.println(F("OUI"));
+  } else {
+    Serial.println(F("NON (0x27 / 0x3F)"));
+  }
+#endif
 
   if (!rtcPresent) {
     Serial.println(F("RTC initialisee       : NON"));
@@ -106,6 +129,61 @@ void printHelp() {
   Serial.println(F("  set compile  regle la RTC sur la date/heure de compilation"));
   Serial.println(F("  help         affiche cette aide"));
 }
+
+#if RTC_LCD_TEST
+void writeLcdLine(uint8_t row, const char* text) {
+  if (lcd == nullptr) {
+    return;
+  }
+
+  char padded[21];
+  memset(padded, ' ', 20);
+  padded[20] = '\0';
+  const size_t length = strlen(text);
+  memcpy(padded, text, length < 20 ? length : 20);
+  lcd->locate(row + 1, 1);
+  lcd->print(padded);
+}
+
+void renderLcd() {
+  if (lcd == nullptr) {
+    return;
+  }
+
+  writeLcdLine(0, "TEST RTC + LCD");
+  writeLcdLine(1, "I2C: RTC 0x68 OK");
+  if (!rtcPresent) {
+    writeLcdLine(2, "RTC: NON DETECTEE");
+    writeLcdLine(3, "Verifier D/C +3V3");
+    return;
+  }
+
+  char line[21];
+  snprintf(line, sizeof(line), "Pile: %s", rtc.lostPower() ? "A REGLER" : "OK");
+  writeLcdLine(2, line);
+
+  const DateTime now = rtc.now();
+  snprintf(line, sizeof(line), "%04d-%02d-%02d %02d:%02d:%02d", now.year(), now.month(), now.day(), now.hour(), now.minute(), now.second());
+  writeLcdLine(3, line);
+}
+
+void beginLcd() {
+  if (ping(rtcWire, 0x27)) {
+    lcd = &lcd27;
+  } else if (ping(rtcWire, 0x3F)) {
+    lcd = &lcd3f;
+  }
+
+  if (lcd == nullptr) {
+    return;
+  }
+
+  lcdPresent = true;
+  lcd->begin(4, 20);
+  lcd->display(BACKLIGHT_ON);
+  renderLcd();
+}
+#endif
 
 void processCommand(String command) {
   command.trim();
@@ -157,6 +235,9 @@ void setup() {
   rtcWire.begin(kAuxSda, kAuxScl, 100000);
   scanAuxiliaryI2c();
   rtcPresent = ping(rtcWire, kRtcAddress) && rtc.begin(&rtcWire);
+#if RTC_LCD_TEST
+  beginLcd();
+#endif
   printStatus();
   printHelp();
 }
@@ -182,6 +263,9 @@ void loop() {
     Serial.print(F("RTC : "));
     printDateTime(rtc.now());
     Serial.println();
+#if RTC_LCD_TEST
+    renderLcd();
+#endif
   }
 
   delay(10);
