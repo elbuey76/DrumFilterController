@@ -18,6 +18,7 @@ $paths = @(
   "docs/calculs/NC-0002-dimensionnement-motorisation-tambour.md",
   "docs/calculs/NC-0003-dimensionnement-pompe-rincage.md",
   "docs/calculs/NC-0004-dimensionnement-eclairage-exterieur.md",
+  "docs/calculs/NC-0005-dimensionnement-coffret-electrique.md",
   "docs/decisions/README.md",
   "docs/decisions/_template.md",
   "docs/decisions/ADR-0001-structure-documentation.md",

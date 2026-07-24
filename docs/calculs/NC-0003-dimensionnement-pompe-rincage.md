@@ -30,6 +30,21 @@ Documenter les caractéristiques connues de la pompe de rinçage du FAT, les lim
 
 Pour le dimensionnement des relais ou contacteurs, la pompe doit être traitée comme une charge moteur 230 VAC. Le courant nominal ne suffit pas à lui seul : le courant d'appel au démarrage doit être pris en compte dans le choix de l'organe de coupure.
 
+## Protection du depart 230 VAC
+
+Le courant nominal connu de la pompe est de **3,5 A**. Le depart retenu est un
+**disjoncteur 6 A courbe C**, avec cable et conditions de pose a verifier au
+schema final. La courbe C est retenue pour absorber l'appel de courant normal
+d'un moteur monophasé au démarrage ; un 4 A serait trop proche du courant
+nominal et plus expose aux declenchements intempestifs. Un 10 A etait une marge
+trop large : il protegerait moins finement le depart sans apporter de besoin
+identifie pour cette pompe.
+
+Le disjoncteur protege d'abord le cable et le depart. Il ne remplace pas une
+protection thermique moteur dediee si la plaque signaletique ou la notice de la
+pompe en exige une. La presence et le comportement d'une protection thermique
+interne a la pompe restent a verifier lors de la revue de notice et des essais.
+
 ## Données hydrauliques
 
 | Donnée | Valeur | Commentaire |

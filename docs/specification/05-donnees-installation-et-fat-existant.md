@@ -124,7 +124,7 @@ Hypothèse de transmission mécanique en cours de conception : engrenages droits
 
 | Element | Valeur | Notes |
 | --- | --- | --- |
-| Protection amont cote maison | Disjoncteur dedie 16 A | Calibre retenu cote maison pour la liaison existante d'environ 20 m, car la section tiree n'est pas confirmee a 2,5 mm2. Limite le courant disponible pour le coffret bassin ; le TeSys VCDN20 20 A reste utilise comme sectionneur local, pas comme protection. |
+| Protection amont cote maison | Disjoncteur dedie 16 A | Liaison existante d'environ 20 m confirmee en 3G2,5 mm2, actuellement en attente sans disjoncteur au tableau maison. Ajouter la protection 16 A avant raccordement ; le TeSys VCDN20 20 A reste utilise comme sectionneur local, pas comme protection. |
 | Sequence d'alimentation cible | Disjoncteur 16 A maison -> TeSys VCDN20 -> interrupteur differentiel 30 mA -> disjoncteurs departs | Le sectionneur est la coupure locale cadenassable du coffret, avant le differentiel local |
 | Tete de tableau | Interrupteur differentiel 2P 30 mA, 40 A, type A | Choix coherent avec les charges reelles du MVP ; la notice AquaForte DM-Vario demande 30 mA sans imposer type F ou B |
 | Coupure locale cadenassable | Schneider Electric TeSys VCDN20, interrupteur-sectionneur 3P 690 V 20 A, poignee rouge cadenassable | Piece trouvee en atelier, candidate pour la coupure/consignation du coffret FAT, placee avant l'interrupteur differentiel local. Ne remplace pas le differentiel ni les disjoncteurs ; verifier etat, montage, coupure phase/neutre, calibre amont 16 A et maintien des bulleurs hors coupure automatique |
@@ -133,7 +133,7 @@ Hypothèse de transmission mécanique en cours de conception : engrenages droits
 | Plateforme controle | KC868-A16 ESP32 classique | Base automate V1/V2 selon ADR-0012 ; 16 entrees et 16 sorties MOSFET 12/24 VDC |
 | Ecran local | LCD 2004 / 20x4 I2C 3,3 V, fond bleu | Raccordement cible sur KC868-A16 via `GPIO32` / `GPIO33` et un bus I2C auxiliaire separe ; validation banc requise avant cablage final |
 | Horloge temps reel | Module RTC DS3231 I2C 3,3 V avec batterie rechargeable | Source locale d'heure fiable V2 ; adresse attendue `0x68`, raccordement cible sur le bus I2C auxiliaire KC868-A16 si cohabitation validee avec le LCD 2004 |
-| Pompe rincage | Disjoncteur 10 A courbe C + contacteur Schneider TeSys LC1D18P7, bobine 230 VAC | La bobine est pilotee directement par un relais de l'automate. Le LC1D18P7 remplace le LC1D12P7 a prix equivalent avec une marge AC-3 superieure ; le disjoncteur reste 10 A courbe C. Solution retenue pour eviter un relais intermediaire 12 V -> 230 V, avec separation BT/secteur et reperage a traiter au schema final. |
+| Pompe rincage | Disjoncteur 6 A courbe C + contacteur Schneider TeSys LC1D18P7, bobine 230 VAC | Courant nominal pompe 3,5 A. La courbe C absorbe l'appel de demarrage ; 6 A remplace 10 A pour une protection plus ajustee du depart. La bobine est pilotee par un relais d'interface commande par l'automate, avec separation BT/secteur et reperage a traiter au schema final. |
 | Prises local | Disjoncteur 16 A courbe C | 1 prise bulleur bassin, 1 prise bulleur filtre bio, 2 prises maintenance ponctuelle ; le courant total du coffret reste limite par le disjoncteur amont 16 A cote maison |
 | Pompe filtration | Disjoncteur 6 A courbe C + contacteur TOMZN TOCT1-25Z 25 A, bobine 12 VDC | Depart separe car organe essentiel |
 | UV, pompe decoration, mise a niveau | Disjoncteur 6 A courbe C + contacteurs TOMZN TOCT1-25Z 25 A, bobine 12 VDC | Separés du depart filtration |
@@ -146,7 +146,7 @@ Hypothèse de transmission mécanique en cours de conception : engrenages droits
 | --- | --- | --- |
 | Moteur tambour 12 VDC | 2 x 2,5 mm2 | Section retenue pour limiter la chute de tension sur le depart moteur protege par fusible ATO 5 A. |
 | Voyants et boutons IHM locale | 0,5 mm2 | Section retenue pour les commandes et signalisations basse tension en facade. |
-| Circuits 230 VAC cote filtration | 1,5 mm2 | Section retenue pour les departs 230 VAC locaux et le cablage interne de l'armoire, afin de rester coherent avec l'hypothese prudente d'une liaison amont non confirmee en 2,5 mm2 ; sous reserve de verification du schema final et des conditions de pose. |
+| Circuits 230 VAC cote filtration | 1,5 mm2 | Section retenue pour les departs 230 VAC locaux et le cablage interne de l'armoire ; sous reserve de verification du schema final, des conditions de pose et des protections associees. |
 
 ### Pompe de rinçage
 
@@ -228,7 +228,7 @@ Le point de fonctionnement nominal recherche reste 8 à 10 m3/h, mais la pompe p
 - La pompe de rinçage est commandée par un contacteur Schneider TeSys LC1D18P7, bobine 230 VAC, lui-même piloté directement par un relais de l'automate ; cette reference remplace le LC1D12P7 car elle conserve la meme bobine de commande tout en apportant une marge AC-3 superieure. Le relais intermediaire 12 V -> 230 V n'est pas retenu afin d'eviter une architecture trop complexe, et le contacteur equivalent en bobine 12 VDC / AC-3 est considere difficile a sourcer.
 - L'UV, la pompe décoration, la pompe filtration et la mise à niveau sont commandés via contacteurs TOMZN 25 A a bobine 12 VDC.
 - La pompe de filtration dispose d'un départ séparé de l'UV, de la pompe décoration et de la mise à niveau afin de limiter les coupures communes entre organes essentiels et secondaires.
-- Le depart cote maison vers le coffret bassin devra etre protege par un disjoncteur dedie 16 A, calibre retenu pour la liaison existante d'environ 20 m tant que sa section n'est pas confirmee en 2,5 mm2.
+- Le depart cote maison vers le coffret bassin doit etre protege par un disjoncteur dedie 16 A. La liaison d'environ 20 m est confirmee en 3G2,5 mm2, mais le cable est en attente sans disjoncteur au tableau maison : cette protection doit etre achetee et installee avant mise en service.
 - Le TeSys VCDN20 trouve en atelier est un candidat de coupure locale cadenassable du coffret FAT, place avant l'interrupteur differentiel local, a valider au schema electrique final.
 - Un depart eclairage exterieur supplementaire doit etre reserve dans le coffret ; il reste hors fonctions bassin et il est protege par disjoncteur 6 A courbe C.
 - Le débit de rinçage de référence ne doit pas être confondu avec le débit maximal de 60 L/min, car le point de fonctionnement dépendra des buses déjà fabriquées et des pertes de charge.

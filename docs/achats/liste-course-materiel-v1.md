@@ -27,19 +27,18 @@ Le journal de commande detaille est dans [commandes-2026-07-06.md](commandes-202
 | 5 | Fusibles ATO 5 A | Depart moteur tambour | Commande 2026-07-06 | Quantites et calibres reels a verifier a reception. |
 | 5 | Fusibles ATO 3 A | Depart automate | Commande 2026-07-06 | Quantites et calibres reels a verifier a reception. |
 | 10 | Fusibles ATO 1 A | Departs capteurs/boutons et IHM/accessoires | Commande 2026-07-06 | Quantites et calibres reels a verifier a reception. |
-| 1 | Repartiteur 0 V / +12 V | Borniers ou mini-repartiteur rail DIN adapte au 12 VDC | A commander | Facilite la distribution basse tension propre. |
 
 ## 2. Capteurs et instrumentation
 
 | Qté | Article | Reference / caracteristiques | Statut | Notes |
 | ---: | --- | --- | --- | --- |
-| 3 | Capteurs de niveau | CR18-8DN, NPN, 12-24 VDC, M18, 3 fils | A commander | 2 installes : `EP_LAVAGE`, `EP_CRITIQUE`. Le 3e est le spare recommande. |
+| 3 | Capteurs de niveau | CR18-8DN, NPN, 12-24 VDC, M18, 3 fils | Deja disponible | 2 installes : `EP_LAVAGE`, `EP_CRITIQUE`. Le 3e est le spare recommande ; valider l'interface KC868-A16 avant cablage definitif. |
 | 2 | Supports reglables capteurs M18 | Equerres, colliers ou support maison reglable en hauteur | A verifier avant commande | Pour tube de report niveau 32 mm ; prevoir nettoyage et reglage accessibles. |
 | 1 | Reserve support 3e capteur | Support mecanique ou emplacement libre | A verifier avant commande | Reserve V1.1/V2, pas de cablage V1 obligatoire. |
 | 1 | Fin de course capot | OMRCH ME-8104, momentane, contact 1NO1NC | Commande 2026-07-06 | Montage fail-safe : capot ferme = boucle fermee ; quantite et bornes a verifier. |
 | 1 | Came / patte de capot | Patte reglable pour actionner le ME-8104 | A verifier avant commande | Peut etre fabriquee localement. |
-| 3 | Sondes temperature | DS18B20 etanche inox, 3 fils, longueur cible 3 m | A commander | 2 installees : eau + local. Le 3e est le spare recommande. |
-| 10 | Resistances | 4,7 kOhm, 1/4 W | A commander | Pull-up bus 1-Wire vers 3,3 V. |
+| 3 | Sondes temperature | DS18B20 etanche inox, 3 fils, longueur cible 3 m | Deja disponible | 2 installees : eau + local. Le 3e est le spare recommande ; verifier le brochage et la longueur de cable. |
+| 10 | Resistances | 4,7 kOhm, 1/4 W | Deja disponible | Pull-up bus 1-Wire vers 3,3 V. |
 | 1 | Module RTC | DS3231 I2C compatible 3,3 V, batterie rechargeable incluse | Commande 2026-07-06 | Adresse attendue `0x68`, pull-up I2C 3,3 V a verifier. |
 
 ## 3. Interface locale en facade
@@ -78,23 +77,24 @@ Le journal de commande detaille est dans [commandes-2026-07-06.md](commandes-202
 | 1 | Coupure generale locale | Schneider Electric TeSys VCDN20, interrupteur-sectionneur 3P, 690 V, 20 A, poignee rouge cadenassable | Deja disponible | Sectionneur annonce en stock ; verifier reference exacte, etat, calibre, poles, verrouillage et compatibilite coffret. |
 | 1 | Interrupteur differentiel | 2P, 30 mA, 40 A, type A | A commander | Reference finale a choisir dans la gamme tableau retenue. |
 | 1 | Disjoncteur alimentation 12 V | 4 A courbe C | A commander | Depart Mean Well NDR-120-12. |
-| 1 | Disjoncteur pompe rincage | 10 A courbe C | A commander | Depart pompe rincage via contacteur Schneider. |
+| 1 | Disjoncteur pompe rincage | 6 A courbe C | A commander | Pompe EKJ-802S de courant nominal 3,5 A, commandee via contacteur Schneider. Le 6 A C laisse la marge necessaire au demarrage et protege plus finement le depart qu'un 10 A. |
 | 1 | Disjoncteur prises local | 16 A courbe C | A commander | Bulleurs et prises maintenance, hors controleur. |
 | 1 | Disjoncteur pompe filtration | 6 A courbe C | A commander | Depart separe organe essentiel. |
 | 1 | Disjoncteur UV / decoration / mise a niveau | 6 A courbe C | A commander | Depart separe de la filtration. |
 | 1 | Disjoncteur eclairage exterieur | 6 A courbe C | A commander | Depart dedie, hors automatisme FAT. |
-| 1 | Disjoncteur amont maison | 16 A dedie | A verifier avant commande | A installer/remplacer seulement si le depart maison n'est pas deja conforme. |
+| 8 | Prises 16 A 2P+T | Adaptees au local humide, IP44 minimum et IP55 prefere | A commander | 4 prises commandees : rincage, filtration, decoration, UV. 4 prises permanentes : 2 bulleurs et 2 maintenance. Les appareils a fiche europeenne ne sont pas recables. |
+| 1 | Disjoncteur amont maison | 16 A dedie, compatible avec le tableau maison et sa gamme | A commander et faire installer | Le cable maison-local est present en attente et confirme en 3G2,5 mm2, mais aucun depart n'est actuellement protege au tableau maison. Ajouter ce disjoncteur avant tout raccordement du coffret FAT. |
 | 1 lot | Peignes / pontages / obturateurs | Compatibles avec la gamme de disjoncteurs choisie | A commander | Garder une gamme coherente pour le tableau. |
 
 ## 6. Coffret, rail DIN et implantation
 
 | Qté | Article | Reference / caracteristiques | Statut | Notes |
 | ---: | --- | --- | --- | --- |
-| 1 | Coffret electrique | IP65 cible, IP55 minimum justifie, porte compatible facade IHM | A verifier avant commande | Dimensionner avec reserve rail DIN, borniers, goulottes et separation BT/230 VAC. |
+| 1 | Coffret electrique plastique | IP65 minimum ; cible environ 800 x 600 x 300 mm, polyester renforce ou polycarbonate industriel, porte compatible facade IHM | A verifier avant commande | Enveloppe non metallique imperative pour le Wi-Fi. Capacite minimale calculee 58 emplacements equivalents, sectionneur de facade exclu ; quatre rails de 450 a 500 mm. La taille est imposee aussi par les goulottes, les profondeurs et le Wi-Fi. Candidat : Schneider NSYPLM86BG, IP66/IK10, 847 x 636 x 300 mm, platine bakelite. Voir [NC-0005](../calculs/NC-0005-dimensionnement-coffret-electrique.md). |
 | 1 | Platine de fond | Compatible coffret | A commander si non incluse | Pour fixer rail DIN, goulottes, borniers et supports. |
-| 2 a 4 | Rails DIN | 35 mm, longueur selon coffret | A verifier avant commande | Prevoir reserve V1.1/V2. |
+| 4 | Rails DIN | 35 mm, longueur utile 450 a 500 mm | A verifier avant commande | Implantation cible : protections, puissance, controle/12 VDC et borniers. |
 | 2 a 4 | Goulottes cable | Avec couvercles, dimensions selon coffret | A verifier avant commande | Separation cheminements BT/secteur. |
-| 1 lot | Presse-etoupes IP68 | Assortiment M16 / M20 / M25 avec contre-ecrous | A commander | Quantites finales selon sorties cable ; garder des bouchons de reserve. |
+| 15 | Presse-etoupes IP68 | 5 M16, 9 M20 et 1 M25, avec contre-ecrous | A commander | 13 sorties actives, 1 arrivee maison 3G2,5 mm2 et 1 reserve. Verifier les diametres reels de cable avant commande. |
 | 1 lot | Bouchons de presse-etoupe | Compatibles diametres non utilises | A commander | Pour reserve propre et etanche. |
 | 1 | Event / traitement condensation | Event respirant ou solution passive adaptee au coffret | A verifier avant commande | Local humide, condensation a traiter. |
 
@@ -102,9 +102,10 @@ Le journal de commande detaille est dans [commandes-2026-07-06.md](commandes-202
 
 | Qté | Article | Reference / caracteristiques | Statut | Notes |
 | ---: | --- | --- | --- | --- |
-| 30 | Borniers passage gris | Rail DIN, 2,5 mm2 | A commander | Circuits 230 VAC et basse tension selon schema. |
-| 15 | Borniers neutre bleus | Rail DIN, 2,5 mm2 | A commander | Departs 230 VAC. |
-| 15 | Borniers terre vert/jaune | Rail DIN, 2,5 mm2 | A commander | Terre pompe, prises, coffret/equipements classe I. |
+| 8 | Borniers passage gris | Rail DIN, 2,5 mm2, 230 VAC phase | A commander | 1 arrivee maison et 7 departs puissance sortants. |
+| 8 | Borniers neutre bleus | Rail DIN, 2,5 mm2 | A commander | 1 arrivee maison et 7 departs puissance sortants. |
+| 8 | Borniers terre vert/jaune | Rail DIN, 2,5 mm2 | A commander | 1 arrivee maison et 7 departs puissance sortants. |
+| 16 | Borniers passage blancs | Rail DIN, 2,5 mm2, TBT | A commander | Moteur tambour 12 VDC, capteurs niveau, capot et sondes temperature. |
 | 1 lot | Pontages borniers | Compatibles borniers choisis | A commander | Distribution propre +12 V, 0 V, phase/neutre selon schema. |
 | 1 lot | Reperes borniers et fils | Numerotation, etiquettes ou bagues | A commander | Indispensable pour maintenance et validation. |
 | 1 lot | Embouts de cablage | 0,5 / 0,75 / 1,5 / 2,5 mm2 | A commander | Pour fils souples H07V-K. |
@@ -120,7 +121,8 @@ Les longueurs exactes doivent etre mesurees sur site avant commande. Les section
 | Qté | Article | Reference / caracteristiques | Statut | Notes |
 | ---: | --- | --- | --- | --- |
 | A mesurer | Fil interne 230 VAC | H07V-K 1,5 mm2, marron/noir, bleu, vert-jaune | A commander | Cablage interne armoire et departs 230 VAC. |
-| A mesurer | Fil interne basse tension | H07V-K 0,5 mm2 ou 0,75 mm2, plusieurs couleurs | A commander | Boutons, voyants, capteurs, bobines 12 VDC. |
+| A mesurer | Fil interne basse tension | H07V-K souple : 0,5 mm2 pour TBT/signaux, 0,75 mm2 pour alimentation A16 et bobines 12 VDC | A commander | Couleurs : rouge `+12 V`, noir `0 V`, blanc signaux TBT. Ne pas utiliser le bleu, reserve au neutre 230 VAC. |
+| A mesurer | Cable souple de porte | 16 x 0,25 ou 0,34 mm2, cable de commande multiconducteur | A commander | 13 ames utiles : LCD 3,3 V/I2C, selecteur, 4 boutons, 3 voyants et 0 V commun ; 3 ames de reserve. |
 | A mesurer | Cable moteur tambour | 2 x 2,5 mm2 ou cable adapte environnement | A verifier avant commande | Section retenue en premiere intention pour moteur 12 VDC. |
 | A mesurer | Cable departs 230 VAC terrain | 3G1,5 mm2 adapte local humide / exterieur selon pose | A verifier avant commande | Pompe rincage, filtration, UV, decoration, mise a niveau, prises. |
 | 10 a 15 m | Cable eclairage exterieur | Section et type a confirmer selon pose | A verifier avant commande | Depart eclairage 6 spots LED 3 W avec detecteurs. |
@@ -164,7 +166,7 @@ Ces elements sont cites dans l'architecture mais peuvent deja exister sur l'inst
 
 ## 12. Points a confirmer avant validation panier
 
-- Dimensions du coffret : place disponible pour disjoncteurs, contacteurs, alimentation, KC868-A16 avec boitier eventuel, relais d'interface, borniers, goulottes, presse-etoupes et reserve V1.1/V2.
+- Reference exacte du coffret plastique IP65 : cible recommandee 800 x 600 x 300 mm environ, quatre rails utiles de 450 a 500 mm, platine isolante de preference et zone radio libre autour de l'antenne KC868-A16. Le bilan detaille est dans [NC-0005](../calculs/NC-0005-dimensionnement-coffret-electrique.md).
 - Reference finale de l'interrupteur differentiel 2P 30 mA 40 A type A et coherence de gamme avec les disjoncteurs.
 - Etat reel du sectionneur TeSys VCDN20 trouve en atelier.
 - Longueurs de cables terrain : moteur tambour, capteurs, sondes, pompe rincage, filtration, UV, decoration, mise a niveau, prises et eclairage.

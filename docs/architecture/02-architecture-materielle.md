@@ -116,13 +116,13 @@ La commande matérielle visée correspond au MVP définitif, pas à une commande
 
 | Depart | Protection retenue | Equipements | Commentaire |
 | --- | --- | --- | --- |
-| Protection amont cote maison | Disjoncteur dedie 16 A | Liaison maison vers coffret filtration | Calibre retenu pour la liaison existante d'environ 20 m, tant que sa section n'est pas confirmee en 2,5 mm2. |
+| Protection amont cote maison | Disjoncteur dedie 16 A | Liaison maison vers coffret filtration | Liaison confirmee en 3G2,5 mm2, actuellement en attente et sans disjoncteur au tableau maison. Le disjoncteur 16 A doit etre ajoute avant le raccordement du coffret. |
 | Tete de tableau | Interrupteur differentiel 2P 30 mA, 40 A, type A | Tableau local complet | Choix coherent avec les charges reelles du MVP ; la notice AquaForte DM-Vario demande 30 mA sans imposer type F ou B. |
 | Alimentation 12 VDC | Disjoncteur 4 A courbe C | Mean Well NDR-120-12 | Depart dedie au controle basse tension. |
-| Pompe de rincage | Disjoncteur 10 A courbe C | Pompe VEVOR / Leo EKJ-802S | Commande par contacteur Schneider LC1D18P7, bobine 230 VAC. Le calibre du disjoncteur reste 10 A courbe C. |
-| Prises local | Disjoncteur 16 A courbe C | 1 prise bulleur bassin, 1 prise bulleur filtre bio, 2 prises maintenance | Les bulleurs restent hors controleur ; les prises maintenance sont reservees aux usages ponctuels. |
-| Pompe filtration | Disjoncteur 6 A courbe C | Pompe principale de filtration | Depart separe et prioritaire car organe essentiel. |
-| UV, pompe decoration, mise a niveau | Disjoncteur 6 A courbe C | UV, pompe decoration, mise a niveau automatique | Separé de la filtration afin qu'un defaut sur un organe non essentiel ne coupe pas la pompe de filtration. |
+| Pompe de rincage | Disjoncteur 6 A courbe C | Pompe VEVOR / Leo EKJ-802S sur prise 16 A commandee | Commande par contacteur Schneider LC1D18P7, bobine 230 VAC. Le courant nominal pompe est 3,5 A ; le 6 A C remplace le 10 A pour une protection plus ajustee du depart. |
+| Prises local | Disjoncteur 16 A courbe C | 1 prise bulleur bassin, 1 prise bulleur bio, 2 prises maintenance | Les bulleurs et prises maintenance sont permanents, hors controleur. |
+| Pompe filtration | Disjoncteur 6 A courbe C | Pompe principale sur prise 16 A commandee | Depart separe et prioritaire car organe essentiel. |
+| UV, pompe decoration, mise a niveau | Disjoncteur 6 A courbe C | UV et pompe decoration sur prises 16 A commandées ; mise a niveau a definir | Separé de la filtration afin qu'un defaut sur un organe non essentiel ne coupe pas la pompe de filtration. |
 | Eclairage exterieur | Disjoncteur 6 A courbe C | 6 spots LED exterieurs 3 W avec detecteurs | Depart distinct hors automatisme FAT ; charge nominale 18 W, soit environ 0,08 A sous 230 VAC, avec environ 10 a 15 m de cable. |
 
 ### Distribution 12 VDC
@@ -134,7 +134,25 @@ La commande matérielle visée correspond au MVP définitif, pas à une commande
 | Capteurs et boutons | 1 A | Capteurs de niveau, capot et commandes locales |
 | Ecran, voyants, accessoires | 1 A | IHM locale, signalisation et accessoires |
 
-Le porte-fusibles ATO devra etre fixe proprement dans le coffret. Preference si l'achat reste ouvert : porte-fusibles ou repartiteur fusible DC natif rail DIN. Si le modele ATO 4 emplacements est conserve et n'a pas de fixation rail DIN native, un adaptateur imprime en 3D uniquement mecanique sera concu pour assurer le maintien, l'acces aux fusibles, l'absence de contrainte sur les cosses et le reperage des quatre departs.
+Le porte-fusibles ATO devra etre fixe proprement dans le coffret. Les quatre departs 12 VDC proteges partent directement de ce porte-fusibles vers leurs charges : aucun repartiteur +12 V / 0 V supplementaire n'est prevu. Si le modele ATO 4 emplacements est conserve et n'a pas de fixation rail DIN native, un adaptateur imprime en 3D uniquement mecanique sera concu pour assurer le maintien, l'acces aux fusibles, l'absence de contrainte sur les cosses et le reperage des quatre departs.
+
+### Cablage interne basse tension et facade
+
+- Utiliser du fil souple **H07V-K 0,5 mm2** pour les signaux TBT, les capteurs,
+  les boutons et les voyants, dans les goulottes basse tension.
+- Utiliser du **H07V-K 0,75 mm2** pour l'alimentation de la KC868-A16 et les
+  bobines 12 VDC, sous reserve de mesure du courant reel des bobines.
+- Le moteur tambour conserve son cable **2 x 2,5 mm2** dedie ; son retour `0 V`
+  revient directement vers la distribution 12 VDC et ne partage pas le petit
+  commun de commande.
+- Pour la porte, utiliser un cable souple multiconducteur **16 x 0,25 ou
+  0,34 mm2**, fixe avec serre-cable et boucle de service cote charniere.
+- Un unique `0 V` commun de 0,5 mm2 peut etre partage par le LCD, les contacts
+  secs du selecteur/boutons et les trois voyants. Les boutons ne recoivent pas
+  de 12 V : ils ramenent simplement leur entree KC868-A16 vers ce `0 V`.
+- Le LCD reste alimente en **3,3 V** et utilise `SDA` / `SCL`; seuls les voyants
+  utilisent les sorties 12 VDC de la KC868-A16. Ne pas employer le bleu pour le
+  `0 V` continu, car il est reserve au neutre 230 VAC dans ce coffret.
 
 ### Interface des capteurs CR18-8DN
 

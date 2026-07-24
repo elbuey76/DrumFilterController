@@ -44,7 +44,7 @@ Le contrôleur doit separer la basse tension de commande de la puissance moteur/
 | S-033 | Le moteur tambour doit disposer d'une protection adaptée contre surintensité ou blocage mécanique. | Must | Moteur Fyearfly 12 VDC 10 rpm, fusible ATO 5 A retenu en première approche ; confirmer par mesures a vide, en charge, au démarrage et au blocage. |
 | S-034 | Le système ne doit pas supposer une protection thermique interne du moteur tambour sans preuve. | Must | La protection externe doit rester dimensionnante tant que la référence moteur n'est pas documentée complètement. |
 | S-035 | Le moteur tambour doit rester hors immersion et protège des projections directes. | Must | Le moteur automobile est acceptable en ambiance humide protégée, mais pas en immersion. |
-| S-036 | La pompe de rinçage 230 VAC doit être commandée par un organe adapté aux charges moteur et protégée cote secteur. | Must | Pompe VEVOR / Leo EKJ-802S, classe I, 0,6 à 0,8 kW ; depart disjoncteur 10 A courbe C et contacteur Schneider TeSys LC1D18P7 bobine 230 VAC retenus, a valider au schema final. Le contacteur 18 A remplace le 12 A sans augmenter la protection du depart. |
+| S-036 | La pompe de rinçage 230 VAC doit être commandée par un organe adapté aux charges moteur et protégée cote secteur. | Must | Pompe VEVOR / Leo EKJ-802S, classe I, 0,6 à 0,8 kW, courant nominal 3,5 A ; depart disjoncteur 6 A courbe C et contacteur Schneider TeSys LC1D18P7 bobine 230 VAC retenus. Le contacteur 18 A remplace le 12 A sans augmenter la protection du depart. |
 | S-037 | La pompe de rinçage doit être raccordee à la terre et rester hors immersion. | Must | Protection classe I et IPX4 : compatible projections, pas immersion ni exposition forte non protégée. |
 | S-038 | Le système ne doit pas assimiler commande de pompe de rinçage a débit ou pression réel sans mesure dédiée. | Must | Sans pressostat, débitmètre ou retour électrique exploité, le diagnostic doit rester indirect. |
 | S-039 | Les alarmes bloquantes V1 doivent rester actives jusqu'à disparition de la cause et acquittement valide. | Must | Concerne au minimum EP_CRITIQUE, capteurs niveau incohérents, capot ouvert pendant action dangereuse et défaut lavage maintenu après tentatives max. |
@@ -112,10 +112,10 @@ Le mode dégradé doit être conçu pour maintenir le bassin en vie tout en sign
 ## Contraintes de tableau electrique V1
 
 - un interrupteur differentiel 2P 30 mA, 40 A, type A est retenu en tete de tableau ; la notice AquaForte DM-Vario demande une protection differentielle 30 mA sans imposer type F ou B ;
-- le depart cote maison vers le coffret FAT devra etre protege par un disjoncteur dedie 16 A, calibre retenu pour la liaison existante d'environ 20 m tant que sa section n'est pas confirmee en 2,5 mm2 ;
+- le depart cote maison vers le coffret FAT devra etre protege par un disjoncteur dedie 16 A ; la liaison d'environ 20 m est confirmee en 3G2,5 mm2, mais le cable est en attente sans protection au tableau maison ;
 - un interrupteur-sectionneur cadenassable TeSys VCDN20, 3P, 690 V, 20 A, est candidat pour la coupure locale du coffret FAT, place avant l'interrupteur differentiel du coffret, sous reserve de validation du schema final et du calibre amont 16 A ;
 - l'alimentation 12 VDC est protegee par un disjoncteur 4 A courbe C ;
-- la pompe de rincage est protegee par un disjoncteur 10 A courbe C ;
+- la pompe de rincage est protegee par un disjoncteur 6 A courbe C ;
 - les prises classiques du local sont protegees par un disjoncteur 16 A courbe C ;
 - la pompe de filtration est protegee par un depart dedie 6 A courbe C ;
 - l'UV, la pompe decoration et la mise a niveau sont sur un depart 6 A courbe C separe de la filtration ;

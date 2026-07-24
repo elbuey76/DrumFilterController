@@ -22,3 +22,4 @@ NC-0002-titre-court.md
 2. [Dimensionnement de la motorisation du tambour](NC-0002-dimensionnement-motorisation-tambour.md)
 3. [Dimensionnement de la pompe de rinçage](NC-0003-dimensionnement-pompe-rincage.md)
 4. [Dimensionnement du depart eclairage exterieur](NC-0004-dimensionnement-eclairage-exterieur.md)
+5. [Dimensionnement du coffret electrique](NC-0005-dimensionnement-coffret-electrique.md)

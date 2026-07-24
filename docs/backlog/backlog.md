@@ -47,7 +47,7 @@
 | B-041 | Integrer au choix de plateforme V1 la capacité d'heure fiable V2 sans remplacement matériel principal, par RTC DS3231 I2C 3,3 V avec batterie rechargeable, synchronisation réseau seulement en complement, sans dépendance exclusive à Internet. | Must | Tranchée |
 | B-042 | Retenir l'UV hors tambour, après la pompe principale, asservi a filtration autorisée plus absence EP_CRITIQUE, sans coupure sur défaut FAT non critique. | Must | Tranchée |
 | B-043 | Retenir en tete de tableau un interrupteur differentiel 2P 30 mA, 40 A, type A, coherent avec les charges reelles du MVP et la notice AquaForte DM-Vario qui demande 30 mA sans imposer type F ou B. | Must | Tranchée |
-| B-044 | Retenir une distribution 230 VAC avec departs : 4 A courbe C alimentation 12 V, 10 A courbe C pompe rincage, 16 A courbe C prises local, 6 A courbe C pompe filtration, 6 A courbe C UV/pompe decoration/mise a niveau, 6 A courbe C eclairage exterieur. | Must | Tranchée |
+| B-044 | Retenir une distribution 230 VAC avec departs : 4 A courbe C alimentation 12 V, 6 A courbe C pompe rincage, 16 A courbe C prises local, 6 A courbe C pompe filtration, 6 A courbe C UV/pompe decoration/mise a niveau, 6 A courbe C eclairage exterieur. | Must | Tranchée |
 | B-045 | Retenir une distribution 12 VDC Mean Well NDR-120-12 + porte-fusibles ATO 4 departs : moteur 5 A, automate 3 A, capteurs/boutons 1 A, ecran/voyants/accessoires 1 A. | Must | Tranchée |
 | B-046 | Statuer avant gel de la conception sur le comportement du système en restriction d'eau / canicule : autorisation ou inhibition explicite de la mise à niveau automatique et des lavages, information opérateur, maintien impératif de l'aération, seuils de surveillance et conduite à tenir avant `EP_CRITIQUE`. | Must | À faire |
 
@@ -89,7 +89,7 @@
 | B-113 | Garder le capteur de position tambour comme option V2 ou V1.1 tardive, seulement si l'indexation au temps pose problème ou si une position reproductible devient nécessaire. | Should | Tranchée |
 | B-114 | Valider la commande 12 V DC du moteur tambour avec fusible ATO 5 A, relais HELLA 12 V 15 A inductif, alimentation Mean Well NDR-120-12 et courant de blocage annoncé 6,5 A. | Must | En cours |
 | B-115 | Valider le sens de rotation, la connectique et la fixation mécanique du motorreducteur Fyearfly 12 VDC 10 rpm avant câblage définitif. | Must | À faire |
-| B-116 | Valider la commande secteur de la pompe de rinçage EKJ-802S avec disjoncteur 10 A courbe C, relais d'interface a bobine 12 VDC, contacteur Schneider LC1D18P7 bobine 230 VAC, terre, separation BT/secteur et protection. | Must | En cours |
+| B-116 | Valider la commande secteur de la pompe de rinçage EKJ-802S avec disjoncteur 6 A courbe C, relais d'interface a bobine 12 VDC, contacteur Schneider LC1D18P7 bobine 230 VAC, terre, separation BT/secteur et protection. | Must | En cours |
 | B-117 | Concevoir et imprimer un support rail DIN pour le relais HELLA automobile, avec maintien mécanique, accès aux cosses et repérage clair. | Should | Fait |
 | B-118 | Verifier la compatibilite des sorties MOSFET KC868-A16 avec les bobines 12 VDC HELLA, TOMZN et relais d'interface : courant inferieur a 500 mA par voie, polarite, courant simultane, alimentation des deux banques et suppression de surtension. | Must | À faire |
 | B-119 | Concevoir et imprimer si necessaire un adaptateur rail DIN pour le porte-fusibles ATO 4 emplacements, avec maintien mécanique, accès aux fusibles et repérage des departs. | Should | Fait |
